@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class SampleUnit : Unit
 {
@@ -9,19 +11,20 @@ public class SampleUnit : Unit
         transform.position += new Vector3(0, 1, 0);
         GetComponent<Renderer>().material.color = LeadingColor;
     }
-    public override void MarkAsAttacking(Unit other)
-    {      
-    }
 
-    public override void MarkAsDefending(Unit other)
-    {       
+    public override void MarkAsAttacking(Unit other)
+    {
     }
 
     public override void MarkAsDestroyed()
-    {      
+    {
     }
 
     public override void MarkAsFinished()
+    {
+    }
+
+    public override void MarkAsDefending(Unit other)
     {
     }
 
@@ -32,7 +35,7 @@ public class SampleUnit : Unit
 
     public override void MarkAsReachableEnemy()
     {
-        GetComponent<Renderer>().material.color = LeadingColor + Color.red ;
+        GetComponent<Renderer>().material.color = LeadingColor + Color.red;
     }
 
     public override void MarkAsSelected()
@@ -44,4 +47,7 @@ public class SampleUnit : Unit
     {
         GetComponent<Renderer>().material.color = LeadingColor;
     }
+
+
+
 }

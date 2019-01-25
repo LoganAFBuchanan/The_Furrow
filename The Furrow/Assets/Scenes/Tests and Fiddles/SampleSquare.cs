@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-class SampleSquare : Square
+public class SampleSquare : Square
 {
+    // Start is called before the first frame update
     public override Vector3 GetCellDimensions()
     {
         return GetComponent<Renderer>().bounds.size;
@@ -9,7 +12,7 @@ class SampleSquare : Square
 
     public override void MarkAsHighlighted()
     {
-        GetComponent<Renderer>().material.color = new Color(0.75f, 0.75f, 0.75f); ;
+        GetComponent<Renderer>().material.color = new Color(0.75f, 0.75f, 0.75f);
     }
 
     public override void MarkAsPath()
@@ -26,5 +29,5 @@ class SampleSquare : Square
     {
         GetComponent<Renderer>().material.color = Color.white;
     }
-}
 
+}
