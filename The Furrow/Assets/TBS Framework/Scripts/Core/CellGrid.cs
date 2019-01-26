@@ -111,6 +111,16 @@ public class CellGrid : MonoBehaviour
             cell.CellHighlighted += OnCellHighlighted;
             cell.CellDehighlighted += OnCellDehighlighted;
             cell.GetComponent<Cell>().GetNeighbours(Cells);
+
+            if((cell as CombatTile).tiletype != null)
+            {
+                if((cell as CombatTile).tiletype == CombatTile.TileType.ALLY)
+                {
+                    (cell as CombatTile).tileteam = "ALLY";
+                }else{
+                    (cell as CombatTile).tileteam = "ENEMY";
+                }
+            }
         }
 
         var unitGenerator = GetComponent<IUnitGenerator>();
