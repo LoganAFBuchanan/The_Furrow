@@ -75,6 +75,7 @@ public abstract class Unit : MonoBehaviour
     /// <summary>
     /// Determines how far on the grid the unit can move.
     /// </summary>
+    [System.NonSerialized]
     public int MovementPoints;
     /// <summary>
     /// Determines speed of movement animation.
@@ -109,7 +110,7 @@ public abstract class Unit : MonoBehaviour
         UnitState = new UnitStateNormal(this);
 
         TotalHitPoints = HitPoints;
-        TotalMovementPoints = MovementPoints;
+        TotalMovementPoints = ActionPoints;
         TotalActionPoints = ActionPoints;
     }
 
@@ -221,7 +222,7 @@ public abstract class Unit : MonoBehaviour
         MarkAsDefending(other);
         //Damage is calculated by subtracting attack factor of attacker and defence factor of defender. 
         //If result is below 1, it is set to 1. This behaviour can be overridden in derived classes.
-        HitPoints -= Mathf.Clamp(damage - DefenceFactor, 1, damage);  
+        HitPoints -= Mathf.Clamp(damage - DefenceFactor, 0, damage);  
         if (UnitAttacked != null)
             UnitAttacked.Invoke(this, new AttackEventArgs(other, this, damage));
 
@@ -240,12 +241,12 @@ public abstract class Unit : MonoBehaviour
     {
         if (isMoving)
             return;
-
+        
         var totalMovementCost = path.Sum(h => h.MovementCost);
-        if (MovementPoints < totalMovementCost)
+        if (ActionPoints < totalMovementCost)
             return;
 
-        MovementPoints -= totalMovementCost;
+        ActionPoints -= totalMovementCost;
 
         Cell.IsTaken = false;
         Cell = destinationCell;
@@ -304,7 +305,7 @@ public abstract class Unit : MonoBehaviour
             var path = paths[key];
 
             var pathCost = path.Sum(c => c.MovementCost);
-            if (pathCost <= MovementPoints)
+            if (pathCost <= ActionPoints)
             {
                 cachedPaths.Add(key, path);
             }

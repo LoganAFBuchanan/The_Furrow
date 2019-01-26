@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
+using System.Collections;
 
 public class HeroControl : Unit
 {
@@ -20,6 +22,13 @@ public class HeroControl : Unit
             combatteam = "ENEMY";
         }
 
+    }
+
+    public override void OnTurnStart()
+    {
+        base.OnTurnStart();
+        MovementPoints = TotalMovementPoints;
+        DefenceFactor = 0;
     }
 
     public override bool IsCellMovableTo(Cell cell)
