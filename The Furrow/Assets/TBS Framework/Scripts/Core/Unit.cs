@@ -61,7 +61,8 @@ public abstract class Unit : MonoBehaviour
 
     public int TotalHitPoints { get; private set; }
     protected int TotalMovementPoints;
-    protected int TotalActionPoints;
+    [System.NonSerialized]
+    public int TotalActionPoints;
 
     /// <summary>
     /// Cell that the unit is currently occupying.
@@ -82,7 +83,7 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public float MovementSpeed;
     /// <summary>
-    /// Determines how many attacks unit can perform in one turn.
+    /// Determines how many actions unit can perform in one turn.
     /// </summary>
     public int ActionPoints;
 
@@ -217,19 +218,46 @@ public abstract class Unit : MonoBehaviour
     /// <summary>
     /// Attacking unit calls Defend method on defending unit. 
     /// </summary>
+    // protected virtual void Defend(Unit other, int damage)
+    // {
+    //     MarkAsDefending(other);
+    //     //Damage is calculated by subtracting attack factor of attacker and defence factor of defender. 
+    //     //If result is below 1, it is set to 1. This behaviour can be overridden in derived classes.
+    //     HitPoints -= Mathf.Clamp(damage - DefenceFactor, 0, damage);  
+    //     if (UnitAttacked != null)
+    //         UnitAttacked.Invoke(this, new AttackEventArgs(other, this, damage));
+
+    //     if (HitPoints <= 0)
+    //     {
+    //         if (UnitDestroyed != null)
+    //             UnitDestroyed.Invoke(this, new AttackEventArgs(other, this, damage));
+    //         OnDestroyed();
+    //     }
+    // }
+
     protected virtual void Defend(Unit other, int damage)
     {
         MarkAsDefending(other);
         //Damage is calculated by subtracting attack factor of attacker and defence factor of defender. 
-        //If result is below 1, it is set to 1. This behaviour can be overridden in derived classes.
-        HitPoints -= Mathf.Clamp(damage - DefenceFactor, 0, damage);  
+
+        int healthdamage = damage;
+
+        if(DefenceFactor > 0){
+            healthdamage -= DefenceFactor;
+            healthdamage = Mathf.Max(0, healthdamage); //Adjust to 0 if negative
+
+            DefenceFactor -= damage;
+            DefenceFactor = Mathf.Max(0, DefenceFactor); //Adjust to 0 if negative
+        }
+
+        HitPoints -= healthdamage;  
         if (UnitAttacked != null)
-            UnitAttacked.Invoke(this, new AttackEventArgs(other, this, damage));
+            UnitAttacked.Invoke(this, new AttackEventArgs(other, this, healthdamage));
 
         if (HitPoints <= 0)
         {
             if (UnitDestroyed != null)
-                UnitDestroyed.Invoke(this, new AttackEventArgs(other, this, damage));
+                UnitDestroyed.Invoke(this, new AttackEventArgs(other, this, healthdamage));
             OnDestroyed();
         }
     }

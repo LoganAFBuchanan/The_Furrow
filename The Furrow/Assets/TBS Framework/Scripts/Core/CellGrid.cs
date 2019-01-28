@@ -26,6 +26,10 @@ public class CellGrid : MonoBehaviour
     /// </summary>
     public event EventHandler GameEnded;
     /// <summary>
+    /// Turnstarted is invoked at the begining of the game and at the start of every turn
+    /// </summary>
+    public event EventHandler TurnStarted;
+    /// <summary>
     /// Turn ended event is invoked at the end of each turn.
     /// </summary>
     public event EventHandler TurnEnded;
@@ -79,6 +83,7 @@ public class CellGrid : MonoBehaviour
             LevelLoadingDone.Invoke(this, new EventArgs());
 
         StartGame();
+        TurnStarted.Invoke(this, new EventArgs());
     }
 
     private void Initialize()
@@ -212,5 +217,6 @@ public class CellGrid : MonoBehaviour
 
         Units.FindAll(u => u.PlayerNumber.Equals(CurrentPlayerNumber)).ForEach(u => { u.OnTurnStart(); });
         Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);     
+        TurnStarted.Invoke(this, new EventArgs());
     }
 }

@@ -7,6 +7,19 @@ using System.Collections;
 public class HeroControl : Unit
 {
     public Color LeadingColor;
+    public string UnitName;
+    public int defenseStrength;
+
+    public GameObject skillObject1;
+    public GameObject skillObject2;
+    public GameObject skillObject3;
+
+    [System.NonSerialized]
+    public Skill skill1;
+    [System.NonSerialized]
+    public Skill skill2;
+    [System.NonSerialized]
+    public Skill skill3;
 
     private string combatteam;
 
@@ -15,6 +28,10 @@ public class HeroControl : Unit
         base.Initialize();
         transform.position += new Vector3(0, 1, 0);
         GetComponent<Renderer>().material.color = LeadingColor;
+
+        if(skillObject1 != null) skill1 = skillObject1.GetComponent<Skill>();
+        if(skillObject2 != null) skill2 = skillObject2.GetComponent<Skill>();
+        if(skillObject3 != null) skill3 = skillObject3.GetComponent<Skill>();
 
         if(PlayerNumber == 0){
             combatteam = "ALLY";
@@ -29,6 +46,34 @@ public class HeroControl : Unit
         base.OnTurnStart();
         MovementPoints = TotalMovementPoints;
         DefenceFactor = 0;
+    }
+
+    public void GainDefence()
+    {
+
+        DefenceFactor += defenseStrength;
+
+    }
+
+    public void UseSkill(int skillNum)
+    {
+        switch (skillNum)
+      {
+          case 1:
+              Debug.Log("Skill 1 Used by " + UnitName);
+              break;
+          case 2:
+              Debug.Log("Skill 2 Used by " + UnitName);
+              break;
+        case 3:
+              Debug.Log("Skill 3 Used by " + UnitName);
+              break;
+          default:
+              Console.WriteLine("Default case for use skill");
+              break;
+      }
+
+
     }
 
     public override bool IsCellMovableTo(Cell cell)
