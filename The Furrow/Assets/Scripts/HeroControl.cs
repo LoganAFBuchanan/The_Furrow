@@ -60,17 +60,40 @@ public class HeroControl : Unit
         switch (skillNum)
       {
           case 1:
-              Debug.Log("Skill 1 Used by " + UnitName);
-              break;
+            Debug.Log("Skill 1 Used by " + UnitName);
+            if(skillObject1 != null)
+            {
+
+            }else
+            {
+                Debug.LogError(UnitName + " Does not have a skill1");
+            }
+
+            break;
           case 2:
-              Debug.Log("Skill 2 Used by " + UnitName);
-              break;
+            Debug.Log("Skill 2 Used by " + UnitName);
+            if(skillObject2 != null)
+            {
+
+            }else
+            {
+                Debug.LogError(UnitName + " Does not have a skill2");
+            }
+            break;
         case 3:
-              Debug.Log("Skill 3 Used by " + UnitName);
-              break;
+            Debug.Log("Skill 3 Used by " + UnitName);
+            if(skillObject3 != null)
+            {
+
+            }else
+            {
+                Debug.LogError(UnitName + " Does not have a skill3");
+            }
+
+            break;
           default:
-              Console.WriteLine("Default case for use skill");
-              break;
+            Debug.Log("Default case for use skill");
+            break;
       }
 
 

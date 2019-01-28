@@ -7,6 +7,8 @@ public class GUIController : MonoBehaviour
     public CellGrid CellGrid;
     public Button NextTurnButton;
     public Button skill1button;
+    public Button skill2button;
+    public Button skill3button;
 
     public Image UnitImage;
     public Text InfoText;
@@ -91,9 +93,38 @@ public class GUIController : MonoBehaviour
         currentunit = unit;
         Debug.Log("Selected Unit is " + currentunit.UnitName);
 
-       // skill1button.onClick.AddListener(currentunit.UseSkill(1));
-        skill1button.onClick.AddListener(delegate { currentunit.UseSkill(1); });
+       
+        if(currentunit.skillObject1 != null)
+        {
+            skill1button.gameObject.SetActive(true);
+            skill1button.onClick.AddListener(delegate { currentunit.UseSkill(1); });
+            skill1button.GetComponentInChildren<Text>().text = currentunit.skill1.skillname;
+        }
+        else skill1button.gameObject.SetActive(false);
 
+        if(currentunit.skillObject2 != null)
+        {
+            skill2button.gameObject.SetActive(true);
+            skill2button.onClick.AddListener(delegate { currentunit.UseSkill(2); });
+            skill2button.GetComponentInChildren<Text>().text = currentunit.skill2.skillname;
+        }
+        else skill2button.gameObject.SetActive(false);
+
+        if(currentunit.skillObject3 != null)
+        {
+            skill3button.gameObject.SetActive(true);
+            skill3button.onClick.AddListener(delegate { currentunit.UseSkill(3); });
+            skill3button.GetComponentInChildren<Text>().text = currentunit.skill3.skillname;
+        }
+        else skill3button.gameObject.SetActive(false);
+
+    }
+
+    private void OnUnitDeselected(object sender, EventArgs e)
+    {
+        skill1button.onClick.RemoveAllListeners();
+        skill2button.onClick.RemoveAllListeners();
+        skill3button.onClick.RemoveAllListeners();
     }
 
     private void OnUnitAdded(object sender, UnitCreatedEventArgs e)
@@ -107,6 +138,7 @@ public class GUIController : MonoBehaviour
         unit.GetComponent<Unit>().UnitDehighlighted += OnUnitDehighlighted;
         unit.GetComponent<Unit>().UnitAttacked += OnUnitAttacked;
         unit.GetComponent<Unit>().UnitSelected += OnUnitSelected;
+        unit.GetComponent<Unit>().UnitDeselected += OnUnitDeselected;
     }
     public void RestartLevel()
     {
