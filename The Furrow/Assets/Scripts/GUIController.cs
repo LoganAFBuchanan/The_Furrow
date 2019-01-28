@@ -93,7 +93,7 @@ public class GUIController : MonoBehaviour
         currentunit = unit;
         Debug.Log("Selected Unit is " + currentunit.UnitName);
 
-       
+       //Dynamically create buttons for each skill that a unit possesses. 
         if(currentunit.skillObject1 != null)
         {
             skill1button.gameObject.SetActive(true);
@@ -120,8 +120,10 @@ public class GUIController : MonoBehaviour
 
     }
 
+
     private void OnUnitDeselected(object sender, EventArgs e)
     {
+        //Avoid doubling listeners when selecting other units
         skill1button.onClick.RemoveAllListeners();
         skill2button.onClick.RemoveAllListeners();
         skill3button.onClick.RemoveAllListeners();
@@ -157,6 +159,7 @@ public class GUIController : MonoBehaviour
             }
             
         }
+        CellGrid.CellGridState = new CellGridStateUnitSelected(CellGrid, currentunit);
 
     }
 }
