@@ -6,7 +6,7 @@ public class Skill : MonoBehaviour
 {
     public string skillname;
     public int actioncost;
-    
+    public int damage;
 
     public int[] skillTargetX;
     public int[] skillTargetY;
@@ -17,9 +17,9 @@ public class Skill : MonoBehaviour
         //skillTargetY = new int[3]{ 1, 0, -1 };
     }
 
-    public void UseSkill()
+    public void UseSkill(HeroControl user, HeroControl target)
     {
-
+        target.Defend(user, damage);
     }
 
     // public HashSet<Cell> GetAvailableTargets(List<Cell> cells)

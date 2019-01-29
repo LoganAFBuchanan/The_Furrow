@@ -1,6 +1,6 @@
 ﻿public class Archer : MyUnit
 {
-    protected override void Defend(Unit other, int damage)
+    public override void Defend(Unit other, int damage)
     {
         var realDamage = damage;
         if (other is Paladin)

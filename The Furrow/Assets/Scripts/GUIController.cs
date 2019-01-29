@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class GUIController : MonoBehaviour
 {
     public CellGrid CellGrid;
+    public Button defendButton;
     public Button NextTurnButton;
     public Button skill1button;
     public Button skill2button;
@@ -44,6 +45,7 @@ public class GUIController : MonoBehaviour
             cell.GetComponent<Cell>().CellHighlighted += OnCellHighlighted;
             cell.GetComponent<Cell>().CellDehighlighted += OnCellDehighlighted;
         }
+        InitializeButtons();
 
         OnTurnEnded(sender,e);
     }
@@ -102,12 +104,22 @@ public class GUIController : MonoBehaviour
         var unit = sender as HeroControl;
         currentunit = unit;
         Debug.Log("Selected Unit is " + currentunit.UnitName);
-
+        defendButton.gameObject.SetActive(true);
+        if(currentunit.ActionPoints <= 0) defendButton.interactable = false;
+        else defendButton.interactable = true;
        //Dynamically create buttons for each skill that a unit possesses. 
         if(currentunit.skillObject1 != null)
         {
             skill1button.gameObject.SetActive(true);
-            skill1button.onClick.AddListener(delegate { currentunit.UseSkill(1); });
+            skill1button.onClick.AddListener(delegate 
+            { 
+                currentunit.UseSkill(1, CellGrid.Cells, CellGrid.Units); 
+                CellGrid.CellGridState = new CellGridStateUnitSelected(CellGrid, currentunit);
+            });
+
+            if(currentunit.ActionPoints < currentunit.skill1.actioncost) skill1button.interactable = false;
+            else skill1button.interactable = true;
+
             skill1button.GetComponentInChildren<Text>().text = currentunit.skill1.skillname;
         }
         else skill1button.gameObject.SetActive(false);
@@ -115,7 +127,15 @@ public class GUIController : MonoBehaviour
         if(currentunit.skillObject2 != null)
         {
             skill2button.gameObject.SetActive(true);
-            skill2button.onClick.AddListener(delegate { currentunit.UseSkill(2); });
+            skill2button.onClick.AddListener(delegate 
+            { 
+                currentunit.UseSkill(2, CellGrid.Cells, CellGrid.Units); 
+                CellGrid.CellGridState = new CellGridStateUnitSelected(CellGrid, currentunit);
+            });
+
+            if(currentunit.ActionPoints < currentunit.skill2.actioncost) skill2button.interactable = false;
+            else skill2button.interactable = true;
+
             skill2button.GetComponentInChildren<Text>().text = currentunit.skill2.skillname;
         }
         else skill2button.gameObject.SetActive(false);
@@ -123,7 +143,15 @@ public class GUIController : MonoBehaviour
         if(currentunit.skillObject3 != null)
         {
             skill3button.gameObject.SetActive(true);
-            skill3button.onClick.AddListener(delegate { currentunit.UseSkill(3); });
+            skill3button.onClick.AddListener(delegate 
+            { 
+                currentunit.UseSkill(3, CellGrid.Cells, CellGrid.Units); 
+                CellGrid.CellGridState = new CellGridStateUnitSelected(CellGrid, currentunit);
+            });
+
+            if(currentunit.ActionPoints < currentunit.skill3.actioncost) skill3button.interactable = false;
+            else skill3button.interactable = true;
+            
             skill3button.GetComponentInChildren<Text>().text = currentunit.skill3.skillname;
         }
         else skill3button.gameObject.SetActive(false);
@@ -137,6 +165,7 @@ public class GUIController : MonoBehaviour
         skill1button.onClick.RemoveAllListeners();
         skill2button.onClick.RemoveAllListeners();
         skill3button.onClick.RemoveAllListeners();
+        InitializeButtons();
     }
 
     private void OnUnitAdded(object sender, UnitCreatedEventArgs e)
@@ -171,6 +200,14 @@ public class GUIController : MonoBehaviour
         }
         CellGrid.CellGridState = new CellGridStateUnitSelected(CellGrid, currentunit);
 
+    }
+
+    private void InitializeButtons()
+    {
+        defendButton.gameObject.SetActive(false);
+        skill1button.gameObject.SetActive(false);
+        skill2button.gameObject.SetActive(false);
+        skill3button.gameObject.SetActive(false);
     }
 
     public void OnSkill1HoverEnter(){

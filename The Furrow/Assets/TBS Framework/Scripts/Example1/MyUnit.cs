@@ -21,7 +21,7 @@ public class MyUnit : Unit
         gameObject.transform.localPosition = Cell.transform.localPosition + new Vector3(0, offset, 0);
     }
 
-    protected override void Defend(Unit other, int damage)
+    public override void Defend(Unit other, int damage)
     {
         base.Defend(other, damage);
         UpdateHpBar();

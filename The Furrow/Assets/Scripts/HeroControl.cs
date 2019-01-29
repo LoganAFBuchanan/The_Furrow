@@ -55,14 +55,35 @@ public class HeroControl : Unit
 
     }
 
-    public void UseSkill(int skillNum)
-    {
+    public void UseSkill(int skillNum, List<Cell> cells, List<Unit> units)
+    {   
+        List<Cell> targetCells;
+
         switch (skillNum)
       {
           case 1:
             Debug.Log("Skill 1 Used by " + UnitName);
+            ActionPoints -= skill1.actioncost;
             if(skillObject1 != null)
             {
+                targetCells = GetAvailableTargets(cells, skill1);
+                foreach(Cell cell in cells) //Check every cell on the game board
+                {
+                    foreach(Cell targetCell in targetCells) //Check the cells that are in the target area
+                    {
+                        if(cell.OffsetCoord == targetCell.OffsetCoord && cell.IsTaken) //If a cell is taken
+                        {
+                            foreach(HeroControl unit in units) //Check all units and use the skill on all those units
+                            {
+                                if(unit.Cell.OffsetCoord == cell.OffsetCoord)
+                                {
+                                    Debug.Log("Skill 1 used on: " + (unit as HeroControl).UnitName);
+                                    skill1.UseSkill(this, unit);
+                                }
+                            }
+                        }
+                    }
+                }
 
             }else
             {
@@ -72,9 +93,27 @@ public class HeroControl : Unit
             break;
           case 2:
             Debug.Log("Skill 2 Used by " + UnitName);
+            ActionPoints -= skill2.actioncost;
             if(skillObject2 != null)
             {
-
+                targetCells = GetAvailableTargets(cells, skill2);
+                foreach(Cell cell in cells) //Check every cell on the game board
+                {
+                    foreach(Cell targetCell in targetCells) //Check the cells that are in the target area
+                    {
+                        if(cell.OffsetCoord == targetCell.OffsetCoord && cell.IsTaken) //If a cell is taken
+                        {
+                            foreach(HeroControl unit in units) //Check all units and use the skill on all those units
+                            {
+                                if(unit.Cell.OffsetCoord == cell.OffsetCoord)
+                                {
+                                    Debug.Log("Skill 2 used on: " + (unit as HeroControl).UnitName);
+                                    skill2.UseSkill(this, unit);
+                                }
+                            }
+                        }
+                    }
+                }
             }else
             {
                 Debug.LogError(UnitName + " Does not have a skill2");
@@ -82,9 +121,27 @@ public class HeroControl : Unit
             break;
         case 3:
             Debug.Log("Skill 3 Used by " + UnitName);
+            ActionPoints -= skill3.actioncost;
             if(skillObject3 != null)
             {
-
+                targetCells = GetAvailableTargets(cells, skill3);
+                foreach(Cell cell in cells) //Check every cell on the game board
+                {
+                    foreach(Cell targetCell in targetCells) //Check the cells that are in the target area
+                    {
+                        if(cell.OffsetCoord == targetCell.OffsetCoord && cell.IsTaken) //If a cell is taken
+                        {
+                            foreach(HeroControl unit in units) //Check all units and use the skill on all those units
+                            {
+                                if(unit.Cell.OffsetCoord == cell.OffsetCoord)
+                                {
+                                    Debug.Log("Skill 3 used on: " + (unit as HeroControl).UnitName);
+                                    skill3.UseSkill(this, unit);
+                                }
+                            }
+                        }
+                    }
+                }
             }else
             {
                 Debug.LogError(UnitName + " Does not have a skill3");

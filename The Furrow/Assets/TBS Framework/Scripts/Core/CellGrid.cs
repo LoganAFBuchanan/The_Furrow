@@ -239,7 +239,12 @@ public class CellGrid : MonoBehaviour
         Debug.Log(playerSkill.skillname + " hovered");
         if(CellGridState is CellGridStateUnitSelected)
         {
-            (sender as GUIController).currentunit.GetAvailableTargets(Cells, playerSkill);
+            List<Cell> targetCells = (sender as GUIController).currentunit.GetAvailableTargets(Cells, playerSkill);
+
+            foreach(Cell cell in targetCells)
+            {
+                cell.MarkAsTargetable();
+            }
         }
 
         
@@ -252,7 +257,12 @@ public class CellGrid : MonoBehaviour
         Debug.Log(playerSkill.skillname + " hovered");
         if(CellGridState is CellGridStateUnitSelected)
         {
-            (sender as GUIController).currentunit.GetAvailableTargets(Cells, playerSkill);
+            List<Cell> targetCells = (sender as GUIController).currentunit.GetAvailableTargets(Cells, playerSkill);
+
+            foreach(Cell cell in targetCells)
+            {
+                cell.MarkAsTargetable();
+            }
         }
     }
 
@@ -263,25 +273,30 @@ public class CellGrid : MonoBehaviour
         Debug.Log(playerSkill.skillname + " hovered");
         if(CellGridState is CellGridStateUnitSelected)
         {
-            (sender as GUIController).currentunit.GetAvailableTargets(Cells, playerSkill);
+            List<Cell> targetCells = (sender as GUIController).currentunit.GetAvailableTargets(Cells, playerSkill);
+
+            foreach(Cell cell in targetCells)
+            {
+                cell.MarkAsTargetable();
+            }
         }
     }
 
     private void OnSkill1HoverExit(object sender, EventArgs e){
         Debug.Log("Skill 1 Exit");
-
-        //CellGridState = new CellGridStateSkillHoverExit(this);
+        Unit __unit = (sender as GUIController).currentunit;
+        CellGridState = new CellGridStateUnitSelected(this, __unit);
     }
 
     private void OnSkill2HoverExit(object sender, EventArgs e){
         Debug.Log("Skill 2 Exit");
-
-        //CellGridState = new CellGridStateSkillHoverExit(this);
+        Unit __unit = (sender as GUIController).currentunit;
+        CellGridState = new CellGridStateUnitSelected(this, __unit);
     }
 
     private void OnSkill3HoverExit(object sender, EventArgs e){
         Debug.Log("Skill 3 Exit");
-
-        //CellGridState = new CellGridStateSkillHoverExit(this);
+        Unit __unit = (sender as GUIController).currentunit;
+        CellGridState = new CellGridStateUnitSelected(this, __unit);
     }
 }

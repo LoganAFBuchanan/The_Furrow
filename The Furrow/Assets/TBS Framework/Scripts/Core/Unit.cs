@@ -236,7 +236,7 @@ public abstract class Unit : MonoBehaviour
     //     }
     // }
 
-    protected virtual void Defend(Unit other, int damage)
+    public virtual void Defend(Unit other, int damage)
     {
         MarkAsDefending(other);
         //Damage is calculated by subtracting attack factor of attacker and defence factor of defender. 
@@ -342,16 +342,24 @@ public abstract class Unit : MonoBehaviour
         return new HashSet<Cell>(cachedPaths.Keys);
     }
 
+
+    //Returns a list of cells that correspond to the target area of the chosen skill
     public List<Cell> GetAvailableTargets(List<Cell> cells, Skill skill)
     {
         cachedTargets = new List<Cell>();
+
+        Vector2 targetCoord = new Vector2();
         
         for (int i = 0; i < cells.Count(); i++)
         {
-            //Debug.Log(cell.OffsetCoord.x + ", " + cell.OffsetCoord.y);
 
             for(int j = 0; j < skill.skillTargetX.Length; j++){
-                if((int)cells[i].OffsetCoord.x == skill.skillTargetX[j] && (int)cells[i].OffsetCoord.y == skill.skillTargetY[j])
+                
+                targetCoord = new Vector2(Cell.OffsetCoord.x + skill.skillTargetX[j], Cell.OffsetCoord.y + skill.skillTargetY[j]);
+
+                Debug.Log("Target Coordinate " + j + ": " + targetCoord.x + ", " + targetCoord.y);
+
+                if((int)cells[i].OffsetCoord.x == targetCoord.x && (int)cells[i].OffsetCoord.y == targetCoord.y)
                 {
                     Debug.Log("Added cell to hover highlight at: " + cells[i].OffsetCoord.x + ", " + cells[i].OffsetCoord.y);
                     cachedTargets.Add(cells[i]);
@@ -361,19 +369,6 @@ public abstract class Unit : MonoBehaviour
             
         }
 
-        // var paths = cachePaths(cells);
-        // foreach (var key in paths.Keys)
-        // {
-        //     if (!IsCellMovableTo(key))
-        //         continue;
-        //     var path = paths[key];
-
-        //     var pathCost = path.Sum(c => c.MovementCost);
-        //     if (pathCost <= ActionPoints)
-        //     {
-        //         cachedTargets.Add(key, path);
-        //     }
-        // }
         return cachedTargets;
     }
 
