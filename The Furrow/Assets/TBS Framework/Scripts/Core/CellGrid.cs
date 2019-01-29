@@ -34,6 +34,8 @@ public class CellGrid : MonoBehaviour
     /// </summary>
     public event EventHandler TurnEnded;
 
+
+
     /// <summary>
     /// UnitAdded event is invoked each time AddUnit method is called.
     /// </summary>
@@ -72,6 +74,8 @@ public class CellGrid : MonoBehaviour
     public List<Cell> Cells { get; private set; }
     public List<Unit> Units { get; private set; }
 
+    public GUIController guiController;
+
     private void Start()
     {
         if (LevelLoading != null)
@@ -99,6 +103,14 @@ public class CellGrid : MonoBehaviour
         }
         NumberOfPlayers = Players.Count;
         CurrentPlayerNumber = Players.Min(p => p.PlayerNumber);
+        guiController = GameObject.Find("GUIController").GetComponent<GUIController>();
+
+        guiController.skill1hoverenter += OnSkill1HoverEnter;
+        guiController.skill1hoverexit += OnSkill1HoverExit;
+        guiController.skill2hoverenter += OnSkill2HoverEnter;
+        guiController.skill2hoverexit += OnSkill2HoverExit;
+        guiController.skill3hoverenter += OnSkill3HoverEnter;
+        guiController.skill3hoverexit += OnSkill3HoverExit;
 
         Cells = new List<Cell>();
         for (int i = 0; i < transform.childCount; i++)
@@ -218,5 +230,58 @@ public class CellGrid : MonoBehaviour
         Units.FindAll(u => u.PlayerNumber.Equals(CurrentPlayerNumber)).ForEach(u => { u.OnTurnStart(); });
         Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);     
         TurnStarted.Invoke(this, new EventArgs());
+    }
+
+    private void OnSkill1HoverEnter(object sender, EventArgs e){
+        Skill playerSkill = (sender as GUIController).currentunit.skill1;
+
+        //CellGridState = new CellGridStateSkillHover(this, (sender as GUIController).currentunit, playerSkill);
+        Debug.Log(playerSkill.skillname + " hovered");
+        if(CellGridState is CellGridStateUnitSelected)
+        {
+            (sender as GUIController).currentunit.GetAvailableTargets(Cells, playerSkill);
+        }
+
+        
+    }
+
+    private void OnSkill2HoverEnter(object sender, EventArgs e){
+        Skill playerSkill = (sender as GUIController).currentunit.skill2;
+
+        //CellGridState = new CellGridStateSkillHover(this, (sender as GUIController).currentunit, playerSkill);
+        Debug.Log(playerSkill.skillname + " hovered");
+        if(CellGridState is CellGridStateUnitSelected)
+        {
+            (sender as GUIController).currentunit.GetAvailableTargets(Cells, playerSkill);
+        }
+    }
+
+    private void OnSkill3HoverEnter(object sender, EventArgs e){
+        Skill playerSkill = (sender as GUIController).currentunit.skill3;
+
+        //CellGridState = new CellGridStateSkillHover(this, (sender as GUIController).currentunit, playerSkill);
+        Debug.Log(playerSkill.skillname + " hovered");
+        if(CellGridState is CellGridStateUnitSelected)
+        {
+            (sender as GUIController).currentunit.GetAvailableTargets(Cells, playerSkill);
+        }
+    }
+
+    private void OnSkill1HoverExit(object sender, EventArgs e){
+        Debug.Log("Skill 1 Exit");
+
+        //CellGridState = new CellGridStateSkillHoverExit(this);
+    }
+
+    private void OnSkill2HoverExit(object sender, EventArgs e){
+        Debug.Log("Skill 2 Exit");
+
+        //CellGridState = new CellGridStateSkillHoverExit(this);
+    }
+
+    private void OnSkill3HoverExit(object sender, EventArgs e){
+        Debug.Log("Skill 3 Exit");
+
+        //CellGridState = new CellGridStateSkillHoverExit(this);
     }
 }

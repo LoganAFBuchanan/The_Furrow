@@ -30,4 +30,9 @@ public class SampleSquare : Square
         GetComponent<Renderer>().material.color = Color.white;
     }
 
+    public override void MarkAsTargetable()
+    {
+        GetComponent<Renderer>().material.color = Color.red;
+    }
+
 }

@@ -71,6 +71,10 @@ public abstract class Cell : MonoBehaviour, IGraphNode, IEquatable<Cell>
     /// It is necessary necessary for grid generators
     /// </summary>
     public abstract Vector3 GetCellDimensions();
+    /// <summary>
+    ///  Method marks the cell to give user an indication that hovered skill can target it.
+    /// </summary>
+    public abstract void MarkAsTargetable();
 
     /// <summary>
     ///  Method marks the cell to give user an indication that selected unit can reach it.

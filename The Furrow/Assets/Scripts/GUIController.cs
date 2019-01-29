@@ -14,7 +14,17 @@ public class GUIController : MonoBehaviour
     public Text InfoText;
     public Text StatsText;
 
-    private HeroControl currentunit;
+    [System.NonSerialized]
+    public HeroControl currentunit;
+
+    //Events to cover highlighting when skill buttons are hovered upon
+    public event EventHandler skill1hoverenter;
+    public event EventHandler skill2hoverenter;
+    public event EventHandler skill3hoverenter;
+
+    public event EventHandler skill1hoverexit;
+    public event EventHandler skill2hoverexit;
+    public event EventHandler skill3hoverexit;
 
     void Awake()
     {
@@ -81,7 +91,7 @@ public class GUIController : MonoBehaviour
     private void OnUnitHighlighted(object sender, EventArgs e)
     {
         var unit = sender as HeroControl;
-        currentunit = unit;
+        //currentunit = unit;
         StatsText.text = unit.UnitName + "\nHit Points: " + unit.HitPoints +"/"+unit.TotalHitPoints + "\nDefence: " + unit.DefenceFactor + "\nAction Points: " + unit.ActionPoints + "/" + unit.TotalActionPoints + "\nAttack: " + unit.AttackFactor + "\nDefence: " + unit.DefenceFactor + "\nRange: " + unit.AttackRange;
         UnitImage.color = unit.LeadingColor;
 
@@ -161,5 +171,29 @@ public class GUIController : MonoBehaviour
         }
         CellGrid.CellGridState = new CellGridStateUnitSelected(CellGrid, currentunit);
 
+    }
+
+    public void OnSkill1HoverEnter(){
+        skill1hoverenter.Invoke(this, new EventArgs());
+    }
+
+    public void OnSkill2HoverEnter(){
+        skill2hoverenter.Invoke(this, new EventArgs());
+    }
+
+    public void OnSkill3HoverEnter(){
+        skill3hoverenter.Invoke(this, new EventArgs());
+    }
+
+    public void OnSkill1HoverExit(){
+        skill1hoverexit.Invoke(this, new EventArgs());
+    }
+
+    public void OnSkill2HoverExit(){
+        skill2hoverexit.Invoke(this, new EventArgs());
+    }
+
+    public void OnSkill3HoverExit(){
+        skill3hoverexit.Invoke(this, new EventArgs());
     }
 }

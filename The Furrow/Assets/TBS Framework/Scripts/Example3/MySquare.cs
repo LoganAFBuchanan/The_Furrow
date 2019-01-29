@@ -30,6 +30,11 @@ public class MySquare : Square
         SetColor(new Color(1,1,1,0));
     }
 
+    public override void MarkAsTargetable()
+    {
+        GetComponent<Renderer>().material.color = Color.red;
+    }
+
     private void SetColor(Color color)
     {
         var highlighter = transform.Find("Highlighter");

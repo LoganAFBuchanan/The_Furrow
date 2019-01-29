@@ -19,6 +19,11 @@ class CellGridStateUnitSelected : CellGridState
         _unitsInRange = new List<Unit>();
     }
 
+    public void OnSkillHover(Skill skill)
+    {
+
+    }
+
     public override void OnCellClicked(Cell cell)
     {
         if (_unit.isMoving)

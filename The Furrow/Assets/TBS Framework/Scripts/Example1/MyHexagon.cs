@@ -23,6 +23,11 @@ class MyHexagon : Hexagon
         return outlineRenderer.bounds.size;
     }
 
+    public override void MarkAsTargetable()
+    {
+        GetComponent<Renderer>().material.color = Color.red;
+    }
+
     public override void MarkAsReachable()
     {
         SetColor(hexagonRenderer, Color.yellow);

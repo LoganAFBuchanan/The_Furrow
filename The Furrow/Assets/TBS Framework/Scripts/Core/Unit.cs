@@ -10,6 +10,7 @@ using System.Collections;
 public abstract class Unit : MonoBehaviour
 {
     Dictionary<Cell, List<Cell>> cachedPaths = null;
+    List<Cell> cachedTargets = null;
     /// <summary>
     /// UnitClicked event is invoked when user clicks the unit. 
     /// It requires a collider on the unit game object to work.
@@ -339,6 +340,41 @@ public abstract class Unit : MonoBehaviour
             }
         }
         return new HashSet<Cell>(cachedPaths.Keys);
+    }
+
+    public List<Cell> GetAvailableTargets(List<Cell> cells, Skill skill)
+    {
+        cachedTargets = new List<Cell>();
+        
+        for (int i = 0; i < cells.Count(); i++)
+        {
+            //Debug.Log(cell.OffsetCoord.x + ", " + cell.OffsetCoord.y);
+
+            for(int j = 0; j < skill.skillTargetX.Length; j++){
+                if((int)cells[i].OffsetCoord.x == skill.skillTargetX[j] && (int)cells[i].OffsetCoord.y == skill.skillTargetY[j])
+                {
+                    Debug.Log("Added cell to hover highlight at: " + cells[i].OffsetCoord.x + ", " + cells[i].OffsetCoord.y);
+                    cachedTargets.Add(cells[i]);
+                }
+            }
+            
+            
+        }
+
+        // var paths = cachePaths(cells);
+        // foreach (var key in paths.Keys)
+        // {
+        //     if (!IsCellMovableTo(key))
+        //         continue;
+        //     var path = paths[key];
+
+        //     var pathCost = path.Sum(c => c.MovementCost);
+        //     if (pathCost <= ActionPoints)
+        //     {
+        //         cachedTargets.Add(key, path);
+        //     }
+        // }
+        return cachedTargets;
     }
 
     private Dictionary<Cell, List<Cell>> cachePaths(List<Cell> cells)

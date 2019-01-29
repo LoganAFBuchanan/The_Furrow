@@ -22,6 +22,11 @@ public class CombatTile : Square
         return GetComponent<Renderer>().bounds.size;
     }
 
+    public override void MarkAsTargetable()
+    {
+        GetComponent<Renderer>().material.color = Color.red;
+    }
+
     public override void MarkAsHighlighted()
     {
         GetComponent<Renderer>().material.color = new Color(0.75f, 0.75f, 0.75f);
