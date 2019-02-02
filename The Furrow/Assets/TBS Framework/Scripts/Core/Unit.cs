@@ -303,6 +303,7 @@ public abstract class Unit : MonoBehaviour
             }
         }
         isMoving = false;
+        
     }
 
     ///<summary>

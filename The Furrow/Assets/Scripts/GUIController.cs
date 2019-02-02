@@ -63,6 +63,7 @@ public class GUIController : MonoBehaviour
     private void OnTurnEnded(object sender, EventArgs e)
     {
         NextTurnButton.interactable = ((sender as CellGrid).CurrentPlayer is HumanPlayer);
+        CellGrid.CheckContention();
 
         InfoText.text = "Player " + ((sender as CellGrid).CurrentPlayerNumber +1);
     }
@@ -193,7 +194,6 @@ public class GUIController : MonoBehaviour
         {
             if(currentunit.ActionPoints > 0)
             {   
-                currentunit.ActionPoints -= 1;
                 currentunit.GainDefence();
             }
             

@@ -51,7 +51,12 @@ public class HeroControl : Unit
     public void GainDefence()
     {
 
-        DefenceFactor += defenseStrength;
+        while(ActionPoints > 0)
+        {
+            DefenceFactor += defenseStrength;
+            ActionPoints--;
+        }
+        
 
     }
 
@@ -159,14 +164,14 @@ public class HeroControl : Unit
     public override bool IsCellMovableTo(Cell cell)
     {
         return base.IsCellMovableTo(cell) &&
-        (cell as CombatTile).tileteam == combatteam;
+        ((cell as CombatTile).tileteam == combatteam || (cell as CombatTile).tileteam == "CONTESTED");
         //Prohibits moving through cells that are Not allied with you
     }
 
     public override bool IsCellTraversable( Cell cell)
     {
         return base .IsCellTraversable(cell) &&
-        (cell as CombatTile).tileteam == combatteam;
+        ((cell as CombatTile).tileteam == combatteam || (cell as CombatTile).tileteam == "CONTESTED");
         //Prohibits moving through cells that are Not allied with you
     }
 

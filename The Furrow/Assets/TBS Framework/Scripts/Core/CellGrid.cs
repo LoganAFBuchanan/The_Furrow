@@ -128,17 +128,25 @@ public class CellGrid : MonoBehaviour
             cell.CellHighlighted += OnCellHighlighted;
             cell.CellDehighlighted += OnCellDehighlighted;
             cell.GetComponent<Cell>().GetNeighbours(Cells);
+            
 
             if((cell as CombatTile).tiletype != null)
             {
                 if((cell as CombatTile).tiletype == CombatTile.TileType.ALLY)
                 {
                     (cell as CombatTile).tileteam = "ALLY";
-                }else{
+                }else if((cell as CombatTile).tiletype == CombatTile.TileType.ENEMY)
+                {
                     (cell as CombatTile).tileteam = "ENEMY";
+                }else if((cell as CombatTile).tiletype == CombatTile.TileType.CONTESTED)
+                {
+                    (cell as CombatTile).tileteam = "CONTESTED";
                 }
             }
+            
+            
         }
+        
 
         var unitGenerator = GetComponent<IUnitGenerator>();
         if (unitGenerator != null)
@@ -147,10 +155,18 @@ public class CellGrid : MonoBehaviour
             foreach (var unit in Units)
             {
                 AddUnit(unit.GetComponent<Transform>());
+                
             }
         }
         else
             Debug.LogError("No IUnitGenerator script attached to cell grid");
+
+        CheckContention();
+    }
+
+    private void OnUnitMoved(object sender, EventArgs e)
+    {
+        CellGridState.OnUnitMoved(sender as Unit);
     }
 
     private void OnCellDehighlighted(object sender, EventArgs e)
@@ -179,6 +195,113 @@ public class CellGrid : MonoBehaviour
             if(GameEnded != null)
                 GameEnded.Invoke(this, new EventArgs());
         }
+        CheckContention();
+    }
+
+    public void CheckContention()
+    {   
+        List<CombatTile> contestedCells = GetContestedCells();
+        List<Unit> contestedUnits = new List<Unit>();
+
+        //Add Units that are within contested territory
+        foreach(CombatTile cell in contestedCells)
+        {
+            foreach(Unit unit in Units)
+            {
+                if(unit.Cell.OffsetCoord == cell.OffsetCoord)
+                {
+                    contestedUnits.Add(unit);
+                }
+            }
+        }
+
+        if(contestedUnits.Count > 0)
+        {   
+            //Check that all contested units are on the same team
+            int takingTeam = contestedUnits[0].PlayerNumber; 
+            bool isContested = false;
+            int captureColumn = (int)(contestedUnits[0].Cell as CombatTile).OffsetCoord.x;
+            foreach(Unit unit in contestedUnits)
+            {
+                if(unit.PlayerNumber == takingTeam)
+                {
+
+                }
+                else
+                {
+                    //If there is a discrepancy then set contested to true and abort capture
+                    isContested = true;
+                }
+            }
+
+            if(isContested)
+            {
+                Debug.Log("Row still Contested, no capture needed");
+            }
+            else if(!isContested)
+            {
+                //If contested stays true and all units are on the same team, then initiate column capture of contested row
+                Debug.Log("Capturing Column: " + captureColumn);
+                SetContestedColumn(captureColumn, takingTeam);
+            }
+        }
+
+
+        Debug.Log(contestedUnits);
+    }
+
+    public List<CombatTile> GetContestedCells()
+    {
+        List<CombatTile> contestedCells = new List<CombatTile>();
+        foreach(CombatTile cell in Cells)
+        {
+            if((cell as CombatTile).tileteam == "CONTESTED") contestedCells.Add((cell as CombatTile)); 
+        }
+        return contestedCells;
+    }
+
+    public void SetContestedColumn(int column, int team)
+    {
+
+        int captureDir = 0;
+        
+
+        if(team == 0)
+        {
+            captureDir = 1;
+        }
+        else if(team == 1)
+        {
+            captureDir = -1;
+        }
+
+        column += captureDir;
+
+        foreach(CombatTile cell in Cells)
+        {
+            if(cell.tileteam == "CONTESTED")
+            {
+                if(team == 0)
+                {
+                    cell.tileteam = "ALLY";
+                    cell.tiletype = CombatTile.TileType.ALLY;
+                }
+                else if (team == 1)
+                {
+                    cell.tileteam = "ENEMY";
+                    cell.tiletype = CombatTile.TileType.ENEMY;
+                }
+            }
+
+            if((int)cell.OffsetCoord.x == column)
+            {
+                cell.tileteam = "CONTESTED";
+                cell.tiletype = CombatTile.TileType.CONTESTED;
+            }
+            
+        }
+
+
     }
 
     /// <summary>
@@ -189,6 +312,7 @@ public class CellGrid : MonoBehaviour
     {
         unit.GetComponent<Unit>().UnitClicked += OnUnitClicked;
         unit.GetComponent<Unit>().UnitDestroyed += OnUnitDestroyed;
+        unit.GetComponent<Unit>().UnitMoved += OnUnitMoved;
 
         if(UnitAdded != null)
             UnitAdded.Invoke(this, new UnitCreatedEventArgs(unit)); 

@@ -10,13 +10,20 @@ public class CombatTile : Square
     public enum TileType
     {
         ALLY,
-        ENEMY
+        ENEMY, 
+        CONTESTED
     }
 
     [System.NonSerialized]
     public string tileteam;
 
-    
+
+
+    public void MarkAsContested()
+    {
+        GetComponent<Renderer>().material.color = Color.blue;
+    }
+
     public override Vector3 GetCellDimensions()
     {
         return GetComponent<Renderer>().bounds.size;
@@ -45,5 +52,7 @@ public class CombatTile : Square
     public override void UnMark()
     {
         GetComponent<Renderer>().material.color = Color.white;
+
+        //if(tiletype == TileType.CONTESTED) MarkAsContested();
     }
 }
