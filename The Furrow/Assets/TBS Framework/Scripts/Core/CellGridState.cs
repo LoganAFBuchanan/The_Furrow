@@ -41,6 +41,12 @@ public abstract class CellGridState
     /// <param name="cell">Cell that was clicked.</param>
     public virtual void OnCellClicked(Cell cell)
     {
+        //_cellGrid.CheckContention();
+    }
+
+    public virtual void OnUnitMoved(Unit unit)
+    {
+        _cellGrid.CheckContention();
     }
 
     /// <summary>
