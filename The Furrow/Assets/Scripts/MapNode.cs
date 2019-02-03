@@ -15,14 +15,17 @@ public class MapNode : MonoBehaviour
     [System.NonSerialized]
     public float moveDistance;
 
-    List<MapNode> accessNodes;
+    public List<MapNode> accessNodes;
+    public event EventHandler HoverEnter;
     public event EventHandler HoverExit;
+    public event EventHandler NodeClicked;
+    public event EventHandler PlayerEntered;
 
     // Start is called before the first frame update
     void Awake()
     {
         isTaken = false;
-
+        accessNodes = new List<MapNode>();
     }
 
     // Update is called once per frame
@@ -47,17 +50,18 @@ public class MapNode : MonoBehaviour
 
     private void OnMouseEnter() 
     {
-        Debug.Log("MouseEntered!");
-        foreach(MapNode node in accessNodes)
-        {
-            Debug.Log("Highlighting Node: " + node);
-            node.OnHighlightNode();
-        }
+        //Debug.Log("MouseEntered!");
+        HoverEnter.Invoke(this, new EventArgs());
     }
 
     private void OnMouseExit() 
     {
         HoverExit.Invoke(this, new EventArgs());
+    }
+
+    private void OnMouseUpAsButton() 
+    {
+        NodeClicked.Invoke(this, new EventArgs());
     }
 
     public void OnHighlightNode()
@@ -70,6 +74,17 @@ public class MapNode : MonoBehaviour
         GetComponent<Renderer>().material.color = Color.white;
     }
 
+    public void OnPlayerHighlight()
+    {
+        GetComponent<Renderer>().material.color = Color.green;
+    }
+
+    public void PlayerInNode()
+    {
+        PlayerEntered.Invoke(this, new EventArgs());
+    }
+
+    //Evenly spaces out nodes. Will be randomized later for more interesting layouts
     public void SetPosition()
     {
         transform.position = new Vector3((tierPosition * 10) + (worldTier * 5), 0, (worldTier * 10));
