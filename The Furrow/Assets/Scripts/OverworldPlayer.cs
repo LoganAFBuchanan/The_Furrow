@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Fungus;
 
 public class OverworldPlayer : MonoBehaviour
 {
@@ -15,11 +16,12 @@ public class OverworldPlayer : MonoBehaviour
     public int bondMax;
 
     public MapNode currNode;
+    
 
-    public event EventHandler NodeChanged;
+    public event System.EventHandler NodeChanged;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         
     }
@@ -45,6 +47,21 @@ public class OverworldPlayer : MonoBehaviour
         currNode = dest;
         currNode.isTaken = true;
         currNode.PlayerInNode();
+    }
+
+    public void ExecuteFlowchart(string startBlock)
+    {
+        SetEncounterVariables();
+        currNode.flowchart.ExecuteBlock(startBlock);
+    }
+
+    public void SetEncounterVariables()
+    {
+        currNode.flowchart.SetStringVariable("biome", currNode.biome);
+        currNode.flowchart.SetIntegerVariable("goldCount", goldCount);
+        currNode.flowchart.SetIntegerVariable("rationCount", rationCount);
+        currNode.flowchart.SetStringVariable("char1Name", "Aldric");
+        currNode.flowchart.SetStringVariable("char2Name", "Ide");
     }
 
 

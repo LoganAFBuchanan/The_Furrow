@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Fungus;
 
 public class MapNode : MonoBehaviour
 {
@@ -16,16 +17,19 @@ public class MapNode : MonoBehaviour
     public float moveDistance;
 
     public List<MapNode> accessNodes;
-    public event EventHandler HoverEnter;
-    public event EventHandler HoverExit;
-    public event EventHandler NodeClicked;
-    public event EventHandler PlayerEntered;
+    public event System.EventHandler HoverEnter;
+    public event System.EventHandler HoverExit;
+    public event System.EventHandler NodeClicked;
+    public event System.EventHandler PlayerEntered;
+
+    public Flowchart flowchart;
 
     // Start is called before the first frame update
     void Awake()
     {
         isTaken = false;
         accessNodes = new List<MapNode>();
+        flowchart = GetComponent<Flowchart>();
     }
 
     // Update is called once per frame
@@ -90,3 +94,4 @@ public class MapNode : MonoBehaviour
         transform.position = new Vector3((tierPosition * 10) + (worldTier * 5), 0, (worldTier * 10));
     }
 }
+

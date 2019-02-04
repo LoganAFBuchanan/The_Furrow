@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Fungus;
 
 public class MapControl : MonoBehaviour
 {
@@ -158,6 +159,8 @@ public class MapControl : MonoBehaviour
             if(node.tierPosition == clickedNode.tierPosition && node.worldTier == clickedNode.worldTier)
             {
                 playerScript.MovePlayer(clickedNode);
+                playerScript.ExecuteFlowchart("Start");
+                //playerScript.currNode.flowchart.ExecuteBlock("Start");
             }
         }
     }
