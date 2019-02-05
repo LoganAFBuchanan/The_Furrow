@@ -21,8 +21,24 @@ public class OverworldPlayer : MonoBehaviour
     public event System.EventHandler NodeChanged;
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
+        characterList = new List<HeroControl>();
+        foreach(Transform child in transform)
+        {
+            characterList.Add(child.gameObject.GetComponent<HeroControl>());
+
+        }
+
+        foreach(HeroControl hero in characterList)
+        {
+            Debug.Log(hero.UnitName);
+            if(hero.gameObject.activeSelf)
+            {
+                hero.Initialize();
+                hero.gameObject.SetActive(false);
+            }
+        }
         
     }
 
@@ -61,10 +77,19 @@ public class OverworldPlayer : MonoBehaviour
         currNode.flowchart.SetIntegerVariable("goldCount", goldCount);
         currNode.flowchart.SetIntegerVariable("rationCount", rationCount);
 
+        currNode.flowchart.SetIntegerVariable("bondCount", bondCount);
+        currNode.flowchart.SetIntegerVariable("bondMax", bondMax);
+        currNode.flowchart.SetIntegerVariable("bondLevel", bondLevel);
+
+        currNode.flowchart.SetIntegerVariable("char1Health", characterList[0].HitPoints);
+        currNode.flowchart.SetIntegerVariable("char1MaxHealth", characterList[0].TotalHitPoints);
+
+        currNode.flowchart.SetIntegerVariable("char2Health", characterList[1].HitPoints);
+        currNode.flowchart.SetIntegerVariable("char2MaxHealth", characterList[1].TotalHitPoints);
 
         Debug.Log("CHARACTER 1 NAME IS BEFORE: " + currNode.flowchart.GetStringVariable("char1Name"));
-        currNode.flowchart.SetStringVariable("char1Name", "Aldric");
-        currNode.flowchart.SetStringVariable("char2Name", "Ide");
+        currNode.flowchart.SetStringVariable("char1Name", characterList[0].UnitName);
+        currNode.flowchart.SetStringVariable("char2Name", characterList[1].UnitName);
         Debug.Log("CHARACTER 1 NAME IS NOW: " + currNode.flowchart.GetStringVariable("char1Name"));
 
 
