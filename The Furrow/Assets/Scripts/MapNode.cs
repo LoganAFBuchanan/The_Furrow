@@ -11,11 +11,15 @@ public class MapNode : MonoBehaviour
     public int encounterID;
     public int worldTier;
     public int tierPosition;
+    public bool isUnique;
 
     public bool isTaken;
 
     [System.NonSerialized]
     public float moveDistance;
+
+    [System.NonSerialized]
+    public float positionAdjust;
 
     public List<MapNode> accessNodes;
     public event System.EventHandler HoverEnter;
@@ -92,7 +96,12 @@ public class MapNode : MonoBehaviour
     //Evenly spaces out nodes. Will be randomized later for more interesting layouts
     public void SetPosition()
     {
+        float adjustVal = moveDistance/positionAdjust;
+
+        Vector3 randomAdjustment = new Vector3(UnityEngine.Random.Range(-adjustVal, adjustVal), 0, UnityEngine.Random.Range(-adjustVal, adjustVal));
+
         transform.position = new Vector3((tierPosition * 10) + (worldTier * 5), 0, (worldTier * 10));
+        transform.position += randomAdjustment;
     }
 
     public void UpdateVariables()

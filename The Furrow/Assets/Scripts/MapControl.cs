@@ -9,7 +9,8 @@ public class MapControl : MonoBehaviour
 
     public GameObject node;
     public List<MapNode> nodeList;
-    private UnityEngine.GameObject[] encounterObjectList;
+    private UnityEngine.Object[] encounterObjectList;
+    private List<GameObject> encounterPreFabList;
 
     private OverworldPlayer playerScript;
 
@@ -21,11 +22,12 @@ public class MapControl : MonoBehaviour
     public bool isFirstMove;
 
     public float moveDistance;
+    public float positionAdjust; // determines the extent to wihch nodes are scattered
 
     // Start is called before the first frame update
     void Start()
     {
-
+    
         GatherEncounterObjects();
         
         GenerateMap();
@@ -60,14 +62,19 @@ public class MapControl : MonoBehaviour
         
     }
 
+    //Collect all encounter objects from the resources folder
     private void GatherEncounterObjects()
     {
+        encounterPreFabList = new List<GameObject>();
 
-        encounterObjectList = (GameObject[])Resources.FindObjectsOfTypeAll(typeof(GameObject));
+        encounterObjectList = Resources.LoadAll("Encounters", typeof(GameObject));
 
-        foreach(GameObject obj in encounterObjectList)
+        foreach(UnityEngine.Object obj in encounterObjectList)
         {
+            GameObject encounterObject = (obj as UnityEngine.GameObject);
             Debug.Log(obj);
+
+            encounterPreFabList.Add(encounterObject);
         }
     }
 
@@ -83,11 +90,12 @@ public class MapControl : MonoBehaviour
                 newNode.transform.SetParent(this.transform);
                 newNodeScript.worldTier = i;
                 newNodeScript.tierPosition = j;
+                newNodeScript.moveDistance = moveDistance;
+                newNodeScript.positionAdjust = positionAdjust;
                 newNodeScript.SetPosition();
 
                 newNodeScript.HoverExit += OnNodeHoverExit;
                 newNodeScript.HoverEnter += OnNodeHoverEnter;
-                newNodeScript.moveDistance = moveDistance;
                 newNodeScript.NodeClicked += OnNodeClicked;
                 newNodeScript.PlayerEntered += OnPlayerEnterNode;
 
