@@ -8,6 +8,7 @@ public class MapNode : MonoBehaviour
 {
 
     public string biome;
+    public int encounterID;
     public int worldTier;
     public int tierPosition;
 
@@ -92,6 +93,23 @@ public class MapNode : MonoBehaviour
     public void SetPosition()
     {
         transform.position = new Vector3((tierPosition * 10) + (worldTier * 5), 0, (worldTier * 10));
+    }
+
+    public void UpdateVariables()
+    {
+        Debug.Log("EVENT IS OVER!!!");
+        OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
+        player.GetEncounterVariables();
+    }
+
+    public void AddRandomArtifact()
+    {
+        Debug.Log("Player Gains an Artifact!");
+    }
+
+    public void FightEnemyGroup(int groupNum)
+    {
+        Debug.Log("Player fights enemy group " + groupNum + "!");
     }
 }
 
