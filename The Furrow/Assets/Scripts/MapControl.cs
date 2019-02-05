@@ -9,8 +9,7 @@ public class MapControl : MonoBehaviour
 
     public GameObject node;
     public List<MapNode> nodeList;
-    //Need a list of all nodes
-    //Think like cellgrid
+    private UnityEngine.GameObject[] encounterObjectList;
 
     private OverworldPlayer playerScript;
 
@@ -27,6 +26,7 @@ public class MapControl : MonoBehaviour
     void Start()
     {
 
+        GatherEncounterObjects();
         
         GenerateMap();
 
@@ -58,6 +58,17 @@ public class MapControl : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void GatherEncounterObjects()
+    {
+
+        encounterObjectList = (GameObject[])Resources.FindObjectsOfTypeAll(typeof(GameObject));
+
+        foreach(GameObject obj in encounterObjectList)
+        {
+            Debug.Log(obj);
+        }
     }
 
     public void GenerateMap()
