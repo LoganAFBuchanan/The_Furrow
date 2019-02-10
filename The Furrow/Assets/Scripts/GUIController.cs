@@ -37,6 +37,8 @@ public class GUIController : MonoBehaviour
         CellGrid.TurnEnded += OnTurnEnded;   
         CellGrid.GameEnded += OnGameEnded;
         CellGrid.UnitAdded += OnUnitAdded;
+
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
     }
 
     private void OnGameStarted(object sender, EventArgs e)
@@ -55,7 +57,7 @@ public class GUIController : MonoBehaviour
     {
 
         InfoText.text = "Player " + ((sender as CellGrid).CurrentPlayerNumber + 1) + " wins!";
-
+        CleanUpDelegates();
         
         SceneManager.LoadScene(0);
     }
@@ -237,5 +239,40 @@ public class GUIController : MonoBehaviour
 
     public void OnSkill3HoverExit(){
         skill3hoverexit.Invoke(this, new EventArgs());
+    }
+
+    public void OnSceneUnloaded(Scene current)
+    {
+        //CleanUpDelegates();
+    }
+
+    private void CleanUpDelegates()
+    {
+        foreach (Transform cell in CellGrid.transform)
+        {
+            cell.GetComponent<Cell>().CellHighlighted -= OnCellHighlighted;
+            cell.GetComponent<Cell>().CellDehighlighted -= OnCellDehighlighted;
+        }
+        CellGrid.GameStarted -= OnGameStarted;
+        CellGrid.TurnStarted -= OnTurnStarted;
+        CellGrid.TurnEnded -= OnTurnEnded;   
+        CellGrid.GameEnded -= OnGameEnded;
+        CellGrid.UnitAdded -= OnUnitAdded;
+
+        skill1button.onClick.RemoveAllListeners();
+        skill2button.onClick.RemoveAllListeners();
+        skill3button.onClick.RemoveAllListeners();
+
+        defendButton.onClick.RemoveAllListeners();
+        NextTurnButton.onClick.RemoveAllListeners();
+
+        foreach(HeroControl hero in CellGrid.Units)
+        {
+            hero.UnitHighlighted -= OnUnitHighlighted;
+            hero.UnitDehighlighted -= OnUnitDehighlighted;
+            hero.UnitAttacked -= OnUnitAttacked;
+            hero.UnitSelected -= OnUnitSelected;
+            hero.UnitDeselected -= OnUnitDeselected;
+        }
     }
 }
