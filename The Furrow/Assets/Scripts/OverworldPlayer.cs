@@ -100,8 +100,17 @@ public class OverworldPlayer : MonoBehaviour
 
     public void ExecuteFlowchart(string startBlock)
     {
-        SetEncounterVariables();
-        currNode.flowchart.ExecuteBlock(startBlock);
+        
+        if(!currNode.isVisited)
+        {
+            SetEncounterVariables();
+            currNode.flowchart.ExecuteBlock(startBlock);
+            currNode.isVisited = true;
+        }
+        else
+        {
+            //Move Darkness Forwards
+        }
     }
 
     public void SetEncounterVariables()

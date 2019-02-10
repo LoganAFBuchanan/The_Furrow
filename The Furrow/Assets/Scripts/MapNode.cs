@@ -13,6 +13,9 @@ public class MapNode : MonoBehaviour
     public int worldTier;
     public int tierPosition;
     public bool isUnique;
+    
+    [System.NonSerialized]
+    public bool isVisited;
 
     public bool isTaken;
 
@@ -38,6 +41,7 @@ public class MapNode : MonoBehaviour
     // Start is called before the first frame update
     public void Initialize()
     {
+        isVisited = false;
         isTaken = false;
         accessNodes = new List<MapNode>();
         flowchart = GetComponent<Flowchart>();
