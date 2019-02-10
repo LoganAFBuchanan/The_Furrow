@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Fungus;
+using UnityEngine.SceneManagement;
 
 public class MapNode : MonoBehaviour
 {
@@ -29,12 +30,20 @@ public class MapNode : MonoBehaviour
 
     public Flowchart flowchart;
 
+    public List<GameObject> enemyList;
+
     // Start is called before the first frame update
-    void Awake()
+    public void Initialize()
     {
         isTaken = false;
         accessNodes = new List<MapNode>();
         flowchart = GetComponent<Flowchart>();
+        enemyList = new List<GameObject>();
+
+        for(int i = 0; i < transform.childCount; i++)
+        {
+            enemyList.Add(transform.GetChild(i).gameObject);
+        }
     }
 
     // Update is called once per frame
@@ -70,6 +79,7 @@ public class MapNode : MonoBehaviour
 
     private void OnMouseUpAsButton() 
     {
+        Debug.Log("The Node Recognizes this as a button click!");
         NodeClicked.Invoke(this, new EventArgs());
     }
 
@@ -119,6 +129,9 @@ public class MapNode : MonoBehaviour
     public void FightEnemyGroup(int groupNum)
     {
         Debug.Log("Player fights enemy group " + groupNum + "!");
+        DontDestroyOnLoad(this.gameObject);
+        transform.SetParent(null);
+        SceneManager.LoadScene(1);
     }
 }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GUIController : MonoBehaviour
 {
@@ -52,7 +53,12 @@ public class GUIController : MonoBehaviour
 
     private void OnGameEnded(object sender, EventArgs e)
     {
+
         InfoText.text = "Player " + ((sender as CellGrid).CurrentPlayerNumber + 1) + " wins!";
+
+        CellGrid.overWorldMap.SetActive(true);
+        CellGrid.overWorldNode.transform.SetParent(CellGrid.overWorldMap.transform);
+        SceneManager.LoadScene(0);
     }
 
     public void OnTurnStarted(object sender, EventArgs e)

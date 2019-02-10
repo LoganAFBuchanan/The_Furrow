@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Fungus;
+using System;
+using UnityEngine.SceneManagement;
 
 public class MapControl : MonoBehaviour
 {
@@ -12,7 +14,8 @@ public class MapControl : MonoBehaviour
     private UnityEngine.Object[] encounterObjectList;
     private List<GameObject> encounterPreFabList;
 
-    private OverworldPlayer playerScript;
+    [System.NonSerialized]
+    public OverworldPlayer playerScript;
 
     public GameObject playerObject;
 
@@ -21,13 +24,37 @@ public class MapControl : MonoBehaviour
 
     public bool isFirstMove;
 
+    public event System.EventHandler MapGenerated;
+    public event System.EventHandler ValuesChanged;
+
     public float moveDistance;
     public float positionAdjust; // determines the extent to wihch nodes are scattered
 
+    private string initialSceneName;
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-    
+        if(GameObject.FindGameObjectsWithTag("MapControl").Length > 1)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Initialize();
+        }
+        
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public void Initialize()
+    {
         GatherEncounterObjects();
         
         GenerateMap();
@@ -52,14 +79,14 @@ public class MapControl : MonoBehaviour
             checkHighlights();
         }
 
-        
-        
-    }
+        playerScript.Initialize();
+        playerScript.StatsChanged += OnStatsChanged;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        DontDestroyOnLoad(this.gameObject);
+        SceneManager.activeSceneChanged += OnActiveSceneChanged;
+        initialSceneName = SceneManager.GetActiveScene().name;
+
+        MapGenerated.Invoke(this, new EventArgs());
     }
 
     //Collect all encounter objects from the resources folder
@@ -94,10 +121,14 @@ public class MapControl : MonoBehaviour
                 newNodeScript.positionAdjust = positionAdjust;
                 newNodeScript.SetPosition();
 
+                
+
                 newNodeScript.HoverExit += OnNodeHoverExit;
                 newNodeScript.HoverEnter += OnNodeHoverEnter;
                 newNodeScript.NodeClicked += OnNodeClicked;
                 newNodeScript.PlayerEntered += OnPlayerEnterNode;
+
+                newNodeScript.Initialize();
 
                 nodeList.Add(newNodeScript);
             }
@@ -167,9 +198,10 @@ public class MapControl : MonoBehaviour
     public void OnNodeClicked(object sender, EventArgs e)
     {
         MapNode clickedNode = (sender as MapNode);
-
+        Debug.Log("Node CLicked!");
         if(clickedNode.isTaken)
         {
+            Debug.Log("Cannot Move Node is Taken");
             return;
         }
 
@@ -196,6 +228,11 @@ public class MapControl : MonoBehaviour
         // }
     }
 
+    public void OnStatsChanged(object sender, EventArgs e)
+    {
+        ValuesChanged.Invoke(this, new EventArgs());
+    }
+
     public void checkHighlights()
     {
         foreach(MapNode node in nodeList)
@@ -207,6 +244,17 @@ public class MapControl : MonoBehaviour
         {
             accessNode.OnHighlightNode();
         }
+    }
+
+
+    public void OnActiveSceneChanged(Scene one, Scene two)
+    {
+        if(two.name != initialSceneName)
+        {
+            //this.gameObject.SetActive(false);
+        }
+        Debug.Log("YUP that scene done changed to" + two.name);
+        
     }
     
 }

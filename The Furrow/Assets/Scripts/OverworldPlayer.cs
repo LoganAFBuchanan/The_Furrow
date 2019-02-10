@@ -16,13 +16,17 @@ public class OverworldPlayer : MonoBehaviour
     public int bondMax;
 
     public MapNode currNode;
-    
 
     public event System.EventHandler NodeChanged;
+    public event System.EventHandler StatsChanged;
 
-    // Start is called before the first frame update
-    void Start()
+    // Sets up the player
+    public void Initialize()
     {
+        if(GameObject.FindGameObjectsWithTag("Player").Length > 1)
+        {
+            Destroy(this);
+        }
         characterList = new List<HeroControl>();
         foreach(Transform child in transform)
         {
@@ -39,6 +43,13 @@ public class OverworldPlayer : MonoBehaviour
                 hero.gameObject.SetActive(false);
             }
         }
+
+        bondLevel = Constants.STARTING_BOND_LEVEL;
+        goldCount = Constants.STARTING_GOLD;
+        rationCount = Constants.STARTING_RATIONS;
+        bondMax = Constants.BOND_MAX_LEVEL_1;
+
+        DontDestroyOnLoad(this.gameObject);
         
     }
 
@@ -60,8 +71,23 @@ public class OverworldPlayer : MonoBehaviour
             currNode.OnDeHighlightNode();
         }
         
+        //Ration reduction when moving
+        if(rationCount > 0)
+        {
+            rationCount--;
+        }
+        else
+        {
+            foreach(HeroControl hero in characterList)
+            {
+                //Reduce character health if ration count is 0
+                hero.HitPoints -= Constants.STARVING_COST;
+            }
+        }
+        
         currNode = dest;
         currNode.isTaken = true;
+        StatsChanged.Invoke(this, new EventArgs());
         currNode.PlayerInNode();
     }
 
@@ -102,6 +128,7 @@ public class OverworldPlayer : MonoBehaviour
         rationCount = currNode.flowchart.GetIntegerVariable("rationCount");
         //currNode.flowchart.GetStringVariable("char1Name");
         //currNode.flowchart.GetStringVariable("char2Name");
+        StatsChanged.Invoke(this, new EventArgs());
     }
 
 
