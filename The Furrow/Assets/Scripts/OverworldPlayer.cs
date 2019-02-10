@@ -20,36 +20,43 @@ public class OverworldPlayer : MonoBehaviour
     public event System.EventHandler NodeChanged;
     public event System.EventHandler StatsChanged;
 
-    // Sets up the player
-    public void Initialize()
+    public void Awake()
     {
         if(GameObject.FindGameObjectsWithTag("Player").Length > 1)
         {
-            Destroy(this);
+            Destroy(this.gameObject);
         }
-        characterList = new List<HeroControl>();
-        foreach(Transform child in transform)
-        {
-            characterList.Add(child.gameObject.GetComponent<HeroControl>());
+    }
 
-        }
-
-        foreach(HeroControl hero in characterList)
-        {
-            Debug.Log(hero.UnitName);
-            if(hero.gameObject.activeSelf)
+    // Sets up the player
+    public void Initialize()
+    {
+        
+        
+            characterList = new List<HeroControl>();
+            foreach(Transform child in transform)
             {
-                hero.Initialize();
-                hero.gameObject.SetActive(false);
+                characterList.Add(child.gameObject.GetComponent<HeroControl>());
+
             }
-        }
 
-        bondLevel = Constants.STARTING_BOND_LEVEL;
-        goldCount = Constants.STARTING_GOLD;
-        rationCount = Constants.STARTING_RATIONS;
-        bondMax = Constants.BOND_MAX_LEVEL_1;
+            foreach(HeroControl hero in characterList)
+            {
+                Debug.Log(hero.UnitName);
+                if(hero.gameObject.activeSelf)
+                {
+                    hero.Initialize();
+                    hero.gameObject.SetActive(false);
+                }
+            }
 
-        DontDestroyOnLoad(this.gameObject);
+            bondLevel = Constants.STARTING_BOND_LEVEL;
+            goldCount = Constants.STARTING_GOLD;
+            rationCount = Constants.STARTING_RATIONS;
+            bondMax = Constants.BOND_MAX_LEVEL_1;
+
+            DontDestroyOnLoad(this.gameObject);
+        
         
     }
 

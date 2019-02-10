@@ -273,6 +273,10 @@ public class CellGrid : MonoBehaviour
             
                 
         }
+        overWorldMap.SetActive(true);
+        overWorldNode.SetActive(true);
+        overWorldNode.transform.SetParent(overWorldMap.transform);
+        overWorldNode.transform.position = overWorldNode.GetComponent<MapNode>().savedPosition;
     }
 
     public void CheckContention()

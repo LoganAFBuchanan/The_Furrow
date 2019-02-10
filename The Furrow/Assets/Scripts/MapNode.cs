@@ -20,6 +20,9 @@ public class MapNode : MonoBehaviour
     public float moveDistance;
 
     [System.NonSerialized]
+    public Vector3 savedPosition;
+
+    [System.NonSerialized]
     public float positionAdjust;
 
     public List<MapNode> accessNodes;
@@ -130,7 +133,9 @@ public class MapNode : MonoBehaviour
     {
         Debug.Log("Player fights enemy group " + groupNum + "!");
         DontDestroyOnLoad(this.gameObject);
+        savedPosition = transform.position;
         transform.SetParent(null);
+        transform.position = new Vector3(0, 0, 0);
         SceneManager.LoadScene(1);
     }
 }

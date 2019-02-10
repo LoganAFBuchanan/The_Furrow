@@ -56,8 +56,7 @@ public class GUIController : MonoBehaviour
 
         InfoText.text = "Player " + ((sender as CellGrid).CurrentPlayerNumber + 1) + " wins!";
 
-        CellGrid.overWorldMap.SetActive(true);
-        CellGrid.overWorldNode.transform.SetParent(CellGrid.overWorldMap.transform);
+        
         SceneManager.LoadScene(0);
     }
 

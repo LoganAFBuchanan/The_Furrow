@@ -63,6 +63,7 @@ public class HeroControl : Unit
     public void UseSkill(int skillNum, List<Cell> cells, List<Unit> units)
     {   
         List<Cell> targetCells;
+        List<HeroControl> hitTargets = new List<HeroControl>();
 
         switch (skillNum)
       {
@@ -83,7 +84,8 @@ public class HeroControl : Unit
                                 if(unit.Cell.OffsetCoord == cell.OffsetCoord)
                                 {
                                     Debug.Log("Skill 1 used on: " + (unit as HeroControl).UnitName);
-                                    skill1.UseSkill(this, unit);
+                                    hitTargets.Add(unit);
+                                    
                                 }
                             }
                         }
@@ -93,6 +95,11 @@ public class HeroControl : Unit
             }else
             {
                 Debug.LogError(UnitName + " Does not have a skill1");
+            }
+
+            foreach(HeroControl target in hitTargets)
+            {
+                skill1.UseSkill(this, target);
             }
 
             break;
@@ -113,7 +120,7 @@ public class HeroControl : Unit
                                 if(unit.Cell.OffsetCoord == cell.OffsetCoord)
                                 {
                                     Debug.Log("Skill 2 used on: " + (unit as HeroControl).UnitName);
-                                    skill2.UseSkill(this, unit);
+                                    hitTargets.Add(unit);
                                 }
                             }
                         }
@@ -122,6 +129,11 @@ public class HeroControl : Unit
             }else
             {
                 Debug.LogError(UnitName + " Does not have a skill2");
+            }
+
+            foreach(HeroControl target in hitTargets)
+            {
+                skill2.UseSkill(this, target);
             }
             break;
         case 3:
@@ -141,7 +153,7 @@ public class HeroControl : Unit
                                 if(unit.Cell.OffsetCoord == cell.OffsetCoord)
                                 {
                                     Debug.Log("Skill 3 used on: " + (unit as HeroControl).UnitName);
-                                    skill3.UseSkill(this, unit);
+                                    hitTargets.Add(unit);
                                 }
                             }
                         }
@@ -151,7 +163,10 @@ public class HeroControl : Unit
             {
                 Debug.LogError(UnitName + " Does not have a skill3");
             }
-
+            foreach(HeroControl target in hitTargets)
+            {
+                skill3.UseSkill(this, target);
+            }
             break;
           default:
             Debug.Log("Default case for use skill");

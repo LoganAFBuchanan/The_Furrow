@@ -30,14 +30,14 @@ public class MapControl : MonoBehaviour
     public float moveDistance;
     public float positionAdjust; // determines the extent to wihch nodes are scattered
 
-    private string initialSceneName;
+    private int initialSceneIndex;
 
     // Start is called before the first frame update
     void Awake()
     {
         if(GameObject.FindGameObjectsWithTag("MapControl").Length > 1)
         {
-            Destroy(this);
+            Destroy(this.gameObject);
         }
         else
         {
@@ -83,8 +83,8 @@ public class MapControl : MonoBehaviour
         playerScript.StatsChanged += OnStatsChanged;
 
         DontDestroyOnLoad(this.gameObject);
-        SceneManager.activeSceneChanged += OnActiveSceneChanged;
-        initialSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        initialSceneIndex = SceneManager.GetActiveScene().buildIndex;
 
         MapGenerated.Invoke(this, new EventArgs());
     }
@@ -246,15 +246,27 @@ public class MapControl : MonoBehaviour
         }
     }
 
-
-    public void OnActiveSceneChanged(Scene one, Scene two)
+    private void CleanUpDelegates()
     {
-        if(two.name != initialSceneName)
+        foreach(Delegate d in MapGenerated.GetInvocationList())
         {
-            //this.gameObject.SetActive(false);
+            MapGenerated -= (System.EventHandler)d;
         }
-        Debug.Log("YUP that scene done changed to" + two.name);
         
+        foreach(Delegate d in ValuesChanged.GetInvocationList())
+        {
+            ValuesChanged -= (System.EventHandler)d;
+        }
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+
+        MapGenerated.Invoke(this, new EventArgs());
+
+        if(scene.buildIndex != initialSceneIndex) CleanUpDelegates();
+
+        Debug.Log("YUP that scene done changed to" + scene.name);
     }
     
 }

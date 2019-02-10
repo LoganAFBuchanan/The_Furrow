@@ -26,8 +26,19 @@ public class OverworldGUI : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+
+        mapControlScript = GameObject.Find("MapControl").GetComponent<MapControl>();
+
         mapControlScript.MapGenerated += OnMapGenerated;
         mapControlScript.ValuesChanged += OnValuesChanged;
+        
+        char1Image = char1Stats.transform.GetChild(0).GetComponent<Image>();
+        char1HPText = char1Stats.transform.GetChild(1).GetComponent<Text>();
+        char1BondText = char1Stats.transform.GetChild(2).GetComponent<Text>();
+
+        char2Image = char2Stats.transform.GetChild(0).GetComponent<Image>();
+        char2HPText = char2Stats.transform.GetChild(1).GetComponent<Text>();
+        char2BondText = char2Stats.transform.GetChild(2).GetComponent<Text>();
     }
 
     // Update is called once per frame
@@ -39,14 +50,6 @@ public class OverworldGUI : MonoBehaviour
     private void OnMapGenerated(object sender, EventArgs e)
     {
         Debug.Log("Oh Boy! The Map has been generated and now I'm gonna hook up the UI!");
-
-        char1Image = char1Stats.transform.GetChild(0).GetComponent<Image>();
-        char1HPText = char1Stats.transform.GetChild(1).GetComponent<Text>();
-        char1BondText = char1Stats.transform.GetChild(2).GetComponent<Text>();
-
-        char2Image = char2Stats.transform.GetChild(0).GetComponent<Image>();
-        char2HPText = char2Stats.transform.GetChild(1).GetComponent<Text>();
-        char2BondText = char2Stats.transform.GetChild(2).GetComponent<Text>();
 
         UpdateUIValues();
         
