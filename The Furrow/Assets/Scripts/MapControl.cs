@@ -162,7 +162,7 @@ public class MapControl : MonoBehaviour
         //     node.OnHighlightNode();
         // }
 
-        isFirstMove = false;
+        
     }
 
     public void OnNodeHoverEnter(object sender, EventArgs e)
@@ -209,6 +209,7 @@ public class MapControl : MonoBehaviour
             if(node.tierPosition == clickedNode.tierPosition && node.worldTier == clickedNode.worldTier)
             {
                 playerScript.MovePlayer(clickedNode);
+                if(isFirstMove) isFirstMove = false;
                 playerScript.ExecuteFlowchart("Start");
                 //playerScript.currNode.flowchart.ExecuteBlock("Start");
             }
