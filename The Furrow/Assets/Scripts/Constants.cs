@@ -10,4 +10,9 @@ public static class Constants
      public const int BOND_MAX_LEVEL_1 = 10;
 
      public const int LEVEL_UP_HP_INC = 2;
+
+     public const int CAMP_HUNT_RATIONS = 3;
+     public const float CAMP_REST_PCT = 0.33f;
+     public const int CAMP_BOND_INC = 5;
+
  }

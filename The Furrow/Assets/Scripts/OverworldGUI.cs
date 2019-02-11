@@ -70,7 +70,7 @@ public class OverworldGUI : MonoBehaviour
         UpdateUIValues();
     }
 
-    private void UpdateUIValues()
+    public virtual void UpdateUIValues()
     {
         char1HPText.text = "HP: " + mapControlScript.playerScript.characterList[0].HitPoints.ToString();
         char1BondText.text = "Bond Lvl: " + mapControlScript.playerScript.bondLevel.ToString();
@@ -89,6 +89,10 @@ public class OverworldGUI : MonoBehaviour
     public void OnCampButtonClicked()
     {
         Debug.Log("Looks like Camping is back on the Menu! (Camp Button Clicked)");
+
+        //Move Map Away
+        mapControlScript.savedPosition = mapControlScript.transform.position;
+        mapControlScript.transform.position = new Vector3(-100000, -100000, -100000);
         SceneManager.LoadScene(2);
     }
 }

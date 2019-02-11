@@ -26,8 +26,11 @@ public class MapControl : MonoBehaviour
     public event System.EventHandler MapGenerated;
     public event System.EventHandler ValuesChanged;
 
+    [System.NonSerialized]
+    public Vector3 savedPosition;
+
     public float moveDistance;
-    public float positionAdjust; // determines the extent to wihch nodes are scattered
+    public float positionAdjust; // determines the extent to which nodes are scattered
 
     private int initialSceneIndex;
 
