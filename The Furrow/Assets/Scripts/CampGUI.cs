@@ -17,6 +17,31 @@ public class CampGUI : OverworldGUI
     public override void Initialize()
     {
         base.Initialize();
+
+        restButton = choicePanel.transform.GetChild(0).gameObject.GetComponent<Button>();
+        huntButton = choicePanel.transform.GetChild(1).gameObject.GetComponent<Button>();
+        bondButton = choicePanel.transform.GetChild(2).gameObject.GetComponent<Button>();
+
+        restButton.onClick.AddListener(OnRestClicked);
+        huntButton.onClick.AddListener(OnHuntClicked);
+        bondButton.onClick.AddListener(OnBondClicked);
+
+
+    }
+
+    public void OnRestClicked()
+    {
+        Debug.Log("Rest Clicked!");
+    }
+
+    public void OnHuntClicked()
+    {
+        Debug.Log("Hunt Clicked!");
+    }
+
+    public void OnBondClicked()
+    {
+        Debug.Log("Bond Clicked!");
     }
 
 
