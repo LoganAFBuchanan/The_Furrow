@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.SceneManagement;
 
 public class OverworldGUI : MonoBehaviour
 {
     public MapControl mapControlScript;
+
+    public Button campButton;
 
     public GameObject char1Stats;
     public GameObject char2Stats;
@@ -27,6 +30,13 @@ public class OverworldGUI : MonoBehaviour
     void Awake()
     {
 
+        Initialize();
+
+        
+    }
+
+    public virtual void Initialize()
+    {
         mapControlScript = GameObject.Find("MapControl").GetComponent<MapControl>();
 
         mapControlScript.MapGenerated += OnMapGenerated;
@@ -71,5 +81,11 @@ public class OverworldGUI : MonoBehaviour
         goldText.text = "Gold: " + mapControlScript.playerScript.goldCount.ToString();
         rationText.text = "Rations: " + mapControlScript.playerScript.rationCount.ToString();
         bondPointText.text = "Bond Points: " + mapControlScript.playerScript.bondCount.ToString() + " / " +mapControlScript.playerScript.bondMax.ToString();
+    }
+
+    public void OnCampButtonClicked()
+    {
+        Debug.Log("Looks like Camping is back on the Menu! (Camp Button Clicked)");
+        SceneManager.LoadScene(2);
     }
 }
