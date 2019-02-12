@@ -29,9 +29,7 @@ public class HeroControl : Unit
         transform.position += new Vector3(0, 1, 0);
         GetComponent<Renderer>().material.color = LeadingColor;
 
-        if(skillObject1 != null) skill1 = skillObject1.GetComponent<Skill>();
-        if(skillObject2 != null) skill2 = skillObject2.GetComponent<Skill>();
-        if(skillObject3 != null) skill3 = skillObject3.GetComponent<Skill>();
+        AttachSkills();
 
         if(PlayerNumber == 0){
             combatteam = "ALLY";
@@ -58,6 +56,13 @@ public class HeroControl : Unit
         }
         
 
+    }
+
+    public void AttachSkills()
+    {
+        if(skillObject1 != null) skill1 = skillObject1.GetComponent<Skill>();
+        if(skillObject2 != null) skill2 = skillObject2.GetComponent<Skill>();
+        if(skillObject3 != null) skill3 = skillObject3.GetComponent<Skill>();
     }
 
     public void UseSkill(int skillNum, List<Cell> cells, List<Unit> units)
