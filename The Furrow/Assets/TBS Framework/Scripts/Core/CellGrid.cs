@@ -33,8 +33,11 @@ public class CellGrid : MonoBehaviour
     /// Turn ended event is invoked at the end of each turn.
     /// </summary>
     public event EventHandler TurnEnded;
-
-
+    
+    [System.NonSerialized]
+    public GameObject overWorldNode;
+    [System.NonSerialized]
+    public GameObject overWorldMap;
 
     /// <summary>
     /// UnitAdded event is invoked each time AddUnit method is called.
@@ -78,6 +81,8 @@ public class CellGrid : MonoBehaviour
 
     private void Start()
     {
+        PopulateUnits();
+
         if (LevelLoading != null)
             LevelLoading.Invoke(this, new EventArgs());
 
@@ -88,6 +93,47 @@ public class CellGrid : MonoBehaviour
 
         StartGame();
         TurnStarted.Invoke(this, new EventArgs());
+    }
+
+
+    private void PopulateUnits()
+    {
+        GameObject unitList = GameObject.Find("Units");
+
+        overWorldMap = GameObject.Find("MapControl");
+        overWorldMap.SetActive(false);
+        
+        //Add Heroes
+        if(GameObject.Find("Player"))
+        {
+            GameObject overWorldPlayer = GameObject.Find("Player");
+            int listSize = overWorldPlayer.transform.childCount;
+
+            for(int i = 0; i < listSize; i++)
+            {
+              
+                overWorldPlayer.transform.GetChild(0).gameObject.SetActive(true);
+                overWorldPlayer.transform.GetChild(0).SetParent(unitList.transform);
+                
+            }
+        }
+
+        //Add Enemies
+        if(GameObject.FindGameObjectsWithTag("MapNode").Length > 0)
+        {
+            overWorldNode = GameObject.FindGameObjectsWithTag("MapNode")[0];
+            int listSize = overWorldNode.transform.childCount;
+
+            for(int i = 0; i < listSize; i++)
+            {
+                
+                    overWorldNode.transform.GetChild(0).gameObject.SetActive(true);
+                    overWorldNode.transform.GetChild(0).SetParent(unitList.transform);
+                
+                
+            }
+            overWorldNode.SetActive(false);
+        }
     }
 
     private void Initialize()
@@ -146,6 +192,8 @@ public class CellGrid : MonoBehaviour
             
             
         }
+
+        
         
 
         var unitGenerator = GetComponent<IUnitGenerator>();
@@ -193,9 +241,42 @@ public class CellGrid : MonoBehaviour
         if (totalPlayersAlive.Count == 1)
         {
             if(GameEnded != null)
+            {
+                GameEndCleanup();
                 GameEnded.Invoke(this, new EventArgs());
+            }
+                
         }
         CheckContention();
+    }
+
+    //Move the players out of units and back into the player object
+    public void GameEndCleanup()
+    {
+        GameObject unitList = GameObject.Find("Units");
+
+        GameObject overWorldPlayer = GameObject.Find("Player");
+        int listSize = unitList.transform.childCount;
+
+        int j = 0;
+        for(int i = 0; i < listSize; i++)
+        {
+            if(unitList.transform.GetChild(j).gameObject.tag == "PlayerHero")
+            {
+                unitList.transform.GetChild(j).gameObject.SetActive(false);
+                unitList.transform.GetChild(j).SetParent(overWorldPlayer.transform);
+            }
+            else
+            {
+                j++;
+            }
+            
+                
+        }
+        overWorldMap.SetActive(true);
+        overWorldNode.SetActive(true);
+        overWorldNode.transform.SetParent(overWorldMap.transform);
+        overWorldNode.transform.position = overWorldNode.GetComponent<MapNode>().savedPosition;
     }
 
     public void CheckContention()

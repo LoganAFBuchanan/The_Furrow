@@ -5,11 +5,14 @@ using UnityEngine;
 public class Skill : MonoBehaviour
 {
     public string skillname;
+    public string character;
     public int actioncost;
     public int damage;
 
     public int[] skillTargetX;
     public int[] skillTargetY;
+
+    
 
     public void Awake()
     {

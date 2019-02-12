@@ -113,7 +113,7 @@ public abstract class Unit : MonoBehaviour
 
         TotalHitPoints = HitPoints;
         TotalMovementPoints = ActionPoints;
-        TotalActionPoints = ActionPoints;
+        TotalActionPoints = Constants.STARTING_AP_MAX;
     }
 
     protected virtual void OnMouseDown()

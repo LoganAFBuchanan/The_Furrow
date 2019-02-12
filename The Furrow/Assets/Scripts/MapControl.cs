@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Fungus;
+using UnityEngine.SceneManagement;
 
 public class MapControl : MonoBehaviour
 {
 
     public GameObject node;
     public List<MapNode> nodeList;
-    private UnityEngine.GameObject[] encounterObjectList;
+    private UnityEngine.Object[] encounterObjectList;
+    private List<GameObject> encounterPreFabList;
 
-    private OverworldPlayer playerScript;
+    [System.NonSerialized]
+    public OverworldPlayer playerScript;
 
     public GameObject playerObject;
 
@@ -20,12 +23,40 @@ public class MapControl : MonoBehaviour
 
     public bool isFirstMove;
 
+    public event System.EventHandler MapGenerated;
+    public event System.EventHandler ValuesChanged;
+
+    [System.NonSerialized]
+    public Vector3 savedPosition;
+
     public float moveDistance;
+    public float positionAdjust; // determines the extent to which nodes are scattered
+
+    private int initialSceneIndex;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        if(GameObject.FindGameObjectsWithTag("MapControl").Length > 1)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Initialize();
+        }
+        
+        
+    }
 
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public void Initialize()
+    {
         GatherEncounterObjects();
         
         GenerateMap();
@@ -50,24 +81,29 @@ public class MapControl : MonoBehaviour
             checkHighlights();
         }
 
-        
-        
+        playerScript.Initialize();
+        playerScript.StatsChanged += OnStatsChanged;
+
+        DontDestroyOnLoad(this.gameObject);
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        initialSceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+        MapGenerated.Invoke(this, new EventArgs());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    //Collect all encounter objects from the resources folder
     private void GatherEncounterObjects()
     {
+        encounterPreFabList = new List<GameObject>();
 
-        encounterObjectList = (GameObject[])Resources.FindObjectsOfTypeAll(typeof(GameObject));
+        encounterObjectList = Resources.LoadAll("Encounters", typeof(GameObject));
 
-        foreach(GameObject obj in encounterObjectList)
+        foreach(UnityEngine.Object obj in encounterObjectList)
         {
+            GameObject encounterObject = (obj as UnityEngine.GameObject);
             Debug.Log(obj);
+
+            encounterPreFabList.Add(encounterObject);
         }
     }
 
@@ -83,13 +119,18 @@ public class MapControl : MonoBehaviour
                 newNode.transform.SetParent(this.transform);
                 newNodeScript.worldTier = i;
                 newNodeScript.tierPosition = j;
+                newNodeScript.moveDistance = moveDistance;
+                newNodeScript.positionAdjust = positionAdjust;
                 newNodeScript.SetPosition();
+
+                
 
                 newNodeScript.HoverExit += OnNodeHoverExit;
                 newNodeScript.HoverEnter += OnNodeHoverEnter;
-                newNodeScript.moveDistance = moveDistance;
                 newNodeScript.NodeClicked += OnNodeClicked;
                 newNodeScript.PlayerEntered += OnPlayerEnterNode;
+
+                newNodeScript.Initialize();
 
                 nodeList.Add(newNodeScript);
             }
@@ -124,7 +165,7 @@ public class MapControl : MonoBehaviour
         //     node.OnHighlightNode();
         // }
 
-        isFirstMove = false;
+        
     }
 
     public void OnNodeHoverEnter(object sender, EventArgs e)
@@ -159,9 +200,10 @@ public class MapControl : MonoBehaviour
     public void OnNodeClicked(object sender, EventArgs e)
     {
         MapNode clickedNode = (sender as MapNode);
-
+        Debug.Log("Node CLicked!");
         if(clickedNode.isTaken)
         {
+            Debug.Log("Cannot Move Node is Taken");
             return;
         }
 
@@ -170,6 +212,7 @@ public class MapControl : MonoBehaviour
             if(node.tierPosition == clickedNode.tierPosition && node.worldTier == clickedNode.worldTier)
             {
                 playerScript.MovePlayer(clickedNode);
+                if(isFirstMove) isFirstMove = false;
                 playerScript.ExecuteFlowchart("Start");
                 //playerScript.currNode.flowchart.ExecuteBlock("Start");
             }
@@ -188,6 +231,11 @@ public class MapControl : MonoBehaviour
         // }
     }
 
+    public void OnStatsChanged(object sender, EventArgs e)
+    {
+        ValuesChanged.Invoke(this, new EventArgs());
+    }
+
     public void checkHighlights()
     {
         foreach(MapNode node in nodeList)
@@ -199,6 +247,29 @@ public class MapControl : MonoBehaviour
         {
             accessNode.OnHighlightNode();
         }
+    }
+
+    private void CleanUpDelegates()
+    {
+        foreach(Delegate d in MapGenerated.GetInvocationList())
+        {
+            MapGenerated -= (System.EventHandler)d;
+        }
+        
+        foreach(Delegate d in ValuesChanged.GetInvocationList())
+        {
+            ValuesChanged -= (System.EventHandler)d;
+        }
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+
+        MapGenerated.Invoke(this, new EventArgs());
+
+        if(scene.buildIndex != initialSceneIndex) CleanUpDelegates();
+
+        Debug.Log("YUP that scene done changed to" + scene.name);
     }
     
 }

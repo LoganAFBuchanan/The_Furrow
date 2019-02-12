@@ -26,12 +26,10 @@ public class HeroControl : Unit
     public override void Initialize()
     {
         base.Initialize();
-        transform.position += new Vector3(0, 1, 0);
-        GetComponent<Renderer>().material.color = LeadingColor;
+        //transform.position += new Vector3(0, 0, 0);
+        //GetComponent<Renderer>().material.color = LeadingColor;
 
-        if(skillObject1 != null) skill1 = skillObject1.GetComponent<Skill>();
-        if(skillObject2 != null) skill2 = skillObject2.GetComponent<Skill>();
-        if(skillObject3 != null) skill3 = skillObject3.GetComponent<Skill>();
+        AttachSkills();
 
         if(PlayerNumber == 0){
             combatteam = "ALLY";
@@ -60,9 +58,17 @@ public class HeroControl : Unit
 
     }
 
+    public void AttachSkills()
+    {
+        if(skillObject1 != null) skill1 = skillObject1.GetComponent<Skill>();
+        if(skillObject2 != null) skill2 = skillObject2.GetComponent<Skill>();
+        if(skillObject3 != null) skill3 = skillObject3.GetComponent<Skill>();
+    }
+
     public void UseSkill(int skillNum, List<Cell> cells, List<Unit> units)
     {   
         List<Cell> targetCells;
+        List<HeroControl> hitTargets = new List<HeroControl>();
 
         switch (skillNum)
       {
@@ -83,7 +89,8 @@ public class HeroControl : Unit
                                 if(unit.Cell.OffsetCoord == cell.OffsetCoord)
                                 {
                                     Debug.Log("Skill 1 used on: " + (unit as HeroControl).UnitName);
-                                    skill1.UseSkill(this, unit);
+                                    hitTargets.Add(unit);
+                                    
                                 }
                             }
                         }
@@ -93,6 +100,11 @@ public class HeroControl : Unit
             }else
             {
                 Debug.LogError(UnitName + " Does not have a skill1");
+            }
+
+            foreach(HeroControl target in hitTargets)
+            {
+                skill1.UseSkill(this, target);
             }
 
             break;
@@ -113,7 +125,7 @@ public class HeroControl : Unit
                                 if(unit.Cell.OffsetCoord == cell.OffsetCoord)
                                 {
                                     Debug.Log("Skill 2 used on: " + (unit as HeroControl).UnitName);
-                                    skill2.UseSkill(this, unit);
+                                    hitTargets.Add(unit);
                                 }
                             }
                         }
@@ -122,6 +134,11 @@ public class HeroControl : Unit
             }else
             {
                 Debug.LogError(UnitName + " Does not have a skill2");
+            }
+
+            foreach(HeroControl target in hitTargets)
+            {
+                skill2.UseSkill(this, target);
             }
             break;
         case 3:
@@ -141,7 +158,7 @@ public class HeroControl : Unit
                                 if(unit.Cell.OffsetCoord == cell.OffsetCoord)
                                 {
                                     Debug.Log("Skill 3 used on: " + (unit as HeroControl).UnitName);
-                                    skill3.UseSkill(this, unit);
+                                    hitTargets.Add(unit);
                                 }
                             }
                         }
@@ -151,7 +168,10 @@ public class HeroControl : Unit
             {
                 Debug.LogError(UnitName + " Does not have a skill3");
             }
-
+            foreach(HeroControl target in hitTargets)
+            {
+                skill3.UseSkill(this, target);
+            }
             break;
           default:
             Debug.Log("Default case for use skill");
@@ -193,21 +213,21 @@ public class HeroControl : Unit
 
     public override void MarkAsFriendly()
     {
-        GetComponent<Renderer>().material.color = LeadingColor + new Color(0.8f, 1, 0.8f);
+        //GetComponent<Renderer>().material.color = LeadingColor + new Color(0.8f, 1, 0.8f);
     }
 
     public override void MarkAsReachableEnemy()
     {
-        GetComponent<Renderer>().material.color = LeadingColor + Color.red;
+        //GetComponent<Renderer>().material.color = LeadingColor + Color.red;
     }
 
     public override void MarkAsSelected()
     {
-        GetComponent<Renderer>().material.color = LeadingColor + Color.green;
+        //GetComponent<Renderer>().material.color = LeadingColor + Color.green;
     }
 
     public override void UnMark()
     {
-        GetComponent<Renderer>().material.color = LeadingColor;
+        //GetComponent<Renderer>().material.color = LeadingColor;
     }
 }
