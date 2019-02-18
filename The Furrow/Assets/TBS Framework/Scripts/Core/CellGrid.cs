@@ -181,12 +181,15 @@ public class CellGrid : MonoBehaviour
                 if((cell as CombatTile).tiletype == CombatTile.TileType.ALLY)
                 {
                     (cell as CombatTile).tileteam = "ALLY";
+                    (cell as CombatTile).MovementCost = 1;
                 }else if((cell as CombatTile).tiletype == CombatTile.TileType.ENEMY)
                 {
                     (cell as CombatTile).tileteam = "ENEMY";
+                    (cell as CombatTile).MovementCost = 1;
                 }else if((cell as CombatTile).tiletype == CombatTile.TileType.CONTESTED)
                 {
                     (cell as CombatTile).tileteam = "CONTESTED";
+                    (cell as CombatTile).MovementCost = 2;
                 }
             }
             
