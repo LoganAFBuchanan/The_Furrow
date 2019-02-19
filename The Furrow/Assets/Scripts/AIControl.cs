@@ -9,7 +9,8 @@ public class AIControl : MonoBehaviour
 
     private int step;
 
-    private CellGrid _cellGrid;
+    [System.NonSerialized]
+    public CellGrid _cellGrid;
 
     private HeroControl myUnit;
 
@@ -31,7 +32,7 @@ public class AIControl : MonoBehaviour
         actionList[step].EnactBehaviour(_cellGrid, myUnit);
 
         step++;
-        if(step > actionList.Count)
+        if(step >= actionList.Count)
         {
             step = 0;
         }

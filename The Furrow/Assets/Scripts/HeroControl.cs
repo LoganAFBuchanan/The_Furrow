@@ -195,6 +195,8 @@ public class HeroControl : Unit
         //Prohibits moving through cells that are Not allied with you
     }
 
+    
+
     public override void MarkAsAttacking(Unit other)
     {
     }

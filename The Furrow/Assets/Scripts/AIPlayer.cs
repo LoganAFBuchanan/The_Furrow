@@ -22,10 +22,11 @@ public class AIPlayer : Player
         cellGrid.CellGridState = new CellGridStateAiTurn(cellGrid);
         _cellGrid = cellGrid;
         SetControllers();
-        RunControllers();
+        StartCoroutine(RunControllers());
+        _cellGrid.EndTurn();
 
 
-        StartCoroutine(Play()); 
+        //StartCoroutine(Play()); 
         
         //Coroutine is necessary to allow Unity to run updates on other objects (like UI).
         //Implementing this with threads would require a lot of modifications in other classes, as Unity API is not thread safe.
@@ -38,16 +39,17 @@ public class AIPlayer : Player
         foreach (var unit in myUnits)
         {
             aiControllers.Add(unit.GetComponent<AIControl>());
+            unit.GetComponent<AIControl>()._cellGrid = _cellGrid;
             Debug.Log(aiControllers.Count);
         }
     }
 
-    private void RunControllers()
+    private IEnumerator RunControllers()
     {
         foreach(AIControl ai in aiControllers)
         {
             ai.PlayNextBehaviour();
-            //yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.5f);
             
         }
     }
