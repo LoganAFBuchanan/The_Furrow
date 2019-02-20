@@ -17,7 +17,7 @@ public class AIBehaviour : MonoBehaviour
     {
         AGGRESSIVE_MOVE,
         DEFENSIVE_MOVE,
-        AGGRESIVE_MOVE_SKILL,
+        AGGRESSIVE_MOVE_SKILL,
         DEFENSIVE_MOVE_SKILL,
         SKILL
     }
@@ -46,11 +46,19 @@ public class AIBehaviour : MonoBehaviour
         switch(behaviourType)
         {
             case BehaviourType.AGGRESSIVE_MOVE:
-                StartCoroutine(MoveTowardsPlayer(cellGrid, myUnit));
+                StartCoroutine(MoveTowardsPlayer(cellGrid, myUnit, false));
                 break;
             
             case BehaviourType.DEFENSIVE_MOVE:
-                StartCoroutine(MoveAwayFromPlayer(cellGrid, myUnit));
+                StartCoroutine(MoveAwayFromPlayer(cellGrid, myUnit, false));
+                break;
+
+            case BehaviourType.AGGRESSIVE_MOVE_SKILL:
+                StartCoroutine(MoveTowardsPlayer(cellGrid, myUnit, true));
+                break;
+            
+            case BehaviourType.DEFENSIVE_MOVE_SKILL:
+                StartCoroutine(MoveAwayFromPlayer(cellGrid, myUnit, true));
                 break;
         }
         
@@ -58,7 +66,7 @@ public class AIBehaviour : MonoBehaviour
 
 
 
-    public IEnumerator MoveTowardsPlayer(CellGrid _cellGrid, HeroControl unit)
+    public IEnumerator MoveTowardsPlayer(CellGrid _cellGrid, HeroControl unit, bool useSkill)
     {
         var enemyUnits = _cellGrid.Units.FindAll(u => u.PlayerNumber.Equals(enemyPlayerNumber)).ToList();
         List<Cell> potentialDestinations = new List<Cell>();
@@ -93,6 +101,7 @@ public class AIBehaviour : MonoBehaviour
                 if (pathCost > 0 && pathCost <= unit.MovementPoints)
                 {
                     unit.Move(potentialDestination, path);
+                    if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
                     while (unit.isMoving)
                         yield return 0;
                     shortestPath = null;
@@ -110,6 +119,7 @@ public class AIBehaviour : MonoBehaviour
                     if (pathCost > 0 && pathCost <= unit.MovementPoints)
                     {
                         unit.Move(potentialDestination, path);
+                        if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
                         while (unit.isMoving)
                             yield return 0;
                         break;
@@ -120,7 +130,7 @@ public class AIBehaviour : MonoBehaviour
 
     }
 
-    public IEnumerator MoveAwayFromPlayer(CellGrid _cellGrid, HeroControl unit)
+    public IEnumerator MoveAwayFromPlayer(CellGrid _cellGrid, HeroControl unit, bool useSkill)
     {
         var enemyUnits = _cellGrid.Units.FindAll(u => u.PlayerNumber.Equals(enemyPlayerNumber)).ToList();
         List<Cell> potentialDestinations = new List<Cell>();
@@ -143,6 +153,7 @@ public class AIBehaviour : MonoBehaviour
                 if (pathCost > 0 && pathCost <= unit.MovementPoints)
                 {
                     unit.Move(potentialDestination, path);
+                    if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
                     while (unit.isMoving)
                         yield return 0;
                     shortestPath = null;
@@ -160,6 +171,7 @@ public class AIBehaviour : MonoBehaviour
                     if (pathCost > 0 && pathCost <= unit.MovementPoints)
                     {
                         unit.Move(potentialDestination, path);
+                        if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
                         while (unit.isMoving)
                             yield return 0;
                         break;
