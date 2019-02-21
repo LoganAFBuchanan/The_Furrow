@@ -16,6 +16,10 @@ public class Skill : MonoBehaviour
     public bool hitNeeded;
     public int defenceChange;
 
+    public bool isBuff;
+    public int buffStrength;
+    public int buffDuration;
+
     public int[] skillTargetX;
     public int[] skillTargetY;
 
@@ -25,17 +29,44 @@ public class Skill : MonoBehaviour
     public int[] moveCasterX;
     public int[] moveCasterY;
 
+    public BuffType buffType;
+
+    private Buff buff;
+
+    public enum BuffType
+    {
+        HASTE,
+        SLOW
+    }
+
 
     public void Awake()
     {
         //skillTargetX = new int[3]{ 2, 2, 2 };
         //skillTargetY = new int[3]{ 1, 0, -1 };
+
+        if(isBuff)
+        {
+            switch(buffType)
+            {
+                case BuffType.HASTE:
+                    buff = new HasteBuff(buffDuration, buffStrength);
+                    break;
+                
+                default:
+                break;
+            }
+        }
     }
 
     //Portion of the skill which will always fire
     public void PassiveUse(HeroControl user)
     {
-        if (!hitNeeded) user.DefenceFactor += defenceChange;
+        if (!hitNeeded) 
+        {
+            user.DefenceFactor += defenceChange;
+            
+        }
     }
 
     public void UseSkill(HeroControl user, HeroControl target)
@@ -43,6 +74,12 @@ public class Skill : MonoBehaviour
 
         if (defenceChange != 0 && hitNeeded) user.DefenceFactor += defenceChange; //Change defense if skill specifies
         target.Defend(user, damage);
+        if(isBuff)
+        {
+            var _buff = buff.Clone();
+            _buff.Apply(target);
+            target.Buffs.Add(_buff);
+        } 
 
         Debug.Log(target.UnitName + " has taken " + damage + " damage!");
 
