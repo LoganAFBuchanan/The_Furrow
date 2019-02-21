@@ -19,7 +19,8 @@ public class AIBehaviour : MonoBehaviour
         DEFENSIVE_MOVE,
         AGGRESSIVE_MOVE_SKILL,
         DEFENSIVE_MOVE_SKILL,
-        SKILL
+        SKILL,
+        DEFEND,
     }
 
     public AIBehaviour()
@@ -60,11 +61,29 @@ public class AIBehaviour : MonoBehaviour
             case BehaviourType.DEFENSIVE_MOVE_SKILL:
                 StartCoroutine(MoveAwayFromPlayer(cellGrid, myUnit, true));
                 break;
+
+            case BehaviourType.SKILL:
+                StartCoroutine(UseSkill(cellGrid, myUnit));
+                break;
+
+            case BehaviourType.DEFEND:
+                StartCoroutine(GainDefence(myUnit));
+                break;
         }
         
     }
 
+    public IEnumerator UseSkill(CellGrid _cellGrid, HeroControl unit)
+    {
+        unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
+        yield return 0;
+    }
 
+    public IEnumerator GainDefence(HeroControl unit)
+    {
+        unit.GainDefence();
+        yield return 0;
+    }
 
     public IEnumerator MoveTowardsPlayer(CellGrid _cellGrid, HeroControl unit, bool useSkill)
     {

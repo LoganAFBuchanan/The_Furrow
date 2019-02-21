@@ -309,6 +309,26 @@ public abstract class Unit : MonoBehaviour
         if (UnitMoved != null)
             UnitMoved.Invoke(this, new MovementEventArgs(Cell, destinationCell, path));    
     }
+
+    //Special movement for pushing which doesn't subtract action points
+    public virtual void PushMove(Cell destinationCell, List<Cell> path)
+    {
+         if (isMoving)
+             return;
+
+        Cell.IsTaken = false;
+        Cell = destinationCell;
+        destinationCell.IsTaken = true;
+
+        if (MovementSpeed > 0)
+            StartCoroutine(MovementAnimation(path));
+        else
+            transform.position = Cell.transform.position;
+
+        if (UnitMoved != null)
+            UnitMoved.Invoke(this, new MovementEventArgs(Cell, destinationCell, path));    
+    }
+
     protected virtual IEnumerator MovementAnimation(List<Cell> path)
     {
         isMoving = true;

@@ -15,4 +15,6 @@ public static class Constants
      public const float CAMP_REST_PCT = 0.33f;
      public const int CAMP_BOND_INC = 5;
 
+     public const float PUSH_SPEED = 10f;
+
  }

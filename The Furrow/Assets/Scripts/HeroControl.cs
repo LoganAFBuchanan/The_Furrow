@@ -98,6 +98,8 @@ public class HeroControl : Unit
 
         Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
         ActionPoints -= selectedSkill.actioncost;
+        selectedSkill.PassiveUse(this);
+
         if (selectedSkillObject != null)
         {
             targetCells = GetAvailableTargets(cells, selectedSkill);
@@ -127,7 +129,7 @@ public class HeroControl : Unit
 
         foreach (HeroControl target in hitTargets)
         {
-            skill1.UseSkill(this, target);
+            selectedSkill.UseSkill(this, target);
         }
 
 
