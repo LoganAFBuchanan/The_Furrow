@@ -21,6 +21,8 @@ public class HeroControl : Unit
     [System.NonSerialized]
     public Skill skill3;
 
+    private int moveBonus = 0;
+
     private string combatteam;
 
     public override void Initialize()
@@ -98,9 +100,17 @@ public class HeroControl : Unit
 
         Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
         ActionPoints -= selectedSkill.actioncost;
+
+
+        if (selectedSkill.moveCaster)
+        {
+            StartCoroutine(SkillMove(selectedSkill, cells));
+        }
+
+
         selectedSkill.PassiveUse(this);
 
-        if (selectedSkillObject != null)
+        if (selectedSkillObject != null && !selectedSkill.moveCaster)
         {
             targetCells = GetAvailableTargets(cells, selectedSkill);
 
@@ -121,6 +131,10 @@ public class HeroControl : Unit
             }
 
 
+        }
+        else if (selectedSkillObject != null && selectedSkill.moveCaster)
+        {
+            StartCoroutine(UseMoveSkill(selectedSkill, cells, units));
         }
         else
         {
@@ -145,35 +159,133 @@ public class HeroControl : Unit
 
         Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
         ActionPoints -= selectedSkill.actioncost;
-        
+
         targetCells = GetAvailableTargets(cells, selectedSkill);
 
-            foreach (Cell targetCell in targetCells) //Check the cells that are in the target area
+        foreach (Cell targetCell in targetCells) //Check the cells that are in the target area
+        {
+            if (targetCell.IsTaken) //If a cell is taken
             {
-                if (targetCell.IsTaken) //If a cell is taken
+                foreach (HeroControl unit in units) //Check all units and use the skill on all those units
                 {
-                    foreach (HeroControl unit in units) //Check all units and use the skill on all those units
+                    if (unit.Cell.OffsetCoord == targetCell.OffsetCoord)
                     {
-                        if (unit.Cell.OffsetCoord == targetCell.OffsetCoord)
-                        {
-                            Debug.Log(selectedSkill.skillname + " used on: " + (unit as HeroControl).UnitName);
-                            hitTargets.Add(unit);
+                        Debug.Log(selectedSkill.skillname + " used on: " + (unit as HeroControl).UnitName);
+                        hitTargets.Add(unit);
 
-                        }
                     }
                 }
             }
-
-
-        
-
-        foreach (HeroControl target in hitTargets)
-        {
-            skill1.UseSkill(this, target);
         }
 
 
 
+
+        foreach (HeroControl target in hitTargets)
+        {
+            selectedSkill.UseSkill(this, target);
+        }
+
+
+
+    }
+
+
+    public IEnumerator SkillMove(Skill skill, List<Cell> cells)
+    {
+
+        float savedSpeed = MovementSpeed;
+        MovementSpeed = Constants.PUSH_SPEED;
+        for (int i = 0; i < skill.moveCasterX.Length; i++)
+        {
+            Debug.Log("Dash #: " + i);
+
+
+            List<Cell> neighbourCells = Cell.GetNeighbours(cells);
+
+            Vector3 destinationPosition = new Vector3(Cell.transform.position.x + skill.moveCasterX[i], 0, Cell.transform.position.z + skill.moveCasterY[i]);
+
+            foreach (Cell cell in neighbourCells)
+            {
+                Debug.Log("CurrPos: " + cell.transform.position + " to " + destinationPosition);
+                if (cell.transform.position == destinationPosition)
+                {
+                    if (cell.IsTaken)
+                    {
+                        //Grab other unit and damage both
+                        Debug.Log("Other Cell is Taken");
+                    }
+                    else
+                    {
+                        //Move Unit to new Cell
+                        List<Cell> path = FindPath(cells, cell);
+                        //Cell = cell;
+                        
+                        moveBonus++;
+                        //If target is moving just hang on a second
+                        while (isMoving)
+                            yield return 0;
+
+                        PushMove(cell, path);
+
+                    }
+                }
+            }
+        }
+        MovementSpeed = savedSpeed;
+        yield return 0;
+    }
+
+    public IEnumerator UseMoveSkill(Skill selectedSkill, List<Cell> cells, List<Unit> units)
+    {
+        while (isMoving)
+            yield return 0;
+
+        List<Cell> targetCells;
+        List<HeroControl> hitTargets = new List<HeroControl>();
+
+        Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
+        ActionPoints -= selectedSkill.actioncost;
+
+        targetCells = GetAvailableTargets(cells, selectedSkill);
+
+        foreach (Cell targetCell in targetCells) //Check the cells that are in the target area
+        {
+            if (targetCell.IsTaken) //If a cell is taken
+            {
+                foreach (HeroControl unit in units) //Check all units and use the skill on all those units
+                {
+                    if (unit.Cell.OffsetCoord == targetCell.OffsetCoord)
+                    {
+                        Debug.Log(selectedSkill.skillname + " used on: " + (unit as HeroControl).UnitName);
+                        hitTargets.Add(unit);
+
+                    }
+                }
+            }
+        }
+
+        //Add bonus damage for movement  (ie: Ignition lance)
+
+        int bonusDamage = 0;
+        if(moveBonus != 0 && selectedSkill.bonusDamage != 0)
+        {
+            Debug.Log("Move Bonus: " + moveBonus);
+
+            bonusDamage = selectedSkill.bonusDamage * moveBonus;
+            if(selectedSkill.skillname == "Ignition Lance") selectedSkill.damage += bonusDamage;
+            Debug.Log("Total Damage: " + selectedSkill.damage);
+            moveBonus = 0;
+        }
+
+        foreach (HeroControl target in hitTargets)
+        {
+            selectedSkill.UseSkill(this, target);
+        }
+
+        if(bonusDamage != 0) selectedSkill.damage -= bonusDamage;
+
+        yield return 0;
     }
 
     public override bool IsCellMovableTo(Cell cell)

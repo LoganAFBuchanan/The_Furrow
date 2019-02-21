@@ -310,7 +310,7 @@ public abstract class Unit : MonoBehaviour
             UnitMoved.Invoke(this, new MovementEventArgs(Cell, destinationCell, path));    
     }
 
-    //Special movement for pushing which doesn't subtract action points
+    //Special movement for pushing/dashing which doesn't subtract action points
     public virtual void PushMove(Cell destinationCell, List<Cell> path)
     {
          if (isMoving)

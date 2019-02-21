@@ -8,6 +8,7 @@ public class Skill : MonoBehaviour
     public string character;
     public int actioncost;
     public int damage;
+    public int bonusDamage;
 
     public bool moveCaster;
     public bool moveTarget;
@@ -42,6 +43,8 @@ public class Skill : MonoBehaviour
 
         if (defenceChange != 0 && hitNeeded) user.DefenceFactor += defenceChange; //Change defense if skill specifies
         target.Defend(user, damage);
+
+        Debug.Log(target.UnitName + " has taken " + damage + " damage!");
 
         if (moveTarget)
         {
