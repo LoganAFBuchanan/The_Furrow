@@ -21,6 +21,8 @@ public class HeroControl : Unit
     [System.NonSerialized]
     public Skill skill3;
 
+    private int moveBonus = 0;
+
     private string combatteam;
 
     public override void Initialize()
@@ -31,9 +33,12 @@ public class HeroControl : Unit
 
         AttachSkills();
 
-        if(PlayerNumber == 0){
+        if (PlayerNumber == 0)
+        {
             combatteam = "ALLY";
-        }else{
+        }
+        else
+        {
             combatteam = "ENEMY";
         }
 
@@ -49,136 +54,238 @@ public class HeroControl : Unit
     public void GainDefence()
     {
 
-        while(ActionPoints > 0)
+        while (ActionPoints > 0)
         {
             DefenceFactor += defenseStrength;
             ActionPoints--;
         }
-        
+
 
     }
 
     public void AttachSkills()
     {
-        if(skillObject1 != null) skill1 = skillObject1.GetComponent<Skill>();
-        if(skillObject2 != null) skill2 = skillObject2.GetComponent<Skill>();
-        if(skillObject3 != null) skill3 = skillObject3.GetComponent<Skill>();
+        if (skillObject1 != null) skill1 = skillObject1.GetComponent<Skill>();
+        if (skillObject2 != null) skill2 = skillObject2.GetComponent<Skill>();
+        if (skillObject3 != null) skill3 = skillObject3.GetComponent<Skill>();
     }
 
     public void UseSkill(int skillNum, List<Cell> cells, List<Unit> units)
-    {   
+    {
         List<Cell> targetCells;
         List<HeroControl> hitTargets = new List<HeroControl>();
 
+        GameObject selectedSkillObject = skillObject1;
+        Skill selectedSkill = skill1;
+
         switch (skillNum)
-      {
-          case 1:
-            Debug.Log("Skill 1 Used by " + UnitName);
-            ActionPoints -= skill1.actioncost;
-            if(skillObject1 != null)
+        {
+            case 1:
+                selectedSkillObject = skillObject1;
+                selectedSkill = skill1;
+                break;
+
+            case 2:
+                selectedSkillObject = skillObject2;
+                selectedSkill = skill2;
+                break;
+
+            case 3:
+                selectedSkillObject = skillObject3;
+                selectedSkill = skill3;
+                break;
+
+        }
+
+
+        Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
+        ActionPoints -= selectedSkill.actioncost;
+
+
+        if (selectedSkill.moveCaster)
+        {
+            StartCoroutine(SkillMove(selectedSkill, cells));
+        }
+
+
+        selectedSkill.PassiveUse(this);
+
+        if (selectedSkillObject != null && !selectedSkill.moveCaster)
+        {
+            targetCells = GetAvailableTargets(cells, selectedSkill);
+
+            foreach (Cell targetCell in targetCells) //Check the cells that are in the target area
             {
-                targetCells = GetAvailableTargets(cells, skill1);
-                foreach(Cell cell in cells) //Check every cell on the game board
+                if (targetCell.IsTaken) //If a cell is taken
                 {
-                    foreach(Cell targetCell in targetCells) //Check the cells that are in the target area
+                    foreach (HeroControl unit in units) //Check all units and use the skill on all those units
                     {
-                        if(cell.OffsetCoord == targetCell.OffsetCoord && cell.IsTaken) //If a cell is taken
+                        if (unit.Cell.OffsetCoord == targetCell.OffsetCoord)
                         {
-                            foreach(HeroControl unit in units) //Check all units and use the skill on all those units
-                            {
-                                if(unit.Cell.OffsetCoord == cell.OffsetCoord)
-                                {
-                                    Debug.Log("Skill 1 used on: " + (unit as HeroControl).UnitName);
-                                    hitTargets.Add(unit);
-                                    
-                                }
-                            }
+                            Debug.Log(selectedSkill.skillname + " used on: " + (unit as HeroControl).UnitName);
+                            hitTargets.Add(unit);
+
                         }
                     }
                 }
-
-            }else
-            {
-                Debug.LogError(UnitName + " Does not have a skill1");
             }
 
-            foreach(HeroControl target in hitTargets)
-            {
-                skill1.UseSkill(this, target);
-            }
 
-            break;
-          case 2:
-            Debug.Log("Skill 2 Used by " + UnitName);
-            ActionPoints -= skill2.actioncost;
-            if(skillObject2 != null)
+        }
+        else if (selectedSkillObject != null && selectedSkill.moveCaster)
+        {
+            StartCoroutine(UseMoveSkill(selectedSkill, cells, units));
+        }
+        else
+        {
+            Debug.LogError(UnitName + " Does not have a skill object");
+        }
+
+        foreach (HeroControl target in hitTargets)
+        {
+            selectedSkill.UseSkill(this, target);
+        }
+
+
+
+    }
+
+
+    //Overloaded version for AI use as they don't need a skill object
+    public void UseSkill(Skill selectedSkill, List<Cell> cells, List<Unit> units)
+    {
+        List<Cell> targetCells;
+        List<HeroControl> hitTargets = new List<HeroControl>();
+
+        Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
+        ActionPoints -= selectedSkill.actioncost;
+
+        targetCells = GetAvailableTargets(cells, selectedSkill);
+
+        foreach (Cell targetCell in targetCells) //Check the cells that are in the target area
+        {
+            if (targetCell.IsTaken) //If a cell is taken
             {
-                targetCells = GetAvailableTargets(cells, skill2);
-                foreach(Cell cell in cells) //Check every cell on the game board
+                foreach (HeroControl unit in units) //Check all units and use the skill on all those units
                 {
-                    foreach(Cell targetCell in targetCells) //Check the cells that are in the target area
+                    if (unit.Cell.OffsetCoord == targetCell.OffsetCoord)
                     {
-                        if(cell.OffsetCoord == targetCell.OffsetCoord && cell.IsTaken) //If a cell is taken
-                        {
-                            foreach(HeroControl unit in units) //Check all units and use the skill on all those units
-                            {
-                                if(unit.Cell.OffsetCoord == cell.OffsetCoord)
-                                {
-                                    Debug.Log("Skill 2 used on: " + (unit as HeroControl).UnitName);
-                                    hitTargets.Add(unit);
-                                }
-                            }
-                        }
+                        Debug.Log(selectedSkill.skillname + " used on: " + (unit as HeroControl).UnitName);
+                        hitTargets.Add(unit);
+
                     }
                 }
-            }else
-            {
-                Debug.LogError(UnitName + " Does not have a skill2");
             }
+        }
 
-            foreach(HeroControl target in hitTargets)
+
+
+
+        foreach (HeroControl target in hitTargets)
+        {
+            selectedSkill.UseSkill(this, target);
+        }
+
+
+
+    }
+
+
+    public IEnumerator SkillMove(Skill skill, List<Cell> cells)
+    {
+
+        float savedSpeed = MovementSpeed;
+        MovementSpeed = Constants.PUSH_SPEED;
+        for (int i = 0; i < skill.moveCasterX.Length; i++)
+        {
+            Debug.Log("Dash #: " + i);
+
+
+            List<Cell> neighbourCells = Cell.GetNeighbours(cells);
+
+            Vector3 destinationPosition = new Vector3(Cell.transform.position.x + skill.moveCasterX[i], 0, Cell.transform.position.z + skill.moveCasterY[i]);
+
+            foreach (Cell cell in neighbourCells)
             {
-                skill2.UseSkill(this, target);
-            }
-            break;
-        case 3:
-            Debug.Log("Skill 3 Used by " + UnitName);
-            ActionPoints -= skill3.actioncost;
-            if(skillObject3 != null)
-            {
-                targetCells = GetAvailableTargets(cells, skill3);
-                foreach(Cell cell in cells) //Check every cell on the game board
+                Debug.Log("CurrPos: " + cell.transform.position + " to " + destinationPosition);
+                if (cell.transform.position == destinationPosition)
                 {
-                    foreach(Cell targetCell in targetCells) //Check the cells that are in the target area
+                    if (cell.IsTaken)
                     {
-                        if(cell.OffsetCoord == targetCell.OffsetCoord && cell.IsTaken) //If a cell is taken
-                        {
-                            foreach(HeroControl unit in units) //Check all units and use the skill on all those units
-                            {
-                                if(unit.Cell.OffsetCoord == cell.OffsetCoord)
-                                {
-                                    Debug.Log("Skill 3 used on: " + (unit as HeroControl).UnitName);
-                                    hitTargets.Add(unit);
-                                }
-                            }
-                        }
+                        //Grab other unit and damage both
+                        Debug.Log("Other Cell is Taken");
+                    }
+                    else
+                    {
+                        //Move Unit to new Cell
+                        List<Cell> path = FindPath(cells, cell);
+                        //Cell = cell;
+                        
+                        moveBonus++;
+                        //If target is moving just hang on a second
+                        while (isMoving)
+                            yield return 0;
+
+                        PushMove(cell, path);
+
                     }
                 }
-            }else
-            {
-                Debug.LogError(UnitName + " Does not have a skill3");
             }
-            foreach(HeroControl target in hitTargets)
+        }
+        MovementSpeed = savedSpeed;
+        yield return 0;
+    }
+
+    public IEnumerator UseMoveSkill(Skill selectedSkill, List<Cell> cells, List<Unit> units)
+    {
+        while (isMoving)
+            yield return 0;
+
+        List<Cell> targetCells;
+        List<HeroControl> hitTargets = new List<HeroControl>();
+
+        Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
+        ActionPoints -= selectedSkill.actioncost;
+
+        targetCells = GetAvailableTargets(cells, selectedSkill);
+
+        foreach (Cell targetCell in targetCells) //Check the cells that are in the target area
+        {
+            if (targetCell.IsTaken) //If a cell is taken
             {
-                skill3.UseSkill(this, target);
+                foreach (HeroControl unit in units) //Check all units and use the skill on all those units
+                {
+                    if (unit.Cell.OffsetCoord == targetCell.OffsetCoord)
+                    {
+                        Debug.Log(selectedSkill.skillname + " used on: " + (unit as HeroControl).UnitName);
+                        hitTargets.Add(unit);
+
+                    }
+                }
             }
-            break;
-          default:
-            Debug.Log("Default case for use skill");
-            break;
-      }
+        }
 
+        //Add bonus damage for movement  (ie: Ignition lance)
 
+        int bonusDamage = 0;
+        if(moveBonus != 0 && selectedSkill.bonusDamage != 0)
+        {
+            Debug.Log("Move Bonus: " + moveBonus);
+
+            bonusDamage = selectedSkill.bonusDamage * moveBonus;
+            if(selectedSkill.skillname == "Ignition Lance") selectedSkill.damage += bonusDamage;
+            Debug.Log("Total Damage: " + selectedSkill.damage);
+            moveBonus = 0;
+        }
+
+        foreach (HeroControl target in hitTargets)
+        {
+            selectedSkill.UseSkill(this, target);
+        }
+
+        if(bonusDamage != 0) selectedSkill.damage -= bonusDamage;
+
+        yield return 0;
     }
 
     public override bool IsCellMovableTo(Cell cell)
@@ -188,12 +295,14 @@ public class HeroControl : Unit
         //Prohibits moving through cells that are Not allied with you
     }
 
-    public override bool IsCellTraversable( Cell cell)
+    public override bool IsCellTraversable(Cell cell)
     {
-        return base .IsCellTraversable(cell) &&
+        return base.IsCellTraversable(cell) &&
         ((cell as CombatTile).tileteam == combatteam || (cell as CombatTile).tileteam == "CONTESTED");
         //Prohibits moving through cells that are Not allied with you
     }
+
+
 
     public override void MarkAsAttacking(Unit other)
     {

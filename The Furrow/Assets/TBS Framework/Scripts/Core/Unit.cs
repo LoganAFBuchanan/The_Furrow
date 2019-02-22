@@ -194,6 +194,26 @@ public abstract class Unit : MonoBehaviour
 
         return false;
     }
+
+    //Overloaded method to determine if a skill is in range to hit a target enemy
+    public virtual bool IsUnitAttackable(Unit other, Cell sourceCell, Skill skill)
+    {
+        
+        for(int i = 0; i < skill.skillTargetX.Count(); i++)
+        {
+            
+            if(other.Cell.transform.position == new Vector3(sourceCell.transform.position.x + skill.skillTargetX[i], 0, sourceCell.transform.position.z + skill.skillTargetY[i]))
+            {
+                Debug.Log("Other transform is: " + other.Cell.transform.position + " and the source is " + new Vector3(sourceCell.transform.position.x + skill.skillTargetX[i], 0, sourceCell.transform.position.z + skill.skillTargetY[i]));
+                return true;
+            }
+                
+        }
+        
+        return false;
+       
+    }
+
     /// <summary>
     /// Method deals damage to unit given as parameter.
     /// </summary>
@@ -289,6 +309,26 @@ public abstract class Unit : MonoBehaviour
         if (UnitMoved != null)
             UnitMoved.Invoke(this, new MovementEventArgs(Cell, destinationCell, path));    
     }
+
+    //Special movement for pushing/dashing which doesn't subtract action points
+    public virtual void PushMove(Cell destinationCell, List<Cell> path)
+    {
+         if (isMoving)
+             return;
+
+        Cell.IsTaken = false;
+        Cell = destinationCell;
+        destinationCell.IsTaken = true;
+
+        if (MovementSpeed > 0)
+            StartCoroutine(MovementAnimation(path));
+        else
+            transform.position = Cell.transform.position;
+
+        if (UnitMoved != null)
+            UnitMoved.Invoke(this, new MovementEventArgs(Cell, destinationCell, path));    
+    }
+
     protected virtual IEnumerator MovementAnimation(List<Cell> path)
     {
         isMoving = true;
@@ -347,6 +387,7 @@ public abstract class Unit : MonoBehaviour
     //Returns a list of cells that correspond to the target area of the chosen skill
     public List<Cell> GetAvailableTargets(List<Cell> cells, Skill skill)
     {
+        
         cachedTargets = new List<Cell>();
 
         Vector2 targetCoord = new Vector2();
@@ -372,6 +413,7 @@ public abstract class Unit : MonoBehaviour
 
         return cachedTargets;
     }
+
 
     private Dictionary<Cell, List<Cell>> cachePaths(List<Cell> cells)
     {

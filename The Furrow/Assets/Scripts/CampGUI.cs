@@ -172,7 +172,7 @@ public class CampGUI : OverworldGUI
             if(selectedList.Count >= numberOfSkills) break;
 
             float randomVal = UnityEngine.Random.Range(0.0f, 1.0f);
-            float pickChance = (numberOfSkills - selectedList.Count) / (resourceList.Count - i);
+            float pickChance = ((float)numberOfSkills - (float)selectedList.Count) / ((float)resourceList.Count - (float)i);
             Debug.Log("RandomVal = " + randomVal + "|| PickChance = " + pickChance);
 
             if(randomVal <= pickChance)
