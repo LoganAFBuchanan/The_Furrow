@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
+using SpriteGlow;
 
 public class HeroControl : Unit
 {
@@ -13,6 +14,8 @@ public class HeroControl : Unit
     public GameObject skillObject1;
     public GameObject skillObject2;
     public GameObject skillObject3;
+
+    private SpriteGlowEffect highlightEffect;
 
     [System.NonSerialized]
     public Skill skill1;
@@ -31,6 +34,12 @@ public class HeroControl : Unit
         //transform.position += new Vector3(0, 0, 0);
         //GetComponent<Renderer>().material.color = LeadingColor;
 
+        highlightEffect = GetComponent<SpriteGlowEffect>();
+
+        //highlightEffect.GlowBrightness = 0.0f;
+        highlightEffect.OutlineWidth = 0;
+        highlightEffect.GlowBrightness = 2.5f;
+
         AttachSkills();
 
         if (PlayerNumber == 0)
@@ -42,6 +51,22 @@ public class HeroControl : Unit
             combatteam = "ENEMY";
         }
 
+    }
+
+    protected override void OnMouseDown()
+    {
+        base.OnMouseDown();
+    }
+    protected override void OnMouseEnter()
+    {
+        base.OnMouseEnter();
+
+        highlightEffect.OutlineWidth += 1;
+    }
+    protected override void OnMouseExit()
+    {
+        base.OnMouseExit();
+        highlightEffect.OutlineWidth -= 1;
     }
 
     public override void OnTurnStart()
@@ -314,6 +339,7 @@ public class HeroControl : Unit
 
     public override void MarkAsFinished()
     {
+        highlightEffect.OutlineWidth = 0;
     }
 
     public override void MarkAsDefending(Unit other)
@@ -323,6 +349,7 @@ public class HeroControl : Unit
     public override void MarkAsFriendly()
     {
         //GetComponent<Renderer>().material.color = LeadingColor + new Color(0.8f, 1, 0.8f);
+        highlightEffect.OutlineWidth = 0;
     }
 
     public override void MarkAsReachableEnemy()
@@ -333,10 +360,12 @@ public class HeroControl : Unit
     public override void MarkAsSelected()
     {
         //GetComponent<Renderer>().material.color = LeadingColor + Color.green;
+        highlightEffect.OutlineWidth = 3;
     }
 
     public override void UnMark()
     {
         //GetComponent<Renderer>().material.color = LeadingColor;
+        highlightEffect.OutlineWidth = 0;
     }
 }
