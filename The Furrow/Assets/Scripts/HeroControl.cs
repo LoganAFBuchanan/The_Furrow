@@ -95,6 +95,10 @@ public class HeroControl : Unit
         if (skillObject3 != null) skill3 = skillObject3.GetComponent<Skill>();
     }
 
+
+    // <summary>
+    // Basic Skill use function for player characters
+    // </summary>
     public void UseSkill(int skillNum, List<Cell> cells, List<Unit> units)
     {
         List<Cell> targetCells;
@@ -225,6 +229,17 @@ public class HeroControl : Unit
                     }
                 }
             }
+        }
+
+        //Spawn Detection
+        if(selectedSkill.isSpawner)
+        {
+            foreach(Cell targetCell in targetCells)
+            {
+                if(!targetCell.IsTaken)
+                    selectedSkill.SpawnUnit(this, targetCell);
+            }
+                
         }
 
         int bonusDamage = 0;

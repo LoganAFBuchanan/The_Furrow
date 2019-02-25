@@ -16,11 +16,16 @@ public class Skill : MonoBehaviour
     public bool hitNeeded;
     public int defenceChange;
 
+    public bool isSpawner;
+    public GameObject spawnedUnit;
+
     public bool isBuff;
+    public BuffType buffType;
     public int buffStrength;
     public int buffDuration;
 
     public bool isDebuff;
+    public DebuffType debuffType;
     public int debuffStrength;
     public int debuffDuration;
 
@@ -32,9 +37,6 @@ public class Skill : MonoBehaviour
 
     public int[] moveCasterX;
     public int[] moveCasterY;
-
-    public BuffType buffType;
-    public DebuffType debuffType;
 
     private Buff buff;
     private Buff debuff;
@@ -48,6 +50,12 @@ public class Skill : MonoBehaviour
     public enum DebuffType
     {
         SLOW
+    }
+
+    public void Awake()
+    {
+        Debug.Log(this.gameObject.name);
+        Debug.Log("HEY MY SPAWNABLE GAMEOBJECT IS " + spawnedUnit);
     }
 
 
@@ -91,6 +99,38 @@ public class Skill : MonoBehaviour
             user.DefenceFactor += defenceChange;
             
         }
+    }
+
+
+    //If unit spawner then spawn a unit
+    public void SpawnUnit(HeroControl user, Cell targetCell)
+    {
+
+        Debug.Log("The unit to be spawned is!: " + spawnedUnit);
+        //Instantiate Unit
+        GameObject newUnit = Instantiate(spawnedUnit);
+
+        newUnit.transform.position = targetCell.transform.position;
+
+        //Grab Script object
+        var unitScript = newUnit.GetComponent<HeroControl>();
+
+        unitScript.Initialize();
+
+        //Place new Unit within the Units GameObject
+        newUnit.transform.SetParent(GameObject.Find("Units").GetComponent<Transform>());
+
+        //Attach to cell
+        unitScript.Cell = targetCell;
+        targetCell.IsTaken = true;
+
+        //Add unit to the cellgrid
+        CellGrid cellGrid = GameObject.Find("CellGrid").GetComponent<CellGrid>();
+        cellGrid.Units.Add(unitScript);
+        cellGrid.AddUnit(newUnit.transform);
+
+
+
     }
 
     public void UseSkill(HeroControl user, HeroControl target)
