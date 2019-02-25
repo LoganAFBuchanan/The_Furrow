@@ -20,6 +20,10 @@ public class Skill : MonoBehaviour
     public int buffStrength;
     public int buffDuration;
 
+    public bool isDebuff;
+    public int debuffStrength;
+    public int debuffDuration;
+
     public int[] skillTargetX;
     public int[] skillTargetY;
 
@@ -30,8 +34,10 @@ public class Skill : MonoBehaviour
     public int[] moveCasterY;
 
     public BuffType buffType;
+    public DebuffType debuffType;
 
     private Buff buff;
+    private Buff debuff;
 
     public enum BuffType
     {
@@ -39,8 +45,13 @@ public class Skill : MonoBehaviour
         SLOW
     }
 
+    public enum DebuffType
+    {
+        SLOW
+    }
 
-    public void Awake()
+
+    public void Initialize()
     {
         //skillTargetX = new int[3]{ 2, 2, 2 };
         //skillTargetY = new int[3]{ 1, 0, -1 };
@@ -51,6 +62,19 @@ public class Skill : MonoBehaviour
             {
                 case BuffType.HASTE:
                     buff = new HasteBuff(buffDuration, buffStrength);
+                    break;
+                
+                default:
+                break;
+            }
+        }
+
+        if(isDebuff)
+        {
+            switch(debuffType)
+            {
+                case DebuffType.SLOW:
+                    debuff = new SlowDebuff(debuffDuration, debuffStrength);
                     break;
                 
                 default:
@@ -71,15 +95,27 @@ public class Skill : MonoBehaviour
 
     public void UseSkill(HeroControl user, HeroControl target)
     {
+        Initialize();
 
         if (defenceChange != 0 && hitNeeded) user.DefenceFactor += defenceChange; //Change defense if skill specifies
+
+        
         target.Defend(user, damage);
-        if(isBuff)
+
+        if(isBuff && target.PlayerNumber == 0)
         {
             var _buff = buff.Clone();
             _buff.Apply(target);
             target.Buffs.Add(_buff);
         } 
+
+        if(isDebuff && target.PlayerNumber == 1)
+        {
+            var _debuff = debuff.Clone();
+            _debuff.Apply(target);
+            target.Buffs.Add(_debuff);
+        } 
+        
 
         Debug.Log(target.UnitName + " has taken " + damage + " damage!");
 

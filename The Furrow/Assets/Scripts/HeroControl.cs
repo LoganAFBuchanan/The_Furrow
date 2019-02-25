@@ -166,12 +166,36 @@ public class HeroControl : Unit
             Debug.LogError(UnitName + " Does not have a skill object");
         }
 
+        int bonusDamage = 0;
+        if(selectedSkill.bonusDamage != 0)
+        {
+
+            if(moveBonus != 0)
+            {
+                Debug.Log("Move Bonus: " + moveBonus);
+
+                bonusDamage = selectedSkill.bonusDamage * moveBonus;
+                if(selectedSkill.skillname == "Ignition Lance") selectedSkill.damage += bonusDamage;
+                Debug.Log("Total Damage: " + selectedSkill.damage);
+                moveBonus = 0;
+            }
+
+            if(selectedSkill.skillname == "Last Rites")
+            {
+                Defend(this, selectedSkill.bonusDamage);
+                bonusDamage = (TotalHitPoints - HitPoints) * selectedSkill.bonusDamage;
+                selectedSkill.damage += bonusDamage;
+            }
+
+            
+        }
+
         foreach (HeroControl target in hitTargets)
         {
             selectedSkill.UseSkill(this, target);
         }
 
-
+        if(bonusDamage != 0) selectedSkill.damage -= bonusDamage;
 
     }
 
@@ -203,7 +227,28 @@ public class HeroControl : Unit
             }
         }
 
+        int bonusDamage = 0;
+        if(selectedSkill.bonusDamage != 0)
+        {
 
+            if(moveBonus != 0)
+            {
+                Debug.Log("Move Bonus: " + moveBonus);
+
+                bonusDamage = selectedSkill.bonusDamage * moveBonus;
+                if(selectedSkill.skillname == "Ignition Lance") selectedSkill.damage += bonusDamage;
+                Debug.Log("Total Damage: " + selectedSkill.damage);
+                moveBonus = 0;
+            }
+
+            if(selectedSkill.skillname == "Last Rites")
+            {
+                bonusDamage = (TotalHitPoints - HitPoints) * selectedSkill.bonusDamage;
+                selectedSkill.damage += bonusDamage;
+            }
+
+            
+        }
 
 
         foreach (HeroControl target in hitTargets)
@@ -211,6 +256,7 @@ public class HeroControl : Unit
             selectedSkill.UseSkill(this, target);
         }
 
+        if(bonusDamage != 0) selectedSkill.damage -= bonusDamage;
 
 
     }
@@ -290,17 +336,29 @@ public class HeroControl : Unit
             }
         }
 
-        //Add bonus damage for movement  (ie: Ignition lance)
+        //Add bonus damage for movement, health loss, etc.  (ie: Ignition lance)
 
         int bonusDamage = 0;
-        if(moveBonus != 0 && selectedSkill.bonusDamage != 0)
+        if(selectedSkill.bonusDamage != 0)
         {
-            Debug.Log("Move Bonus: " + moveBonus);
 
-            bonusDamage = selectedSkill.bonusDamage * moveBonus;
-            if(selectedSkill.skillname == "Ignition Lance") selectedSkill.damage += bonusDamage;
-            Debug.Log("Total Damage: " + selectedSkill.damage);
-            moveBonus = 0;
+            if(moveBonus != 0)
+            {
+                Debug.Log("Move Bonus: " + moveBonus);
+
+                bonusDamage = selectedSkill.bonusDamage * moveBonus;
+                if(selectedSkill.skillname == "Ignition Lance") selectedSkill.damage += bonusDamage;
+                Debug.Log("Total Damage: " + selectedSkill.damage);
+                moveBonus = 0;
+            }
+
+            if(selectedSkill.skillname == "Last Rites")
+            {
+                bonusDamage = (TotalHitPoints - HitPoints) * selectedSkill.bonusDamage;
+                selectedSkill.damage += bonusDamage;
+            }
+
+            
         }
 
         foreach (HeroControl target in hitTargets)
@@ -311,6 +369,12 @@ public class HeroControl : Unit
         if(bonusDamage != 0) selectedSkill.damage -= bonusDamage;
 
         yield return 0;
+    }
+
+
+    public void AddBonusDamage(Skill skill)
+    {
+       
     }
 
     public override bool IsCellMovableTo(Cell cell)
