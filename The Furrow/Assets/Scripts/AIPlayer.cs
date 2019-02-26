@@ -10,7 +10,8 @@ public class AIPlayer : Player
 {
     private CellGrid _cellGrid;
     private System.Random _rnd;
-    private List<AIControl> aiControllers;
+    [System.NonSerialized]
+    public List<AIControl> aiControllers;
 
     public AIPlayer()
     {

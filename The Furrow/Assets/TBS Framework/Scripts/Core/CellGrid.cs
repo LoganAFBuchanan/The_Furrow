@@ -240,6 +240,13 @@ public class CellGrid : MonoBehaviour
     private void OnUnitDestroyed(object sender, AttackEventArgs e)
     {
         Units.Remove(sender as Unit);
+
+        //If AI then remove from ai controller list
+        if((sender as Unit).PlayerNumber == 1)
+        {
+            Players[1].GetComponent<AIPlayer>().aiControllers.Remove((sender as Unit).GetComponent<AIControl>());
+        }
+
         var totalPlayersAlive = Units.Select(u => u.PlayerNumber).Distinct().ToList(); //Checking if the game is over
         if (totalPlayersAlive.Count == 1)
         {
