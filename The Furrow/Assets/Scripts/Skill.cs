@@ -19,6 +19,8 @@ public class Skill : MonoBehaviour
     public bool isSpawner;
     public GameObject spawnedUnit;
 
+    public bool allyImmune;
+
     public bool isBuff;
     public BuffType buffType;
     public int buffStrength;
@@ -140,16 +142,23 @@ public class Skill : MonoBehaviour
         if (defenceChange != 0 && hitNeeded) user.DefenceFactor += defenceChange; //Change defense if skill specifies
 
         
-        target.Defend(user, damage);
+        if(!allyImmune) target.Defend(user, damage);
+        else
+        {
+            if(target.PlayerNumber != user.PlayerNumber)
+            {
+                target.Defend(user, damage);
+            }
+        }
 
-        if(isBuff && target.PlayerNumber == 0)
+        if(isBuff && target.PlayerNumber == user.PlayerNumber)
         {
             var _buff = buff.Clone();
             _buff.Apply(target);
             target.Buffs.Add(_buff);
         } 
 
-        if(isDebuff && target.PlayerNumber == 1)
+        if(isDebuff && target.PlayerNumber != user.PlayerNumber)
         {
             var _debuff = debuff.Clone();
             _debuff.Apply(target);

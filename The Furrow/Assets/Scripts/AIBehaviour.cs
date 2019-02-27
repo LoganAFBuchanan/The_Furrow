@@ -143,9 +143,12 @@ public class AIBehaviour : MonoBehaviour
                             yield return 0;
                         break;
                     }
+                    
                     yield return 0;
                 }
             }//If the path cost is greater than unit movement points, move as far as possible.
+            if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
+            yield return 0;
 
     }
 
