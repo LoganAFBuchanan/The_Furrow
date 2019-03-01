@@ -21,7 +21,9 @@ public class CombatTile : Square
 
     public void MarkAsContested()
     {
-        GetComponent<Renderer>().material.color = Color.blue;
+        Color newColor = Color.blue;
+        newColor.a -= 1f - Constants.GRID_TRANSPARENCY;
+        GetComponent<Renderer>().material.color = newColor;
     }
 
     public override Vector3 GetCellDimensions()
@@ -31,27 +33,39 @@ public class CombatTile : Square
 
     public override void MarkAsTargetable()
     {
-        GetComponent<Renderer>().material.color = Color.red;
+        
+        Color newColor = Color.red;
+        newColor.a -= 1f - Constants.GRID_TRANSPARENCY;
+        GetComponent<Renderer>().material.color = newColor;
     }
 
     public override void MarkAsHighlighted()
     {
-        GetComponent<Renderer>().material.color = new Color(0.75f, 0.75f, 0.75f);
+        Color newColor = new Color(0.75f, 0.75f, 0.75f);
+        newColor.a -= 1f - Constants.GRID_TRANSPARENCY;
+        GetComponent<Renderer>().material.color = newColor;
     }
 
     public override void MarkAsPath()
     {
-        GetComponent<Renderer>().material.color = Color.green;
+        Color newColor = Color.green;
+        newColor.a -= 1f - Constants.GRID_TRANSPARENCY;
+        GetComponent<Renderer>().material.color = newColor;
+        
     }
 
     public override void MarkAsReachable()
     {
-        GetComponent<Renderer>().material.color = Color.yellow;
+        Color newColor = Color.yellow;
+        newColor.a -= 1f - Constants.GRID_TRANSPARENCY;
+        GetComponent<Renderer>().material.color = newColor;
     }
 
     public override void UnMark()
     {
-        GetComponent<Renderer>().material.color = Color.white;
+        Color newColor = Color.white;
+        newColor.a -= 1f - Constants.GRID_TRANSPARENCY;
+        GetComponent<Renderer>().material.color = newColor;
 
         //if(tiletype == TileType.CONTESTED) MarkAsContested();
     }

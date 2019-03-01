@@ -159,6 +159,7 @@ public class CellGrid : MonoBehaviour
         guiController.skill3hoverexit += OnSkill3HoverExit;
 
         Cells = new List<Cell>();
+        Debug.Log("ChildCount of Cellgrid: " + transform.childCount);
         for (int i = 0; i < transform.childCount; i++)
         {
             var cell = transform.GetChild(i).gameObject.GetComponent<Cell>();
@@ -311,7 +312,7 @@ public class CellGrid : MonoBehaviour
             //Check that all contested units are on the same team
             int takingTeam = contestedUnits[0].PlayerNumber; 
             bool isContested = false;
-            int captureColumn = (int)(contestedUnits[0].Cell as CombatTile).OffsetCoord.x;
+            float captureColumn = (contestedUnits[0].Cell as CombatTile).OffsetCoord.x;
             foreach(Unit unit in contestedUnits)
             {
                 if(unit.PlayerNumber == takingTeam)
@@ -333,12 +334,12 @@ public class CellGrid : MonoBehaviour
             {
                 //If contested stays true and all units are on the same team, then initiate column capture of contested row
                 Debug.Log("Capturing Column: " + captureColumn);
-                SetContestedColumn(captureColumn, takingTeam);
+                SetContestedColumn((int)captureColumn, takingTeam);
             }
         }
 
 
-        Debug.Log(contestedUnits);
+        //Debug.Log(contestedUnits);
     }
 
     public List<CombatTile> GetContestedCells()
@@ -368,6 +369,8 @@ public class CellGrid : MonoBehaviour
 
         column += captureDir;
 
+        Debug.Log("Contested column at " + column);
+
         foreach(CombatTile cell in Cells)
         {
             if(cell.tileteam == "CONTESTED")
@@ -376,18 +379,23 @@ public class CellGrid : MonoBehaviour
                 {
                     cell.tileteam = "ALLY";
                     cell.tiletype = CombatTile.TileType.ALLY;
+                    cell.MovementCost = 1;
                 }
                 else if (team == 1)
                 {
                     cell.tileteam = "ENEMY";
                     cell.tiletype = CombatTile.TileType.ENEMY;
+                    cell.MovementCost = 1;
                 }
             }
 
-            if((int)cell.OffsetCoord.x == column)
+            Debug.Log("Cell x coord is: " + cell.OffsetCoord.x + ". And Column is: " + column);
+
+            if(cell.OffsetCoord.x == column)
             {
                 cell.tileteam = "CONTESTED";
                 cell.tiletype = CombatTile.TileType.CONTESTED;
+                cell.MovementCost = 2;
             }
             
         }

@@ -16,5 +16,6 @@ public static class Constants
      public const int CAMP_BOND_INC = 5;
 
      public const float PUSH_SPEED = 10f;
-
+    
+     public const float GRID_TRANSPARENCY = 0.8f;
  }
