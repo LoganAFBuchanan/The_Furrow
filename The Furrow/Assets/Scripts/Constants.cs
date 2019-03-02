@@ -17,5 +17,5 @@ public static class Constants
 
      public const float PUSH_SPEED = 10f;
     
-     public const float GRID_TRANSPARENCY = 0.8f;
+     public const float GRID_TRANSPARENCY = 0.1f;
  }
