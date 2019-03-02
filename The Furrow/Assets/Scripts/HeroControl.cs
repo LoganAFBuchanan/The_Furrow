@@ -101,7 +101,7 @@ public class HeroControl : Unit
     // </summary>
     public void UseSkill(int skillNum, List<Cell> cells, List<Unit> units)
     {
-        List<Cell> targetCells;
+        List<Cell> targetCells = new List<Cell>();
         List<HeroControl> hitTargets = new List<HeroControl>();
 
         GameObject selectedSkillObject = skillObject1;
@@ -130,10 +130,12 @@ public class HeroControl : Unit
         Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
         ActionPoints -= selectedSkill.actioncost;
 
+        
 
         if (selectedSkill.moveCaster)
         {
-            StartCoroutine(SkillMove(selectedSkill, cells));
+            if(!selectedSkill.damageBeforeMove) StartCoroutine(SkillMove(selectedSkill, cells));
+            if(selectedSkill.damageBeforeMove)StartCoroutine(UseMoveSkill(selectedSkill, cells, units));
         }
 
 
@@ -163,11 +165,19 @@ public class HeroControl : Unit
         }
         else if (selectedSkillObject != null && selectedSkill.moveCaster)
         {
-            StartCoroutine(UseMoveSkill(selectedSkill, cells, units));
+            if(!selectedSkill.damageBeforeMove)StartCoroutine(UseMoveSkill(selectedSkill, cells, units));
+            if(selectedSkill.damageBeforeMove) StartCoroutine(SkillMove(selectedSkill, cells));
         }
         else
         {
             Debug.LogError(UnitName + " Does not have a skill object");
+        }
+
+        //Apply ground effect if any
+        if(selectedSkill.isGroundEffect)
+        {
+            if(targetCells.Count == 0) targetCells = GetAvailableTargets(cells, selectedSkill);
+            selectedSkill.ApplyGroundEffect(targetCells);
         }
 
         int bonusDamage = 0;
@@ -242,6 +252,15 @@ public class HeroControl : Unit
                 
         }
 
+        Debug.Log("I am outside the AI ground effect skill section");
+        //Apply ground effect if any
+        if(selectedSkill.isGroundEffect)
+        {
+            Debug.Log("I am using a ground effect skill");
+            if(targetCells.Count == 0) targetCells = GetAvailableTargets(cells, selectedSkill);
+            selectedSkill.ApplyGroundEffect(targetCells);
+        }
+
         int bonusDamage = 0;
         if(selectedSkill.bonusDamage != 0)
         {
@@ -276,10 +295,10 @@ public class HeroControl : Unit
 
     }
 
-
+    //For Dashes
     public IEnumerator SkillMove(Skill skill, List<Cell> cells)
     {
-
+        Debug.Log(UnitName + " is Dashing/Moving because of " + skill.skillname);
         float savedSpeed = MovementSpeed;
         MovementSpeed = Constants.PUSH_SPEED;
         for (int i = 0; i < skill.moveCasterX.Length; i++)
@@ -289,12 +308,12 @@ public class HeroControl : Unit
 
             List<Cell> neighbourCells = Cell.GetNeighbours(cells);
 
-            Vector3 destinationPosition = new Vector3(Cell.transform.position.x + skill.moveCasterX[i], 0, Cell.transform.position.z + skill.moveCasterY[i]);
+            Vector2 destinationPosition = new Vector2(Cell.OffsetCoord.x + skill.moveCasterX[i], Cell.OffsetCoord.y + skill.moveCasterY[i]);
 
             foreach (Cell cell in neighbourCells)
             {
-                Debug.Log("CurrPos: " + cell.transform.position + " to " + destinationPosition);
-                if (cell.transform.position == destinationPosition)
+                Debug.Log("CurrPos: " + cell.OffsetCoord + " to " + destinationPosition);
+                if (cell.OffsetCoord == destinationPosition)
                 {
                     if (cell.IsTaken)
                     {
@@ -322,6 +341,8 @@ public class HeroControl : Unit
         yield return 0;
     }
 
+
+    // For skill use after a dash
     public IEnumerator UseMoveSkill(Skill selectedSkill, List<Cell> cells, List<Unit> units)
     {
         while (isMoving)

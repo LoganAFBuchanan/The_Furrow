@@ -183,14 +183,17 @@ public class CellGrid : MonoBehaviour
                 {
                     (cell as CombatTile).tileteam = "ALLY";
                     (cell as CombatTile).MovementCost = 1;
+                    if((cell as CombatTile).isSlimed) (cell as CombatTile).MovementCost += 1;
                 }else if((cell as CombatTile).tiletype == CombatTile.TileType.ENEMY)
                 {
                     (cell as CombatTile).tileteam = "ENEMY";
                     (cell as CombatTile).MovementCost = 1;
+                    if((cell as CombatTile).isSlimed) (cell as CombatTile).MovementCost += 1;
                 }else if((cell as CombatTile).tiletype == CombatTile.TileType.CONTESTED)
                 {
                     (cell as CombatTile).tileteam = "CONTESTED";
                     (cell as CombatTile).MovementCost = 2;
+                    if((cell as CombatTile).isSlimed) (cell as CombatTile).MovementCost += 1;
                 }
             }
             
@@ -427,6 +430,11 @@ public class CellGrid : MonoBehaviour
 
         Units.FindAll(u => u.PlayerNumber.Equals(CurrentPlayerNumber)).ForEach(u => { u.OnTurnStart(); });
         Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);
+
+        foreach(Player player in Players)
+        {
+            if(player.PlayerNumber == 1) (player as AIPlayer).SetControllers();
+        }
     }
     /// <summary>
     /// Method makes turn transitions. It is called by player at the end of his turn.

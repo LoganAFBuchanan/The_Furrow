@@ -17,7 +17,18 @@ public class CombatTile : Square
     [System.NonSerialized]
     public string tileteam;
 
+    public bool isSlimed = false;
+    public GameObject slimeObject;
 
+    public void ApplySlimed()
+    {
+        if(!isSlimed)
+        {
+            isSlimed = true;
+            MovementCost += 1;
+            slimeObject.SetActive(true);
+        }
+    }
 
     public void MarkAsContested()
     {

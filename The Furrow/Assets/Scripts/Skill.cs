@@ -11,6 +11,7 @@ public class Skill : MonoBehaviour
     public int bonusDamage;
 
     public bool moveCaster;
+    public bool damageBeforeMove;
     public bool moveTarget;
 
     public bool hitNeeded;
@@ -30,6 +31,9 @@ public class Skill : MonoBehaviour
     public DebuffType debuffType;
     public int debuffStrength;
     public int debuffDuration;
+
+    public bool isGroundEffect;
+    public GroundEffectType groundEffectType;
 
     public int[] skillTargetX;
     public int[] skillTargetY;
@@ -52,6 +56,11 @@ public class Skill : MonoBehaviour
     public enum DebuffType
     {
         SLOW
+    }
+
+    public enum GroundEffectType
+    {
+        SLIME
     }
 
     public void Awake()
@@ -103,6 +112,19 @@ public class Skill : MonoBehaviour
         }
     }
 
+
+    public void ApplyGroundEffect(List<Cell> cells)
+    {
+        foreach(Cell cell in cells)
+        {
+            switch(groundEffectType)
+            {
+                case GroundEffectType.SLIME:
+                    (cell as CombatTile).ApplySlimed();
+                    break;
+            }
+        }
+    }
 
     //If unit spawner then spawn a unit
     public void SpawnUnit(HeroControl user, Cell targetCell)
