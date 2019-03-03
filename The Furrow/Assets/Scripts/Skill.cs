@@ -13,6 +13,9 @@ public class Skill : MonoBehaviour
     public bool isSplash;
     public int splashDamage;
 
+    public bool targetAllAllies;
+    public bool targetAllEnemies;
+
     public bool moveCaster;
     public bool damageBeforeMove;
     public bool moveTarget;

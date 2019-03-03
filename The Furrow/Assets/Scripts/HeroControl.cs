@@ -37,7 +37,7 @@ public class HeroControl : Unit
         //GetComponent<Renderer>().material.color = LeadingColor;
 
         highlightEffect = GetComponent<SpriteGlowEffect>();
-        if(GetComponent<Animator>()) animator = GetComponent<Animator>();
+        if (GetComponent<Animator>()) animator = GetComponent<Animator>();
 
         //highlightEffect.GlowBrightness = 0.0f;
         highlightEffect.OutlineWidth = 0;
@@ -132,20 +132,163 @@ public class HeroControl : Unit
 
         Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
         ActionPoints -= selectedSkill.actioncost;
-        if(animator != null) animator.Play("Attack", 0, 0);
-        
+        if (animator != null) animator.Play("Attack", 0, 0);
 
+
+        //If a skill moves the caster this section determines whether the damage is dealt before or after
         if (selectedSkill.moveCaster)
         {
-            if(!selectedSkill.damageBeforeMove) StartCoroutine(SkillMove(selectedSkill, cells));
-            if(selectedSkill.damageBeforeMove)StartCoroutine(UseMoveSkill(selectedSkill, cells, units));
+            if (!selectedSkill.damageBeforeMove) StartCoroutine(SkillMove(selectedSkill, cells));
+            if (selectedSkill.damageBeforeMove) StartCoroutine(UseMoveSkill(selectedSkill, cells, units));
         }
 
 
         selectedSkill.PassiveUse(this);
 
+
+        //Figure out targets
         if (selectedSkillObject != null && !selectedSkill.moveCaster)
         {
+            if (selectedSkill.targetAllAllies && selectedSkill.targetAllEnemies)
+            {
+                //Target all units on the map
+                foreach (HeroControl unit in units)
+                {
+                    hitTargets.Add(unit);
+                }
+            }
+            else if (selectedSkill.targetAllEnemies)
+            {
+                //Target all enemies
+                foreach (HeroControl unit in units)
+                {
+                    if (unit.PlayerNumber != PlayerNumber) hitTargets.Add(unit);
+                }
+            }
+            else if (selectedSkill.targetAllAllies)
+            {
+                //Target all allies
+                foreach (HeroControl unit in units)
+                {
+                    if (unit.PlayerNumber == PlayerNumber) hitTargets.Add(unit);
+                }
+            }
+            else
+            {
+                //Just target the skill targets
+                targetCells = GetAvailableTargets(cells, selectedSkill);
+
+                foreach (Cell targetCell in targetCells) //Check the cells that are in the target area
+                {
+                    if (targetCell.IsTaken) //If a cell is taken
+                    {
+                        foreach (HeroControl unit in units) //Check all units and use the skill on all those units
+                        {
+                            if (unit.Cell.OffsetCoord == targetCell.OffsetCoord)
+                            {
+                                Debug.Log(selectedSkill.skillname + " used on: " + (unit as HeroControl).UnitName);
+                                hitTargets.Add(unit);
+
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+
+        }
+        else if (selectedSkillObject != null && selectedSkill.moveCaster)
+        {
+            if (!selectedSkill.damageBeforeMove) StartCoroutine(UseMoveSkill(selectedSkill, cells, units));
+            if (selectedSkill.damageBeforeMove) StartCoroutine(SkillMove(selectedSkill, cells));
+        }
+        else
+        {
+            Debug.LogError(UnitName + " Does not have a skill object");
+        }
+
+        //Apply ground effect if any
+        if (selectedSkill.isGroundEffect)
+        {
+            if (targetCells.Count == 0) targetCells = GetAvailableTargets(cells, selectedSkill);
+            selectedSkill.ApplyGroundEffect(targetCells);
+        }
+
+        int bonusDamage = 0;
+        if (selectedSkill.bonusDamage != 0)
+        {
+
+            if (moveBonus != 0)
+            {
+                Debug.Log("Move Bonus: " + moveBonus);
+
+                bonusDamage = selectedSkill.bonusDamage * moveBonus;
+                if (selectedSkill.skillname == "Ignition Lance") selectedSkill.damage += bonusDamage;
+                Debug.Log("Total Damage: " + selectedSkill.damage);
+                moveBonus = 0;
+            }
+
+            if (selectedSkill.skillname == "Last Rites")
+            {
+                Defend(this, selectedSkill.bonusDamage);
+                bonusDamage = (TotalHitPoints - HitPoints) * selectedSkill.bonusDamage;
+                selectedSkill.damage += bonusDamage;
+            }
+
+
+        }
+
+        foreach (HeroControl target in hitTargets)
+        {
+            selectedSkill.UseSkill(this, target);
+        }
+
+        if (bonusDamage != 0) selectedSkill.damage -= bonusDamage;
+
+    }
+
+
+    //Overloaded version for AI use as they don't need a skill object
+    public void UseSkill(Skill selectedSkill, List<Cell> cells, List<Unit> units)
+    {
+        List<Cell> targetCells;
+        List<HeroControl> hitTargets = new List<HeroControl>();
+
+        Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
+        ActionPoints -= selectedSkill.actioncost;
+        if (animator != null) animator.Play("Attack", 0, 0);
+
+        targetCells = GetAvailableTargets(cells, selectedSkill);
+
+        if (selectedSkill.targetAllAllies && selectedSkill.targetAllEnemies)
+        {
+            //Target all units on the map
+            foreach (HeroControl unit in units)
+            {
+                hitTargets.Add(unit);
+            }
+        }
+        else if (selectedSkill.targetAllEnemies)
+        {
+            //Target all enemies
+            foreach (HeroControl unit in units)
+            {
+                if (unit.PlayerNumber != PlayerNumber) hitTargets.Add(unit);
+            }
+        }
+        else if (selectedSkill.targetAllAllies)
+        {
+            //Target all allies
+            foreach (HeroControl unit in units)
+            {
+                if (unit.PlayerNumber == PlayerNumber) hitTargets.Add(unit);
+            }
+        }
+        else
+        {
+            //Just target the skill targets
             targetCells = GetAvailableTargets(cells, selectedSkill);
 
             foreach (Cell targetCell in targetCells) //Check the cells that are in the target area
@@ -163,129 +306,50 @@ public class HeroControl : Unit
                     }
                 }
             }
-
-
-        }
-        else if (selectedSkillObject != null && selectedSkill.moveCaster)
-        {
-            if(!selectedSkill.damageBeforeMove)StartCoroutine(UseMoveSkill(selectedSkill, cells, units));
-            if(selectedSkill.damageBeforeMove) StartCoroutine(SkillMove(selectedSkill, cells));
-        }
-        else
-        {
-            Debug.LogError(UnitName + " Does not have a skill object");
         }
 
-        //Apply ground effect if any
-        if(selectedSkill.isGroundEffect)
-        {
-            if(targetCells.Count == 0) targetCells = GetAvailableTargets(cells, selectedSkill);
-            selectedSkill.ApplyGroundEffect(targetCells);
-        }
-
-        int bonusDamage = 0;
-        if(selectedSkill.bonusDamage != 0)
-        {
-
-            if(moveBonus != 0)
-            {
-                Debug.Log("Move Bonus: " + moveBonus);
-
-                bonusDamage = selectedSkill.bonusDamage * moveBonus;
-                if(selectedSkill.skillname == "Ignition Lance") selectedSkill.damage += bonusDamage;
-                Debug.Log("Total Damage: " + selectedSkill.damage);
-                moveBonus = 0;
-            }
-
-            if(selectedSkill.skillname == "Last Rites")
-            {
-                Defend(this, selectedSkill.bonusDamage);
-                bonusDamage = (TotalHitPoints - HitPoints) * selectedSkill.bonusDamage;
-                selectedSkill.damage += bonusDamage;
-            }
-
-            
-        }
-
-        foreach (HeroControl target in hitTargets)
-        {
-            selectedSkill.UseSkill(this, target);
-        }
-
-        if(bonusDamage != 0) selectedSkill.damage -= bonusDamage;
-
-    }
-
-
-    //Overloaded version for AI use as they don't need a skill object
-    public void UseSkill(Skill selectedSkill, List<Cell> cells, List<Unit> units)
-    {
-        List<Cell> targetCells;
-        List<HeroControl> hitTargets = new List<HeroControl>();
-
-        Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
-        ActionPoints -= selectedSkill.actioncost;
-        if(animator != null) animator.Play("Attack", 0, 0);
-
-        targetCells = GetAvailableTargets(cells, selectedSkill);
-
-        foreach (Cell targetCell in targetCells) //Check the cells that are in the target area
-        {
-            if (targetCell.IsTaken) //If a cell is taken
-            {
-                foreach (HeroControl unit in units) //Check all units and use the skill on all those units
-                {
-                    if (unit.Cell.OffsetCoord == targetCell.OffsetCoord)
-                    {
-                        Debug.Log(selectedSkill.skillname + " used on: " + (unit as HeroControl).UnitName);
-                        hitTargets.Add(unit);
-
-                    }
-                }
-            }
-        }
 
         //Spawn Detection
-        if(selectedSkill.isSpawner)
+        if (selectedSkill.isSpawner)
         {
-            foreach(Cell targetCell in targetCells)
+            foreach (Cell targetCell in targetCells)
             {
-                if(!targetCell.IsTaken)
+                if (!targetCell.IsTaken)
                     selectedSkill.SpawnUnit(this, targetCell);
             }
-                
+
         }
 
         Debug.Log("I am outside the AI ground effect skill section");
         //Apply ground effect if any
-        if(selectedSkill.isGroundEffect)
+        if (selectedSkill.isGroundEffect)
         {
             Debug.Log("I am using a ground effect skill");
-            if(targetCells.Count == 0) targetCells = GetAvailableTargets(cells, selectedSkill);
+            if (targetCells.Count == 0) targetCells = GetAvailableTargets(cells, selectedSkill);
             selectedSkill.ApplyGroundEffect(targetCells);
         }
 
         int bonusDamage = 0;
-        if(selectedSkill.bonusDamage != 0)
+        if (selectedSkill.bonusDamage != 0)
         {
 
-            if(moveBonus != 0)
+            if (moveBonus != 0)
             {
                 Debug.Log("Move Bonus: " + moveBonus);
 
                 bonusDamage = selectedSkill.bonusDamage * moveBonus;
-                if(selectedSkill.skillname == "Ignition Lance") selectedSkill.damage += bonusDamage;
+                if (selectedSkill.skillname == "Ignition Lance") selectedSkill.damage += bonusDamage;
                 Debug.Log("Total Damage: " + selectedSkill.damage);
                 moveBonus = 0;
             }
 
-            if(selectedSkill.skillname == "Last Rites")
+            if (selectedSkill.skillname == "Last Rites")
             {
                 bonusDamage = (TotalHitPoints - HitPoints) * selectedSkill.bonusDamage;
                 selectedSkill.damage += bonusDamage;
             }
 
-            
+
         }
 
 
@@ -294,7 +358,7 @@ public class HeroControl : Unit
             selectedSkill.UseSkill(this, target);
         }
 
-        if(bonusDamage != 0) selectedSkill.damage -= bonusDamage;
+        if (bonusDamage != 0) selectedSkill.damage -= bonusDamage;
 
 
     }
@@ -329,7 +393,7 @@ public class HeroControl : Unit
                         //Move Unit to new Cell
                         List<Cell> path = FindPath(cells, cell);
                         //Cell = cell;
-                        
+
                         moveBonus++;
                         //If target is moving just hang on a second
                         while (isMoving)
@@ -360,45 +424,82 @@ public class HeroControl : Unit
 
         targetCells = GetAvailableTargets(cells, selectedSkill);
 
-        foreach (Cell targetCell in targetCells) //Check the cells that are in the target area
+        if (selectedSkill.targetAllAllies && selectedSkill.targetAllEnemies)
         {
-            if (targetCell.IsTaken) //If a cell is taken
+            //Target all units on the map
+            foreach (HeroControl unit in units)
             {
-                foreach (HeroControl unit in units) //Check all units and use the skill on all those units
-                {
-                    if (unit.Cell.OffsetCoord == targetCell.OffsetCoord)
-                    {
-                        Debug.Log(selectedSkill.skillname + " used on: " + (unit as HeroControl).UnitName);
-                        hitTargets.Add(unit);
+                hitTargets.Add(unit);
+            }
+        }
+        else if (selectedSkill.targetAllEnemies)
+        {
+            //Target all enemies
+            foreach (HeroControl unit in units)
+            {
+                if (unit.PlayerNumber != PlayerNumber) hitTargets.Add(unit);
+            }
+        }
+        else if (selectedSkill.targetAllAllies)
+        {
+            //Target all allies
+            foreach (HeroControl unit in units)
+            {
+                if (unit.PlayerNumber == PlayerNumber) hitTargets.Add(unit);
+            }
+        }
+        else
+        {
+            //Just target the skill targets
+            targetCells = GetAvailableTargets(cells, selectedSkill);
 
+            foreach (Cell targetCell in targetCells) //Check the cells that are in the target area
+            {
+                if (targetCell.IsTaken) //If a cell is taken
+                {
+                    foreach (HeroControl unit in units) //Check all units and use the skill on all those units
+                    {
+                        if (unit.Cell.OffsetCoord == targetCell.OffsetCoord)
+                        {
+                            Debug.Log(selectedSkill.skillname + " used on: " + (unit as HeroControl).UnitName);
+                            hitTargets.Add(unit);
+
+                        }
                     }
                 }
             }
         }
 
+        //Apply ground effect if any
+        if (selectedSkill.isGroundEffect)
+        {
+            if (targetCells.Count == 0) targetCells = GetAvailableTargets(cells, selectedSkill);
+            selectedSkill.ApplyGroundEffect(targetCells);
+        }
+
         //Add bonus damage for movement, health loss, etc.  (ie: Ignition lance)
 
         int bonusDamage = 0;
-        if(selectedSkill.bonusDamage != 0)
+        if (selectedSkill.bonusDamage != 0)
         {
 
-            if(moveBonus != 0)
+            if (moveBonus != 0)
             {
                 Debug.Log("Move Bonus: " + moveBonus);
 
                 bonusDamage = selectedSkill.bonusDamage * moveBonus;
-                if(selectedSkill.skillname == "Ignition Lance") selectedSkill.damage += bonusDamage;
+                if (selectedSkill.skillname == "Ignition Lance") selectedSkill.damage += bonusDamage;
                 Debug.Log("Total Damage: " + selectedSkill.damage);
                 moveBonus = 0;
             }
 
-            if(selectedSkill.skillname == "Last Rites")
+            if (selectedSkill.skillname == "Last Rites")
             {
                 bonusDamage = (TotalHitPoints - HitPoints) * selectedSkill.bonusDamage;
                 selectedSkill.damage += bonusDamage;
             }
 
-            
+
         }
 
         foreach (HeroControl target in hitTargets)
@@ -406,7 +507,7 @@ public class HeroControl : Unit
             selectedSkill.UseSkill(this, target);
         }
 
-        if(bonusDamage != 0) selectedSkill.damage -= bonusDamage;
+        if (bonusDamage != 0) selectedSkill.damage -= bonusDamage;
 
         yield return 0;
     }
@@ -414,7 +515,7 @@ public class HeroControl : Unit
 
     public void AddBonusDamage(Skill skill)
     {
-       
+
     }
 
     public override bool IsCellMovableTo(Cell cell)
