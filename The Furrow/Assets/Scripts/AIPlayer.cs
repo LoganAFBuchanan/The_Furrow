@@ -10,7 +10,8 @@ public class AIPlayer : Player
 {
     private CellGrid _cellGrid;
     private System.Random _rnd;
-    private List<AIControl> aiControllers;
+    [System.NonSerialized]
+    public List<AIControl> aiControllers;
 
     public AIPlayer()
     {
@@ -32,7 +33,7 @@ public class AIPlayer : Player
         //Implementing this with threads would require a lot of modifications in other classes, as Unity API is not thread safe.
     }
 
-    private void SetControllers()
+    public void SetControllers()
     {
         var myUnits = _cellGrid.Units.FindAll(u => u.PlayerNumber.Equals(PlayerNumber)).ToList();
         aiControllers = new List<AIControl>();

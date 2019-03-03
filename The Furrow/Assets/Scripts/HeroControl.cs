@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
+using SpriteGlow;
 
 public class HeroControl : Unit
 {
@@ -13,6 +14,10 @@ public class HeroControl : Unit
     public GameObject skillObject1;
     public GameObject skillObject2;
     public GameObject skillObject3;
+
+    private SpriteGlowEffect highlightEffect;
+
+    private Animator animator;
 
     [System.NonSerialized]
     public Skill skill1;
@@ -31,6 +36,13 @@ public class HeroControl : Unit
         //transform.position += new Vector3(0, 0, 0);
         //GetComponent<Renderer>().material.color = LeadingColor;
 
+        highlightEffect = GetComponent<SpriteGlowEffect>();
+        if(GetComponent<Animator>()) animator = GetComponent<Animator>();
+
+        //highlightEffect.GlowBrightness = 0.0f;
+        highlightEffect.OutlineWidth = 0;
+        highlightEffect.GlowBrightness = 2.5f;
+
         AttachSkills();
 
         if (PlayerNumber == 0)
@@ -42,6 +54,22 @@ public class HeroControl : Unit
             combatteam = "ENEMY";
         }
 
+    }
+
+    protected override void OnMouseDown()
+    {
+        base.OnMouseDown();
+    }
+    protected override void OnMouseEnter()
+    {
+        base.OnMouseEnter();
+
+        highlightEffect.OutlineWidth += 1;
+    }
+    protected override void OnMouseExit()
+    {
+        base.OnMouseExit();
+        highlightEffect.OutlineWidth -= 1;
     }
 
     public override void OnTurnStart()
@@ -70,9 +98,13 @@ public class HeroControl : Unit
         if (skillObject3 != null) skill3 = skillObject3.GetComponent<Skill>();
     }
 
+
+    // <summary>
+    // Basic Skill use function for player characters
+    // </summary>
     public void UseSkill(int skillNum, List<Cell> cells, List<Unit> units)
     {
-        List<Cell> targetCells;
+        List<Cell> targetCells = new List<Cell>();
         List<HeroControl> hitTargets = new List<HeroControl>();
 
         GameObject selectedSkillObject = skillObject1;
@@ -100,11 +132,13 @@ public class HeroControl : Unit
 
         Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
         ActionPoints -= selectedSkill.actioncost;
-
+        if(animator != null) animator.Play("Attack", 0, 0);
+        
 
         if (selectedSkill.moveCaster)
         {
-            StartCoroutine(SkillMove(selectedSkill, cells));
+            if(!selectedSkill.damageBeforeMove) StartCoroutine(SkillMove(selectedSkill, cells));
+            if(selectedSkill.damageBeforeMove)StartCoroutine(UseMoveSkill(selectedSkill, cells, units));
         }
 
 
@@ -134,11 +168,43 @@ public class HeroControl : Unit
         }
         else if (selectedSkillObject != null && selectedSkill.moveCaster)
         {
-            StartCoroutine(UseMoveSkill(selectedSkill, cells, units));
+            if(!selectedSkill.damageBeforeMove)StartCoroutine(UseMoveSkill(selectedSkill, cells, units));
+            if(selectedSkill.damageBeforeMove) StartCoroutine(SkillMove(selectedSkill, cells));
         }
         else
         {
             Debug.LogError(UnitName + " Does not have a skill object");
+        }
+
+        //Apply ground effect if any
+        if(selectedSkill.isGroundEffect)
+        {
+            if(targetCells.Count == 0) targetCells = GetAvailableTargets(cells, selectedSkill);
+            selectedSkill.ApplyGroundEffect(targetCells);
+        }
+
+        int bonusDamage = 0;
+        if(selectedSkill.bonusDamage != 0)
+        {
+
+            if(moveBonus != 0)
+            {
+                Debug.Log("Move Bonus: " + moveBonus);
+
+                bonusDamage = selectedSkill.bonusDamage * moveBonus;
+                if(selectedSkill.skillname == "Ignition Lance") selectedSkill.damage += bonusDamage;
+                Debug.Log("Total Damage: " + selectedSkill.damage);
+                moveBonus = 0;
+            }
+
+            if(selectedSkill.skillname == "Last Rites")
+            {
+                Defend(this, selectedSkill.bonusDamage);
+                bonusDamage = (TotalHitPoints - HitPoints) * selectedSkill.bonusDamage;
+                selectedSkill.damage += bonusDamage;
+            }
+
+            
         }
 
         foreach (HeroControl target in hitTargets)
@@ -146,7 +212,7 @@ public class HeroControl : Unit
             selectedSkill.UseSkill(this, target);
         }
 
-
+        if(bonusDamage != 0) selectedSkill.damage -= bonusDamage;
 
     }
 
@@ -159,6 +225,7 @@ public class HeroControl : Unit
 
         Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
         ActionPoints -= selectedSkill.actioncost;
+        if(animator != null) animator.Play("Attack", 0, 0);
 
         targetCells = GetAvailableTargets(cells, selectedSkill);
 
@@ -178,7 +245,48 @@ public class HeroControl : Unit
             }
         }
 
+        //Spawn Detection
+        if(selectedSkill.isSpawner)
+        {
+            foreach(Cell targetCell in targetCells)
+            {
+                if(!targetCell.IsTaken)
+                    selectedSkill.SpawnUnit(this, targetCell);
+            }
+                
+        }
 
+        Debug.Log("I am outside the AI ground effect skill section");
+        //Apply ground effect if any
+        if(selectedSkill.isGroundEffect)
+        {
+            Debug.Log("I am using a ground effect skill");
+            if(targetCells.Count == 0) targetCells = GetAvailableTargets(cells, selectedSkill);
+            selectedSkill.ApplyGroundEffect(targetCells);
+        }
+
+        int bonusDamage = 0;
+        if(selectedSkill.bonusDamage != 0)
+        {
+
+            if(moveBonus != 0)
+            {
+                Debug.Log("Move Bonus: " + moveBonus);
+
+                bonusDamage = selectedSkill.bonusDamage * moveBonus;
+                if(selectedSkill.skillname == "Ignition Lance") selectedSkill.damage += bonusDamage;
+                Debug.Log("Total Damage: " + selectedSkill.damage);
+                moveBonus = 0;
+            }
+
+            if(selectedSkill.skillname == "Last Rites")
+            {
+                bonusDamage = (TotalHitPoints - HitPoints) * selectedSkill.bonusDamage;
+                selectedSkill.damage += bonusDamage;
+            }
+
+            
+        }
 
 
         foreach (HeroControl target in hitTargets)
@@ -186,14 +294,15 @@ public class HeroControl : Unit
             selectedSkill.UseSkill(this, target);
         }
 
+        if(bonusDamage != 0) selectedSkill.damage -= bonusDamage;
 
 
     }
 
-
+    //For Dashes
     public IEnumerator SkillMove(Skill skill, List<Cell> cells)
     {
-
+        Debug.Log(UnitName + " is Dashing/Moving because of " + skill.skillname);
         float savedSpeed = MovementSpeed;
         MovementSpeed = Constants.PUSH_SPEED;
         for (int i = 0; i < skill.moveCasterX.Length; i++)
@@ -203,12 +312,12 @@ public class HeroControl : Unit
 
             List<Cell> neighbourCells = Cell.GetNeighbours(cells);
 
-            Vector3 destinationPosition = new Vector3(Cell.transform.position.x + skill.moveCasterX[i], 0, Cell.transform.position.z + skill.moveCasterY[i]);
+            Vector2 destinationPosition = new Vector2(Cell.OffsetCoord.x + skill.moveCasterX[i], Cell.OffsetCoord.y + skill.moveCasterY[i]);
 
             foreach (Cell cell in neighbourCells)
             {
-                Debug.Log("CurrPos: " + cell.transform.position + " to " + destinationPosition);
-                if (cell.transform.position == destinationPosition)
+                Debug.Log("CurrPos: " + cell.OffsetCoord + " to " + destinationPosition);
+                if (cell.OffsetCoord == destinationPosition)
                 {
                     if (cell.IsTaken)
                     {
@@ -236,6 +345,8 @@ public class HeroControl : Unit
         yield return 0;
     }
 
+
+    // For skill use after a dash
     public IEnumerator UseMoveSkill(Skill selectedSkill, List<Cell> cells, List<Unit> units)
     {
         while (isMoving)
@@ -265,17 +376,29 @@ public class HeroControl : Unit
             }
         }
 
-        //Add bonus damage for movement  (ie: Ignition lance)
+        //Add bonus damage for movement, health loss, etc.  (ie: Ignition lance)
 
         int bonusDamage = 0;
-        if(moveBonus != 0 && selectedSkill.bonusDamage != 0)
+        if(selectedSkill.bonusDamage != 0)
         {
-            Debug.Log("Move Bonus: " + moveBonus);
 
-            bonusDamage = selectedSkill.bonusDamage * moveBonus;
-            if(selectedSkill.skillname == "Ignition Lance") selectedSkill.damage += bonusDamage;
-            Debug.Log("Total Damage: " + selectedSkill.damage);
-            moveBonus = 0;
+            if(moveBonus != 0)
+            {
+                Debug.Log("Move Bonus: " + moveBonus);
+
+                bonusDamage = selectedSkill.bonusDamage * moveBonus;
+                if(selectedSkill.skillname == "Ignition Lance") selectedSkill.damage += bonusDamage;
+                Debug.Log("Total Damage: " + selectedSkill.damage);
+                moveBonus = 0;
+            }
+
+            if(selectedSkill.skillname == "Last Rites")
+            {
+                bonusDamage = (TotalHitPoints - HitPoints) * selectedSkill.bonusDamage;
+                selectedSkill.damage += bonusDamage;
+            }
+
+            
         }
 
         foreach (HeroControl target in hitTargets)
@@ -286,6 +409,12 @@ public class HeroControl : Unit
         if(bonusDamage != 0) selectedSkill.damage -= bonusDamage;
 
         yield return 0;
+    }
+
+
+    public void AddBonusDamage(Skill skill)
+    {
+       
     }
 
     public override bool IsCellMovableTo(Cell cell)
@@ -314,6 +443,7 @@ public class HeroControl : Unit
 
     public override void MarkAsFinished()
     {
+        highlightEffect.OutlineWidth = 0;
     }
 
     public override void MarkAsDefending(Unit other)
@@ -323,6 +453,7 @@ public class HeroControl : Unit
     public override void MarkAsFriendly()
     {
         //GetComponent<Renderer>().material.color = LeadingColor + new Color(0.8f, 1, 0.8f);
+        highlightEffect.OutlineWidth = 0;
     }
 
     public override void MarkAsReachableEnemy()
@@ -333,10 +464,12 @@ public class HeroControl : Unit
     public override void MarkAsSelected()
     {
         //GetComponent<Renderer>().material.color = LeadingColor + Color.green;
+        highlightEffect.OutlineWidth = 3;
     }
 
     public override void UnMark()
     {
         //GetComponent<Renderer>().material.color = LeadingColor;
+        highlightEffect.OutlineWidth = 0;
     }
 }

@@ -120,9 +120,11 @@ public class AIBehaviour : MonoBehaviour
                 if (pathCost > 0 && pathCost <= unit.MovementPoints)
                 {
                     unit.Move(potentialDestination, path);
-                    if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
+                    
                     while (unit.isMoving)
                         yield return 0;
+                    if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
+                    
                     shortestPath = null;
                     break;
                 }
@@ -138,14 +140,19 @@ public class AIBehaviour : MonoBehaviour
                     if (pathCost > 0 && pathCost <= unit.MovementPoints)
                     {
                         unit.Move(potentialDestination, path);
-                        if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
+                        
                         while (unit.isMoving)
                             yield return 0;
+                        if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
                         break;
                     }
+                    
                     yield return 0;
                 }
+                //if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
             }//If the path cost is greater than unit movement points, move as far as possible.
+            //
+            yield return 0;
 
     }
 
@@ -172,9 +179,10 @@ public class AIBehaviour : MonoBehaviour
                 if (pathCost > 0 && pathCost <= unit.MovementPoints)
                 {
                     unit.Move(potentialDestination, path);
-                    if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
+                    
                     while (unit.isMoving)
                         yield return 0;
+                    if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
                     shortestPath = null;
                     break;
                 }
@@ -190,9 +198,10 @@ public class AIBehaviour : MonoBehaviour
                     if (pathCost > 0 && pathCost <= unit.MovementPoints)
                     {
                         unit.Move(potentialDestination, path);
-                        if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
+                        
                         while (unit.isMoving)
                             yield return 0;
+                        if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
                         break;
                     }
                     yield return 0;

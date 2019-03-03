@@ -12,11 +12,13 @@ public class HasteBuff : Buff
     public void Apply(Unit unit)
     {
         unit.TotalActionPoints += _factor;
+        unit.ActionPoints += _factor;
     }
 
     public void Undo(Unit unit)
     {
         unit.TotalActionPoints -= _factor;
+        unit.ActionPoints -= _factor;
     }
 
     public Buff Clone()

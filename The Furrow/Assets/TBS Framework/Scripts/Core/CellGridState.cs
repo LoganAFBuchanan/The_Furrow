@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using UnityEngine;
 
 public abstract class CellGridState
 {
@@ -15,6 +16,12 @@ public abstract class CellGridState
     /// <param name="unit">Unit that was clicked.</param>
     public virtual void OnUnitClicked(Unit unit)
     {
+        Debug.Log((unit as HeroControl).UnitName + "Has Been Clicked!" );
+        foreach(Unit u in _cellGrid.Units)
+        {
+            u.UnMark();
+        }
+        unit.MarkAsSelected();
     }
     
     /// <summary>
