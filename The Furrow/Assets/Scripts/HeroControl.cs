@@ -17,6 +17,8 @@ public class HeroControl : Unit
 
     private SpriteGlowEffect highlightEffect;
 
+    private Animator animator;
+
     [System.NonSerialized]
     public Skill skill1;
     [System.NonSerialized]
@@ -35,6 +37,7 @@ public class HeroControl : Unit
         //GetComponent<Renderer>().material.color = LeadingColor;
 
         highlightEffect = GetComponent<SpriteGlowEffect>();
+        if(GetComponent<Animator>()) animator = GetComponent<Animator>();
 
         //highlightEffect.GlowBrightness = 0.0f;
         highlightEffect.OutlineWidth = 0;
@@ -129,7 +132,7 @@ public class HeroControl : Unit
 
         Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
         ActionPoints -= selectedSkill.actioncost;
-
+        if(animator != null) animator.Play("Attack", 0, 0);
         
 
         if (selectedSkill.moveCaster)
@@ -222,6 +225,7 @@ public class HeroControl : Unit
 
         Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
         ActionPoints -= selectedSkill.actioncost;
+        if(animator != null) animator.Play("Attack", 0, 0);
 
         targetCells = GetAvailableTargets(cells, selectedSkill);
 

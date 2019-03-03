@@ -10,6 +10,9 @@ public class Skill : MonoBehaviour
     public int damage;
     public int bonusDamage;
 
+    public bool isSplash;
+    public int splashDamage;
+
     public bool moveCaster;
     public bool damageBeforeMove;
     public bool moveTarget;
@@ -75,29 +78,29 @@ public class Skill : MonoBehaviour
         //skillTargetX = new int[3]{ 2, 2, 2 };
         //skillTargetY = new int[3]{ 1, 0, -1 };
 
-        if(isBuff)
+        if (isBuff)
         {
-            switch(buffType)
+            switch (buffType)
             {
                 case BuffType.HASTE:
                     buff = new HasteBuff(buffDuration, buffStrength);
                     break;
-                
+
                 default:
-                break;
+                    break;
             }
         }
 
-        if(isDebuff)
+        if (isDebuff)
         {
-            switch(debuffType)
+            switch (debuffType)
             {
                 case DebuffType.SLOW:
                     debuff = new SlowDebuff(debuffDuration, debuffStrength);
                     break;
-                
+
                 default:
-                break;
+                    break;
             }
         }
     }
@@ -105,19 +108,19 @@ public class Skill : MonoBehaviour
     //Portion of the skill which will always fire
     public void PassiveUse(HeroControl user)
     {
-        if (!hitNeeded) 
+        if (!hitNeeded)
         {
             user.DefenceFactor += defenceChange;
-            
+
         }
     }
 
 
     public void ApplyGroundEffect(List<Cell> cells)
     {
-        foreach(Cell cell in cells)
+        foreach (Cell cell in cells)
         {
-            switch(groundEffectType)
+            switch (groundEffectType)
             {
                 case GroundEffectType.SLIME:
                     (cell as CombatTile).ApplySlimed();
@@ -163,30 +166,50 @@ public class Skill : MonoBehaviour
 
         if (defenceChange != 0 && hitNeeded) user.DefenceFactor += defenceChange; //Change defense if skill specifies
 
-        
-        if(!allyImmune) target.Defend(user, damage);
+
+        if (!allyImmune)
+        {
+            if (!isSplash)
+                target.Defend(user, damage);
+            else
+            {
+                //If skill is splash damage then reduce damage if the target isn't in the first target coordinate then take half damage
+                Vector2 primaryDamageCoord = new Vector2(user.Cell.OffsetCoord.x + skillTargetX[0], user.Cell.OffsetCoord.y + skillTargetY[0]);
+                if (target.Cell.OffsetCoord == primaryDamageCoord) target.Defend(user, damage);
+                else target.Defend(user, splashDamage);
+            }
+        }
         else
         {
-            if(target.PlayerNumber != user.PlayerNumber)
+            if (target.PlayerNumber != user.PlayerNumber)
             {
-                target.Defend(user, damage);
+
+                if (!isSplash)
+                    target.Defend(user, damage);
+                else
+                {
+                    //If skill is splash damage then reduce damage if the target isn't in the first target coordinate then take half damage
+                    Vector2 primaryDamageCoord = new Vector2(user.Cell.OffsetCoord.x + skillTargetX[0], user.Cell.OffsetCoord.y + skillTargetY[0]);
+                    if (target.Cell.OffsetCoord == primaryDamageCoord) target.Defend(user, damage);
+                    else target.Defend(user, splashDamage);
+                }
             }
         }
 
-        if(isBuff && target.PlayerNumber == user.PlayerNumber)
+        if (isBuff && target.PlayerNumber == user.PlayerNumber)
         {
             var _buff = buff.Clone();
             _buff.Apply(target);
             target.Buffs.Add(_buff);
-        } 
+        }
 
-        if(isDebuff && target.PlayerNumber != user.PlayerNumber)
+        if (isDebuff && target.PlayerNumber != user.PlayerNumber)
         {
             var _debuff = debuff.Clone();
             _debuff.Apply(target);
             target.Buffs.Add(_debuff);
-        } 
-        
+        }
+
 
         Debug.Log(target.UnitName + " has taken " + damage + " damage!");
 
@@ -202,7 +225,7 @@ public class Skill : MonoBehaviour
     public IEnumerator PushTarget(HeroControl user, HeroControl target)
     {
         CellGrid cellGrid = GameObject.Find("CellGrid").GetComponent<CellGrid>();
-        
+
 
         Cell currCell = target.Cell;
 
@@ -211,18 +234,18 @@ public class Skill : MonoBehaviour
         for (int i = 0; i < moveTargetX.Length; i++)
         {
             Debug.Log("Push #: " + i);
-            
-            
+
+
             List<Cell> neighbourCells = target.Cell.GetNeighbours(cellGrid.Cells);
 
             Vector3 destinationPosition = new Vector3(currCell.transform.position.x + moveTargetX[i], 0, currCell.transform.position.z + moveTargetY[i]);
-            
-            foreach(Cell cell in neighbourCells)
+
+            foreach (Cell cell in neighbourCells)
             {
                 Debug.Log("CurrPos: " + cell.transform.position + " to " + destinationPosition);
-                if(cell.transform.position == destinationPosition)
+                if (cell.transform.position == destinationPosition)
                 {
-                    if(cell.IsTaken)
+                    if (cell.IsTaken)
                     {
                         //Grab other unit and damage both
                         Debug.Log("Other Cell is Taken");
@@ -236,7 +259,7 @@ public class Skill : MonoBehaviour
                         //If target is moving just hang on a second
                         while (target.isMoving)
                             yield return 0;
-                        
+
                         target.PushMove(cell, path);
 
                     }
