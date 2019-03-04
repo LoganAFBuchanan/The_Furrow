@@ -19,6 +19,7 @@ public class CombatTile : Square
 
     public bool isSlimed = false;
     public GameObject slimeObject;
+    private int slimeLife;
 
     public void ApplySlimed()
     {
@@ -26,7 +27,22 @@ public class CombatTile : Square
         {
             isSlimed = true;
             MovementCost += 1;
+            slimeLife = Constants.SLIME_LIFETIME;
             slimeObject.SetActive(true);
+        }
+    }
+
+    public void DecreaseEffectLifetimes()
+    {
+        if(isSlimed)
+        {
+            slimeLife -= 1;
+            if(slimeLife <= 0)
+            {
+                MovementCost -= 1;
+                isSlimed = false;
+                slimeObject.SetActive(false);
+            }
         }
     }
 

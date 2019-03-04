@@ -455,6 +455,11 @@ public class CellGrid : MonoBehaviour
             CurrentPlayerNumber = (CurrentPlayerNumber + 1)%NumberOfPlayers;
         }//Skipping players that are defeated.
 
+        foreach(Cell cell in Cells)
+        {
+            (cell as CombatTile).DecreaseEffectLifetimes();
+        }
+
         if (TurnEnded != null)
             TurnEnded.Invoke(this, new EventArgs());
 
