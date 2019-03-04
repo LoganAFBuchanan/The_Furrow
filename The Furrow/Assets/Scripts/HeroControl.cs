@@ -240,12 +240,31 @@ public class HeroControl : Unit
 
         }
 
+        //Apply skill based buffs
+        foreach(Buff buff in Buffs)
+        {
+            if(buff is DamageBuff)
+            {
+                (buff as DamageBuff).ApplySkillBuff(selectedSkill);
+            }
+        }
+
+        //Use skill on all targets
         foreach (HeroControl target in hitTargets)
         {
             selectedSkill.UseSkill(this, target);
         }
 
         if (bonusDamage != 0) selectedSkill.damage -= bonusDamage;
+
+        //Remove skill based buffs after use
+        foreach(Buff buff in Buffs)
+        {
+            if(buff is DamageBuff)
+            {
+                (buff as DamageBuff).UndoSkillBuff(selectedSkill);
+            }
+        }
 
     }
 
@@ -352,13 +371,32 @@ public class HeroControl : Unit
 
         }
 
+        
+        //Apply skill based buffs
+        foreach(Buff buff in Buffs)
+        {
+            if(buff is DamageBuff)
+            {
+                (buff as DamageBuff).ApplySkillBuff(selectedSkill);
+            }
+        }
 
+        //Use skill on all targets
         foreach (HeroControl target in hitTargets)
         {
             selectedSkill.UseSkill(this, target);
         }
 
         if (bonusDamage != 0) selectedSkill.damage -= bonusDamage;
+
+        //Remove skill based buffs after use
+        foreach(Buff buff in Buffs)
+        {
+            if(buff is DamageBuff)
+            {
+                (buff as DamageBuff).UndoSkillBuff(selectedSkill);
+            }
+        }
 
 
     }
@@ -501,13 +539,33 @@ public class HeroControl : Unit
 
 
         }
+        
 
+        //Apply skill based buffs
+        foreach(Buff buff in Buffs)
+        {
+            if(buff is DamageBuff)
+            {
+                (buff as DamageBuff).ApplySkillBuff(selectedSkill);
+            }
+        }
+
+        //Use skill on all targets
         foreach (HeroControl target in hitTargets)
         {
             selectedSkill.UseSkill(this, target);
         }
 
         if (bonusDamage != 0) selectedSkill.damage -= bonusDamage;
+
+        //Remove skill based buffs after use
+        foreach(Buff buff in Buffs)
+        {
+            if(buff is DamageBuff)
+            {
+                (buff as DamageBuff).UndoSkillBuff(selectedSkill);
+            }
+        }
 
         yield return 0;
     }

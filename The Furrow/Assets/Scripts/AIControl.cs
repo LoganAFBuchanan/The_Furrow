@@ -61,6 +61,7 @@ public class AIControl : MonoBehaviour
             {
                 step = 0;
             }
+            CheckTriggers();
         }
         
     }
@@ -75,13 +76,13 @@ public class AIControl : MonoBehaviour
                 case BehaviourTrigger.NONE:
                     break;
                 
-                case BehaviourTrigger.LAST_ALIVE:
+                case BehaviourTrigger.LAST_ALLY_ALIVE:
                     int allyCount = 0;
                     foreach(Unit unit in _cellGrid.Units)
                     {
                         if(unit.PlayerNumber == myUnit.PlayerNumber) allyCount++;
                     }
-                    if(allyCount > 1) TriggerSpecialBehaviour();
+                    if(allyCount <= 1) TriggerSpecialBehaviour();
                     break;
             }
         }

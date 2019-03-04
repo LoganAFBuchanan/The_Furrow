@@ -23,6 +23,9 @@ public class Skill : MonoBehaviour
     public bool hitNeeded;
     public int defenceChange;
 
+    public bool shieldTargets;
+    public int shieldAmount;
+
     public bool isSpawner;
     public GameObject spawnedUnit;
 
@@ -56,17 +59,21 @@ public class Skill : MonoBehaviour
     public enum BuffType
     {
         HASTE,
-        SLOW
+        SLOW,
+        DAMAGE,
+        NONE
     }
 
     public enum DebuffType
     {
-        SLOW
+        SLOW,
+        NONE
     }
 
     public enum GroundEffectType
     {
-        SLIME
+        SLIME,
+        NONE
     }
 
     public void Awake()
@@ -87,6 +94,10 @@ public class Skill : MonoBehaviour
             {
                 case BuffType.HASTE:
                     buff = new HasteBuff(buffDuration, buffStrength);
+                    break;
+
+                case BuffType.DAMAGE:
+                    buff = new DamageBuff(buffDuration, buffStrength);
                     break;
 
                 default:
@@ -168,6 +179,8 @@ public class Skill : MonoBehaviour
         Initialize();
 
         if (defenceChange != 0 && hitNeeded) user.DefenceFactor += defenceChange; //Change defense if skill specifies
+
+        if(shieldTargets) target.DefenceFactor += shieldAmount;
 
 
         if (!allyImmune)
