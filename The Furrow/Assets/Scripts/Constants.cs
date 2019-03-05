@@ -18,4 +18,7 @@ public static class Constants
     public const float PUSH_SPEED = 10f;
 
     public const float GRID_TRANSPARENCY = 0.5f;
+
+
+    public const int SLIME_LIFETIME = 2;
 }

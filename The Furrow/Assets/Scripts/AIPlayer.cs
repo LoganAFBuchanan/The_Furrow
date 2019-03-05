@@ -12,6 +12,7 @@ public class AIPlayer : Player
     private System.Random _rnd;
     [System.NonSerialized]
     public List<AIControl> aiControllers;
+    
 
     public AIPlayer()
     {
@@ -24,7 +25,7 @@ public class AIPlayer : Player
         _cellGrid = cellGrid;
         SetControllers();
         StartCoroutine(RunControllers());
-        _cellGrid.EndTurn();
+        
 
 
         //StartCoroutine(Play()); 
@@ -47,12 +48,14 @@ public class AIPlayer : Player
 
     private IEnumerator RunControllers()
     {
+
         foreach(AIControl ai in aiControllers)
         {
             ai.PlayNextBehaviour();
             yield return new WaitForSeconds(0.5f);
             
         }
+        _cellGrid.EndTurn();
     }
 
 

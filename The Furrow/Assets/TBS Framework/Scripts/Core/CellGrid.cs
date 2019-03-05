@@ -455,6 +455,11 @@ public class CellGrid : MonoBehaviour
             CurrentPlayerNumber = (CurrentPlayerNumber + 1)%NumberOfPlayers;
         }//Skipping players that are defeated.
 
+        foreach(Cell cell in Cells)
+        {
+            (cell as CombatTile).DecreaseEffectLifetimes();
+        }
+
         if (TurnEnded != null)
             TurnEnded.Invoke(this, new EventArgs());
 
@@ -470,11 +475,38 @@ public class CellGrid : MonoBehaviour
         Debug.Log(playerSkill.skillname + " hovered");
         if(CellGridState is CellGridStateUnitSelected)
         {
-            List<Cell> targetCells = (sender as GUIController).currentunit.GetAvailableTargets(Cells, playerSkill);
-
-            foreach(Cell cell in targetCells)
+            if (playerSkill.targetAllAllies && playerSkill.targetAllEnemies)
             {
-                cell.MarkAsTargetable();
+                //Highlight all units on the map
+                foreach(Unit unit in Units)
+                {
+                    unit.Cell.MarkAsTargetable();
+                }
+            }
+            else if (playerSkill.targetAllEnemies)
+            {
+                //Highlight all enemies
+                foreach(Unit unit in Units)
+                {
+                    if(unit.PlayerNumber != (sender as GUIController).currentunit.PlayerNumber) unit.Cell.MarkAsTargetable();
+                }
+            }
+            else if (playerSkill.targetAllAllies)
+            {
+                //Highlight all allies
+                foreach(Unit unit in Units)
+                {
+                    if(unit.PlayerNumber == (sender as GUIController).currentunit.PlayerNumber) unit.Cell.MarkAsTargetable();
+                }
+            }
+            else
+            {
+                List<Cell> targetCells = (sender as GUIController).currentunit.GetAvailableTargets(Cells, playerSkill);
+
+                foreach(Cell cell in targetCells)
+                {
+                    cell.MarkAsTargetable();
+                }
             }
         }
 
@@ -488,11 +520,38 @@ public class CellGrid : MonoBehaviour
         Debug.Log(playerSkill.skillname + " hovered");
         if(CellGridState is CellGridStateUnitSelected)
         {
-            List<Cell> targetCells = (sender as GUIController).currentunit.GetAvailableTargets(Cells, playerSkill);
-
-            foreach(Cell cell in targetCells)
+            if (playerSkill.targetAllAllies && playerSkill.targetAllEnemies)
             {
-                cell.MarkAsTargetable();
+                //Highlight all units on the map
+                foreach(Unit unit in Units)
+                {
+                    unit.Cell.MarkAsTargetable();
+                }
+            }
+            else if (playerSkill.targetAllEnemies)
+            {
+                //Highlight all enemies
+                foreach(Unit unit in Units)
+                {
+                    if(unit.PlayerNumber != (sender as GUIController).currentunit.PlayerNumber) unit.Cell.MarkAsTargetable();
+                }
+            }
+            else if (playerSkill.targetAllAllies)
+            {
+                //Highlight all allies
+                foreach(Unit unit in Units)
+                {
+                    if(unit.PlayerNumber == (sender as GUIController).currentunit.PlayerNumber) unit.Cell.MarkAsTargetable();
+                }
+            }
+            else
+            {
+                List<Cell> targetCells = (sender as GUIController).currentunit.GetAvailableTargets(Cells, playerSkill);
+
+                foreach(Cell cell in targetCells)
+                {
+                    cell.MarkAsTargetable();
+                }
             }
         }
     }
@@ -504,11 +563,38 @@ public class CellGrid : MonoBehaviour
         Debug.Log(playerSkill.skillname + " hovered");
         if(CellGridState is CellGridStateUnitSelected)
         {
-            List<Cell> targetCells = (sender as GUIController).currentunit.GetAvailableTargets(Cells, playerSkill);
-
-            foreach(Cell cell in targetCells)
+            if (playerSkill.targetAllAllies && playerSkill.targetAllEnemies)
             {
-                cell.MarkAsTargetable();
+                //Highlight all units on the map
+                foreach(Unit unit in Units)
+                {
+                    unit.Cell.MarkAsTargetable();
+                }
+            }
+            else if (playerSkill.targetAllEnemies)
+            {
+                //Highlight all enemies
+                foreach(Unit unit in Units)
+                {
+                    if(unit.PlayerNumber != (sender as GUIController).currentunit.PlayerNumber) unit.Cell.MarkAsTargetable();
+                }
+            }
+            else if (playerSkill.targetAllAllies)
+            {
+                //Highlight all allies
+                foreach(Unit unit in Units)
+                {
+                    if(unit.PlayerNumber == (sender as GUIController).currentunit.PlayerNumber) unit.Cell.MarkAsTargetable();
+                }
+            }
+            else
+            {
+                List<Cell> targetCells = (sender as GUIController).currentunit.GetAvailableTargets(Cells, playerSkill);
+
+                foreach(Cell cell in targetCells)
+                {
+                    cell.MarkAsTargetable();
+                }
             }
         }
     }

@@ -128,9 +128,56 @@ public class MapNode : MonoBehaviour
         player.GetEncounterVariables();
     }
 
+    public void SetGoldCount(int change)
+    {
+        OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
+        player.SetGoldCount(change);
+    }
+
+    public void SetRationCount(int change)
+    {
+        OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
+        player.SetRationCount(change);
+    }
+
+    public void SetBondCount(int change)
+    {
+        OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
+        player.SetBondCount(change);
+    }
+
+    public void SetChar1Health(int change)
+    {
+        OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
+        player.SetChar1Health(change);
+    }
+
+    public void SetChar2Health(int change)
+    {
+        OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
+        player.SetChar2Health(change);
+    }
+
+    public void SetChar1MaxHealth(int change)
+    {
+        OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
+        player.SetChar1MaxHealth(change);
+    }
+
+    public void SetChar2MaxHealth(int change)
+    {
+        OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
+        player.SetChar2MaxHealth(change);
+    }
+
     public void AddRandomArtifact()
     {
         Debug.Log("Player Gains an Artifact!");
+    }
+
+    public void IncreaseDarkness()
+    {
+        Debug.Log("Darkness DOubles movement!");
     }
 
     public void FightEnemyGroup(int groupNum)

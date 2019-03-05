@@ -4,8 +4,20 @@ using UnityEngine;
 
 public class AIControl : MonoBehaviour
 {
-
+    //Default action list
     public List<AIBehaviour> actionList;
+
+    //Special trigger condition
+    public BehaviourTrigger triggeredBehaviour;
+    private bool isTriggered = false;
+    //Action list that begins once a special condition has been met
+    public List<AIBehaviour> triggeredActionList;
+
+    public enum BehaviourTrigger
+    {
+        NONE,
+        LAST_ALLY_ALIVE
+    }
 
     private int step;
 
@@ -27,14 +39,59 @@ public class AIControl : MonoBehaviour
         
     }
 
+    //Determines which behaviour list should be played through
     public void PlayNextBehaviour()
     {
-        actionList[step].EnactBehaviour(_cellGrid, myUnit);
-
-        step++;
-        if(step >= actionList.Count)
+        if(isTriggered)
         {
-            step = 0;
+            triggeredActionList[step].EnactBehaviour(_cellGrid, myUnit);
+
+            step++;
+            if(step >= triggeredActionList.Count)
+            {
+                step = 0;
+            }
         }
+        else
+        {
+            actionList[step].EnactBehaviour(_cellGrid, myUnit);
+
+            step++;
+            if(step >= actionList.Count)
+            {
+                step = 0;
+            }
+            CheckTriggers();
+        }
+        
+    }
+
+    //Checks special conditions for the behaviour list to be changed
+    private void CheckTriggers()
+    {
+        if(!isTriggered)
+        {
+            switch(triggeredBehaviour)
+            {
+                case BehaviourTrigger.NONE:
+                    break;
+                
+                case BehaviourTrigger.LAST_ALLY_ALIVE:
+                    int allyCount = 0;
+                    foreach(Unit unit in _cellGrid.Units)
+                    {
+                        if(unit.PlayerNumber == myUnit.PlayerNumber) allyCount++;
+                    }
+                    if(allyCount <= 1) TriggerSpecialBehaviour();
+                    break;
+            }
+        }
+    }
+    
+    //Called whenever special trigger conditions are met
+    private void TriggerSpecialBehaviour()
+    {
+        isTriggered = true;
+        step = 0;
     }
 }

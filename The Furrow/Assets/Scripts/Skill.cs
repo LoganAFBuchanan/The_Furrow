@@ -13,12 +13,18 @@ public class Skill : MonoBehaviour
     public bool isSplash;
     public int splashDamage;
 
+    public bool targetAllAllies;
+    public bool targetAllEnemies;
+
     public bool moveCaster;
     public bool damageBeforeMove;
     public bool moveTarget;
 
     public bool hitNeeded;
     public int defenceChange;
+
+    public bool shieldTargets;
+    public int shieldAmount;
 
     public bool isSpawner;
     public GameObject spawnedUnit;
@@ -53,17 +59,21 @@ public class Skill : MonoBehaviour
     public enum BuffType
     {
         HASTE,
-        SLOW
+        SLOW,
+        DAMAGE,
+        NONE
     }
 
     public enum DebuffType
     {
-        SLOW
+        SLOW,
+        NONE
     }
 
     public enum GroundEffectType
     {
-        SLIME
+        SLIME,
+        NONE
     }
 
     public void Awake()
@@ -84,6 +94,10 @@ public class Skill : MonoBehaviour
             {
                 case BuffType.HASTE:
                     buff = new HasteBuff(buffDuration, buffStrength);
+                    break;
+
+                case BuffType.DAMAGE:
+                    buff = new DamageBuff(buffDuration, buffStrength);
                     break;
 
                 default:
@@ -166,6 +180,8 @@ public class Skill : MonoBehaviour
 
         if (defenceChange != 0 && hitNeeded) user.DefenceFactor += defenceChange; //Change defense if skill specifies
 
+        if(shieldTargets) target.DefenceFactor += shieldAmount;
+
 
         if (!allyImmune)
         {
@@ -238,12 +254,12 @@ public class Skill : MonoBehaviour
 
             List<Cell> neighbourCells = target.Cell.GetNeighbours(cellGrid.Cells);
 
-            Vector3 destinationPosition = new Vector3(currCell.transform.position.x + moveTargetX[i], 0, currCell.transform.position.z + moveTargetY[i]);
+            Vector2 destinationPosition = new Vector3(currCell.OffsetCoord.x + moveTargetX[i], currCell.OffsetCoord.y + moveTargetY[i]);
 
             foreach (Cell cell in neighbourCells)
             {
-                Debug.Log("CurrPos: " + cell.transform.position + " to " + destinationPosition);
-                if (cell.transform.position == destinationPosition)
+                Debug.Log("CurrPos: " + cell.OffsetCoord + " to " + destinationPosition);
+                if (cell.OffsetCoord == destinationPosition)
                 {
                     if (cell.IsTaken)
                     {
