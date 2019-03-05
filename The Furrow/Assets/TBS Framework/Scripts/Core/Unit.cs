@@ -60,7 +60,7 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public List<Buff> Buffs { get; private set; }
 
-    public int TotalHitPoints { get; private set; }
+    public int TotalHitPoints { get; set; }
     protected int TotalMovementPoints;
     [System.NonSerialized]
     public int TotalActionPoints;

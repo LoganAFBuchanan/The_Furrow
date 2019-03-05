@@ -132,7 +132,7 @@ public class HeroControl : Unit
 
         Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
         ActionPoints -= selectedSkill.actioncost;
-        if (animator != null) animator.Play("Attack", 0, 0);
+        if (animator != null) PlaySkillAnimation(selectedSkill);
 
 
         //If a skill moves the caster this section determines whether the damage is dealt before or after
@@ -277,7 +277,7 @@ public class HeroControl : Unit
 
         Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
         ActionPoints -= selectedSkill.actioncost;
-        if (animator != null) animator.Play("Attack", 0, 0);
+        if (animator != null) PlaySkillAnimation(selectedSkill);
 
         targetCells = GetAvailableTargets(cells, selectedSkill);
 
@@ -459,6 +459,7 @@ public class HeroControl : Unit
 
         Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
         ActionPoints -= selectedSkill.actioncost;
+        if (animator != null) PlaySkillAnimation(selectedSkill);
 
         targetCells = GetAvailableTargets(cells, selectedSkill);
 
@@ -571,9 +572,9 @@ public class HeroControl : Unit
     }
 
 
-    public void AddBonusDamage(Skill skill)
+    private void PlaySkillAnimation(Skill skill)
     {
-
+        animator.Play(skill.skillname,0,0);
     }
 
     public override bool IsCellMovableTo(Cell cell)

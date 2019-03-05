@@ -137,6 +137,57 @@ public class OverworldPlayer : MonoBehaviour
 
     }
 
+    
+    public void SetGoldCount(int change)
+    {
+        goldCount += change;
+        if(goldCount < 0) goldCount = 0;
+        StatsChanged.Invoke(this, new EventArgs());
+    }
+
+    public void SetRationCount(int change)
+    {
+        rationCount += change;
+        if(rationCount < 0) rationCount = 0;
+        StatsChanged.Invoke(this, new EventArgs());
+    }
+
+    public void SetBondCount(int change)
+    {
+        bondCount += change;
+        if(bondCount < 0) bondCount = 0;
+        if(bondCount > bondMax) bondCount = bondMax;
+        StatsChanged.Invoke(this, new EventArgs());
+    }
+
+    public void SetChar1Health(int change)
+    {
+        characterList[0].HitPoints += change;
+        if(characterList[0].HitPoints > characterList[0].TotalHitPoints) characterList[0].HitPoints = characterList[0].TotalHitPoints;
+        StatsChanged.Invoke(this, new EventArgs());
+    }
+
+    public void SetChar2Health(int change)
+    {
+        characterList[1].HitPoints += change;
+        if(characterList[1].HitPoints > characterList[1].TotalHitPoints) characterList[1].HitPoints = characterList[1].TotalHitPoints;
+        StatsChanged.Invoke(this, new EventArgs());
+    }
+
+    public void SetChar1MaxHealth(int change)
+    {
+        characterList[0].TotalHitPoints += change;
+        characterList[0].HitPoints += change;
+        StatsChanged.Invoke(this, new EventArgs());
+    }
+
+    public void SetChar2MaxHealth(int change)
+    {
+        characterList[1].TotalHitPoints += change;
+        characterList[1].HitPoints += change;
+        StatsChanged.Invoke(this, new EventArgs());
+    }
+
     public void GetEncounterVariables()
     {
         //currNode.biome = currNode.flowchart.GetStringVariable("biome");

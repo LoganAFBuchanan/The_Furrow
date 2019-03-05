@@ -44,8 +44,8 @@ TextureImporter:
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 9
-  spritePivot: {x: 0.29470262, y: 0.08676457}
-  spritePixelsToUnits: 900
+  spritePivot: {x: 0.35, y: 0.15}
+  spritePixelsToUnits: 450
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -86,7 +86,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 0b2f0b11d4d7a654ead1780df4f16e39
+    spriteID: a9d7ac2f6fa5ae641ac31aaa639bb0fa
     vertices: []
     indices: 
     edges: []
