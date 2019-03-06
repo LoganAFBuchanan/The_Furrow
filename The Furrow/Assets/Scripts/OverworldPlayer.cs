@@ -17,6 +17,8 @@ public class OverworldPlayer : MonoBehaviour
 
     public MapNode currNode;
 
+    public List<Artifact> artifacts;
+
     public event System.EventHandler NodeChanged;
     public event System.EventHandler StatsChanged;
 
@@ -94,7 +96,7 @@ public class OverworldPlayer : MonoBehaviour
         
         currNode = dest;
         currNode.isTaken = true;
-        StatsChanged.Invoke(this, new EventArgs());
+        UpdateGUI();
         currNode.PlayerInNode();
     }
 
@@ -137,19 +139,24 @@ public class OverworldPlayer : MonoBehaviour
 
     }
 
+    public void UpdateGUI()
+    {
+        StatsChanged.Invoke(this, new EventArgs());
+    }
+
     
     public void SetGoldCount(int change)
     {
         goldCount += change;
         if(goldCount < 0) goldCount = 0;
-        StatsChanged.Invoke(this, new EventArgs());
+        UpdateGUI();
     }
 
     public void SetRationCount(int change)
     {
         rationCount += change;
         if(rationCount < 0) rationCount = 0;
-        StatsChanged.Invoke(this, new EventArgs());
+        UpdateGUI();
     }
 
     public void SetBondCount(int change)
@@ -157,35 +164,35 @@ public class OverworldPlayer : MonoBehaviour
         bondCount += change;
         if(bondCount < 0) bondCount = 0;
         if(bondCount > bondMax) bondCount = bondMax;
-        StatsChanged.Invoke(this, new EventArgs());
+        UpdateGUI();
     }
 
     public void SetChar1Health(int change)
     {
         characterList[0].HitPoints += change;
         if(characterList[0].HitPoints > characterList[0].TotalHitPoints) characterList[0].HitPoints = characterList[0].TotalHitPoints;
-        StatsChanged.Invoke(this, new EventArgs());
+        UpdateGUI();
     }
 
     public void SetChar2Health(int change)
     {
         characterList[1].HitPoints += change;
         if(characterList[1].HitPoints > characterList[1].TotalHitPoints) characterList[1].HitPoints = characterList[1].TotalHitPoints;
-        StatsChanged.Invoke(this, new EventArgs());
+        UpdateGUI();
     }
 
     public void SetChar1MaxHealth(int change)
     {
         characterList[0].TotalHitPoints += change;
         characterList[0].HitPoints += change;
-        StatsChanged.Invoke(this, new EventArgs());
+        UpdateGUI();
     }
 
     public void SetChar2MaxHealth(int change)
     {
         characterList[1].TotalHitPoints += change;
         characterList[1].HitPoints += change;
-        StatsChanged.Invoke(this, new EventArgs());
+        UpdateGUI();
     }
 
     public void GetEncounterVariables()
@@ -195,7 +202,7 @@ public class OverworldPlayer : MonoBehaviour
         rationCount = currNode.flowchart.GetIntegerVariable("rationCount");
         //currNode.flowchart.GetStringVariable("char1Name");
         //currNode.flowchart.GetStringVariable("char2Name");
-        StatsChanged.Invoke(this, new EventArgs());
+        UpdateGUI();
     }
 
 

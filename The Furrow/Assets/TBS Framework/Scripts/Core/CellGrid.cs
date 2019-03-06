@@ -287,8 +287,10 @@ public class CellGrid : MonoBehaviour
             
                 
         }
+
         overWorldMap.SetActive(true);
         overWorldNode.SetActive(true);
+        overWorldNode.GetComponent<MapNode>().GiveCombatRewards(overWorldPlayer.GetComponent<OverworldPlayer>());
         overWorldNode.transform.SetParent(overWorldMap.transform);
         overWorldNode.transform.position = overWorldNode.GetComponent<MapNode>().savedPosition;
     }

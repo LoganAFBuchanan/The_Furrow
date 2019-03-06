@@ -13,10 +13,16 @@ public class MapNode : MonoBehaviour
     public int worldTier;
     public int tierPosition;
     public bool isUnique;
+
+    public int combatGoldReward;
+    public int combatBondReward;
+    public int combatRationReward;
+    public int combatArtifactReward;
     
     [System.NonSerialized]
     public bool isVisited;
 
+    [System.NonSerialized]
     public bool isTaken;
 
     [System.NonSerialized]
@@ -108,6 +114,19 @@ public class MapNode : MonoBehaviour
     public void PlayerInNode()
     {
         PlayerEntered.Invoke(this, new EventArgs());
+    }
+
+    public void GiveCombatRewards(OverworldPlayer player)
+    {
+        //Add rewards to player and update GUI
+        player.SetGoldCount(combatGoldReward);
+        player.SetBondCount(combatBondReward);
+        player.SetRationCount(combatRationReward);
+
+        for(int i = 0; i < combatArtifactReward; i++)
+        {
+            AddRandomArtifact();
+        }
     }
 
     //Evenly spaces out nodes. Will be randomized later for more interesting layouts
