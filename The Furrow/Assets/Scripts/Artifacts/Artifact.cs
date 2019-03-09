@@ -14,6 +14,7 @@ public interface Artifact
     /// Name of the artifact
     /// </summary>
     string name { get; set; }
+    string desc { get; set; }
 
     /// <summary>
     /// Describes how the player should be affected

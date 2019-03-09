@@ -17,14 +17,16 @@ public class OverworldPlayer : MonoBehaviour
 
     public MapNode currNode;
 
+    public List<string> availableArtifacts;
     public List<Artifact> artifacts;
 
     public event System.EventHandler NodeChanged;
     public event System.EventHandler StatsChanged;
+    
 
     public void Awake()
     {
-        if(GameObject.FindGameObjectsWithTag("Player").Length > 1)
+        if (GameObject.FindGameObjectsWithTag("Player").Length > 1)
         {
             Destroy(this.gameObject);
         }
@@ -33,67 +35,75 @@ public class OverworldPlayer : MonoBehaviour
     // Sets up the player
     public void Initialize()
     {
-        
-        
-            characterList = new List<HeroControl>();
-            foreach(Transform child in transform)
+        availableArtifacts = new List<string>();
+        artifacts = new List<Artifact>();
+        foreach (string name in Constants.allArtifacts)
+        {
+            availableArtifacts.Add(name);
+        }
+
+        characterList = new List<HeroControl>();
+        foreach (Transform child in transform)
+        {
+            characterList.Add(child.gameObject.GetComponent<HeroControl>());
+
+        }
+
+        foreach (HeroControl hero in characterList)
+        {
+            Debug.Log(hero.UnitName);
+            if (hero.gameObject.activeSelf)
             {
-                characterList.Add(child.gameObject.GetComponent<HeroControl>());
-
+                hero.Initialize();
+                hero.UnitAttacked += OnHeroAttacked;
+                hero.gameObject.SetActive(false);
             }
+        }
 
-            foreach(HeroControl hero in characterList)
-            {
-                Debug.Log(hero.UnitName);
-                if(hero.gameObject.activeSelf)
-                {
-                    hero.Initialize();
-                    hero.gameObject.SetActive(false);
-                }
-            }
 
-            bondLevel = Constants.STARTING_BOND_LEVEL;
-            goldCount = Constants.STARTING_GOLD;
-            rationCount = Constants.STARTING_RATIONS;
-            bondMax = Constants.BOND_MAX_LEVEL_1;
 
-            DontDestroyOnLoad(this.gameObject);
-        
-        
+        bondLevel = Constants.STARTING_BOND_LEVEL;
+        goldCount = Constants.STARTING_GOLD;
+        rationCount = Constants.STARTING_RATIONS;
+        bondMax = Constants.BOND_MAX_LEVEL_1;
+
+        DontDestroyOnLoad(this.gameObject);
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void MovePlayer(MapNode dest)
     {
-        if(currNode == null) 
+        if (currNode == null)
         {
-            
+
         }
         else
         {
             currNode.isTaken = false;
             currNode.OnDeHighlightNode();
         }
-        
+
         //Ration reduction when moving
-        if(rationCount > 0)
+        if (rationCount > 0)
         {
             rationCount--;
         }
         else
         {
-            foreach(HeroControl hero in characterList)
+            foreach (HeroControl hero in characterList)
             {
                 //Reduce character health if ration count is 0
                 hero.HitPoints -= Constants.STARVING_COST;
             }
         }
-        
+
         currNode = dest;
         currNode.isTaken = true;
         UpdateGUI();
@@ -102,8 +112,8 @@ public class OverworldPlayer : MonoBehaviour
 
     public void ExecuteFlowchart(string startBlock)
     {
-        
-        if(!currNode.isVisited)
+
+        if (!currNode.isVisited)
         {
             SetEncounterVariables();
             currNode.flowchart.ExecuteBlock(startBlock);
@@ -139,45 +149,50 @@ public class OverworldPlayer : MonoBehaviour
 
     }
 
+    private void OnHeroAttacked(object sender, EventArgs e)
+    {
+        UpdateGUI();
+    }
+
     public void UpdateGUI()
     {
         StatsChanged.Invoke(this, new EventArgs());
     }
 
-    
+
     public void SetGoldCount(int change)
     {
         goldCount += change;
-        if(goldCount < 0) goldCount = 0;
+        if (goldCount < 0) goldCount = 0;
         UpdateGUI();
     }
 
     public void SetRationCount(int change)
     {
         rationCount += change;
-        if(rationCount < 0) rationCount = 0;
+        if (rationCount < 0) rationCount = 0;
         UpdateGUI();
     }
 
     public void SetBondCount(int change)
     {
         bondCount += change;
-        if(bondCount < 0) bondCount = 0;
-        if(bondCount > bondMax) bondCount = bondMax;
+        if (bondCount < 0) bondCount = 0;
+        if (bondCount > bondMax) bondCount = bondMax;
         UpdateGUI();
     }
 
     public void SetChar1Health(int change)
     {
         characterList[0].HitPoints += change;
-        if(characterList[0].HitPoints > characterList[0].TotalHitPoints) characterList[0].HitPoints = characterList[0].TotalHitPoints;
+        if (characterList[0].HitPoints > characterList[0].TotalHitPoints) characterList[0].HitPoints = characterList[0].TotalHitPoints;
         UpdateGUI();
     }
 
     public void SetChar2Health(int change)
     {
         characterList[1].HitPoints += change;
-        if(characterList[1].HitPoints > characterList[1].TotalHitPoints) characterList[1].HitPoints = characterList[1].TotalHitPoints;
+        if (characterList[1].HitPoints > characterList[1].TotalHitPoints) characterList[1].HitPoints = characterList[1].TotalHitPoints;
         UpdateGUI();
     }
 
@@ -194,6 +209,53 @@ public class OverworldPlayer : MonoBehaviour
         characterList[1].HitPoints += change;
         UpdateGUI();
     }
+
+    //Pull a random artifact from available artifacts and apply its benefit to the player
+    public void AddRandomArtifact()
+    {
+        int randomNumber = UnityEngine.Random.Range(0, availableArtifacts.Count - 1);
+
+        if (availableArtifacts.Count > 0)
+        {
+            switch (availableArtifacts[randomNumber])
+            {
+                case "FurtiveMushroom":
+                    {
+                        availableArtifacts.Remove("FurtiveMushroom");
+                        FurtiveMushroom newArtifact = new FurtiveMushroom();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact("FurtiveMushroom");
+                        UpdateGUI();
+                        Debug.Log("Added FurtiveMushroom");
+                        break;
+                    }
+
+                default:
+                    {
+                        FurtiveMushroom newArtifact = new FurtiveMushroom();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact("FurtiveMushroom");
+                        UpdateGUI();
+                        Debug.Log("Added Default Artifact");
+                        break;
+                    }
+            }
+
+        }
+        else
+        {
+            FurtiveMushroom newArtifact = new FurtiveMushroom();
+            artifacts.Add(newArtifact);
+            newArtifact.Apply(this);
+            GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact("FurtiveMushroom");
+            UpdateGUI();
+            Debug.Log("Added Default Artifact");
+
+        }
+    }
+
 
     public void GetEncounterVariables()
     {

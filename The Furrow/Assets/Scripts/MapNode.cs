@@ -192,6 +192,9 @@ public class MapNode : MonoBehaviour
     public void AddRandomArtifact()
     {
         Debug.Log("Player Gains an Artifact!");
+        OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
+        player.AddRandomArtifact();
+
     }
 
     public void IncreaseDarkness()

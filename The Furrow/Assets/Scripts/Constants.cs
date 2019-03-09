@@ -21,4 +21,11 @@ public static class Constants
 
 
     public const int SLIME_LIFETIME = 2;
+
+    public static readonly string[] allArtifacts = new string[] 
+    {
+        "FurtiveMushroom"
+    };
+    
+    
 }
