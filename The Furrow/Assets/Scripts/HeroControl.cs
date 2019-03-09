@@ -15,6 +15,8 @@ public class HeroControl : Unit
     public GameObject skillObject2;
     public GameObject skillObject3;
 
+    //This is me pretending to work 
+
     private SpriteGlowEffect highlightEffect;
 
     private Animator animator;

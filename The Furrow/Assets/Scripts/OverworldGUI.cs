@@ -26,18 +26,31 @@ public class OverworldGUI : MonoBehaviour
     private Text char2HPText;
     private Text char2BondText;
 
+    public ArtifactContainer artifactContainer;
+
     // Start is called before the first frame update
     void Awake()
     {
 
-        Initialize();
+        if(GameObject.FindGameObjectsWithTag("OverworldUI").Length > 1)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            DontDestroyOnLoad(this.gameObject);
+            Initialize();
+        }
 
+        
         
     }
 
     public virtual void Initialize()
     {
         mapControlScript = GameObject.Find("MapControl").GetComponent<MapControl>();
+
+        
 
         mapControlScript.MapGenerated += OnMapGenerated;
         mapControlScript.ValuesChanged += OnValuesChanged;
@@ -55,6 +68,11 @@ public class OverworldGUI : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void AddArtifact(string name)
+    {
+        artifactContainer.LoadArtifactToGUI(name);
     }
 
     private void OnMapGenerated(object sender, EventArgs e)
@@ -84,6 +102,11 @@ public class OverworldGUI : MonoBehaviour
 
         if(mapControlScript.isFirstMove) campButton.interactable = false;
         else campButton.interactable = true;
+    }
+
+    public void OnDebugArtifactButtonClicked()
+    {
+        GameObject.Find("Player").GetComponent<OverworldPlayer>().AddRandomArtifact();
     }
 
     public void OnCampButtonClicked()

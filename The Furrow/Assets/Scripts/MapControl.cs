@@ -267,7 +267,7 @@ public class MapControl : MonoBehaviour
 
         MapGenerated.Invoke(this, new EventArgs());
 
-        if(scene.buildIndex != initialSceneIndex) CleanUpDelegates();
+        //if(scene.buildIndex != initialSceneIndex) CleanUpDelegates();
 
         Debug.Log("YUP that scene done changed to" + scene.name);
     }

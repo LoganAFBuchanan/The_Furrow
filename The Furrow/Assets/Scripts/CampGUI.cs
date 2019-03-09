@@ -23,6 +23,16 @@ public class CampGUI : OverworldGUI
     public GameObject skillPanel;
     private Text skillPanelTitle;
 
+
+    void Awake()
+    {
+
+        
+            Initialize();
+
+        
+        
+    }
  
     public override void Initialize()
     {
