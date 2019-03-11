@@ -14,6 +14,8 @@ public class MapNode : MonoBehaviour
     public int tierPosition;
     public bool isUnique;
 
+    public int positionID;
+
     public int combatGoldReward;
     public int combatBondReward;
     public int combatRationReward;

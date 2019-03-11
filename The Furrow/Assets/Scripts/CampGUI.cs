@@ -129,7 +129,26 @@ public class CampGUI : OverworldGUI
         {
             //Bond Level up! Initiate appropriate flowchart
             choicePanel.SetActive(false);
-            GameObject.Find("BondMoment1").GetComponent<Flowchart>().ExecuteBlock("Start");
+
+            switch(playerScript.bondLevel)
+            {
+                case 1:   
+                    GameObject.Find("BondMoment1").GetComponent<Flowchart>().ExecuteBlock("Start");
+                    break;
+                
+                case 2:
+                    GameObject.Find("BondMoment1").GetComponent<Flowchart>().ExecuteBlock("Start");
+                    break;
+                
+                case 3:
+                    GameObject.Find("BondMoment1").GetComponent<Flowchart>().ExecuteBlock("Start");
+                    break;
+                
+                case 4:
+                    GameObject.Find("BondMoment1").GetComponent<Flowchart>().ExecuteBlock("Start");
+                    break;
+            }
+            
         }
         else
         {
@@ -163,6 +182,41 @@ public class CampGUI : OverworldGUI
     public void BondLevelUp()
     {
         Debug.Log("CHARACTERS HAVE BONDED!!!");
+        playerScript.bondCount = 0;
+        
+        foreach(HeroControl hero in playerScript.characterList)
+        {
+            hero.HitPoints += Constants.LEVEL_UP_HP_INC;
+            hero.TotalHitPoints += Constants.LEVEL_UP_HP_INC;
+        }
+
+        switch(playerScript.bondLevel)
+        {
+            case 1:
+
+                playerScript.bondMax = Constants.BOND_MAX_LEVEL_2;
+
+                break;
+            
+            case 2:
+
+                playerScript.bondMax = Constants.BOND_MAX_LEVEL_3;
+
+                break;
+            
+            case 3:
+
+                playerScript.bondMax = Constants.BOND_MAX_LEVEL_4;
+
+                break;
+            
+            case 4:
+
+                playerScript.bondMax = Constants.BOND_MAX_LEVEL_5;
+
+                break;
+        }
+
         skillPanel.SetActive(true);
         List<GameObject> chosenSkills = PickRandomSkills(skillList);
         AttachSkillsToUI(chosenSkills);

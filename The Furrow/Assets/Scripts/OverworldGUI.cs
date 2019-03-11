@@ -50,7 +50,7 @@ public class OverworldGUI : MonoBehaviour
     {
         mapControlScript = GameObject.Find("MapControl").GetComponent<MapControl>();
 
-        
+        SceneManager.sceneLoaded += OnSceneLoaded;
 
         mapControlScript.MapGenerated += OnMapGenerated;
         mapControlScript.ValuesChanged += OnValuesChanged;
@@ -117,5 +117,23 @@ public class OverworldGUI : MonoBehaviour
         mapControlScript.savedPosition = mapControlScript.transform.position;
         mapControlScript.transform.position = new Vector3(-100000, -100000, -100000);
         SceneManager.LoadScene(2);
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        
+        Debug.Log("ONSCENE LOADED IS CALLED IN THE OVERWORLD GUI");
+
+        if(scene.name != "Overworld")
+        {
+            campButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            campButton.gameObject.SetActive(true);
+        }
+        //if(scene.buildIndex != initialSceneIndex) CleanUpDelegates();
+
+        
     }
 }

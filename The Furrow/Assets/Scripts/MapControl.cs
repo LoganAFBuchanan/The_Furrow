@@ -45,21 +45,16 @@ public class MapControl : MonoBehaviour
         {
             Initialize();
         }
-        
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void Initialize()
     {
         GatherEncounterObjects();
         
-        GenerateMap();
+        //GenerateMap();
+
+        //Need to set access nodes for premade map
+        SetupPremadeMap();
 
         if(GameObject.Find("Player") != null)
         {
@@ -107,6 +102,8 @@ public class MapControl : MonoBehaviour
         }
     }
 
+
+    //Generates a pyramid structure map of all the same node
     public void GenerateMap()
     {
         for(int i = 0; i < tierNumber; i++)
@@ -143,10 +140,37 @@ public class MapControl : MonoBehaviour
 
     }
 
+
+    //Configures the access nodes for a premade map
+    public void SetupPremadeMap()
+    {
+        
+        for(int i = 0; i < this.transform.childCount; i++)
+        {
+            nodeList.Add(this.transform.GetChild(i).GetComponent<MapNode>());
+        }
+
+        foreach(MapNode node in nodeList)
+        {
+            node.moveDistance = moveDistance;
+            node.positionAdjust = positionAdjust;
+
+            node.HoverExit += OnNodeHoverExit;
+            node.HoverEnter += OnNodeHoverEnter;
+            node.NodeClicked += OnNodeClicked;
+            node.PlayerEntered += OnPlayerEnterNode;
+
+            node.positionID = UnityEngine.Random.Range(0, 1000000);
+
+            node.Initialize();
+            node.SetAccessNodes(nodeList);
+        }
+    }
+
     public void SetFirstMovement()
     {
         playerScript.currNode = new MapNode();
-        playerScript.currNode.accessNodes = new List<MapNode>(); 
+        playerScript.currNode.accessNodes = new List<MapNode>();
 
         //Set all first level nodes to moveable
         foreach(MapNode node in nodeList)
@@ -209,7 +233,7 @@ public class MapControl : MonoBehaviour
 
         foreach (MapNode node in playerScript.currNode.accessNodes)
         {
-            if(node.tierPosition == clickedNode.tierPosition && node.worldTier == clickedNode.worldTier)
+            if(node.positionID == clickedNode.positionID)
             {
                 playerScript.MovePlayer(clickedNode);
                 if(isFirstMove) isFirstMove = false;
@@ -264,7 +288,6 @@ public class MapControl : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-
         MapGenerated.Invoke(this, new EventArgs());
 
         //if(scene.buildIndex != initialSceneIndex) CleanUpDelegates();
