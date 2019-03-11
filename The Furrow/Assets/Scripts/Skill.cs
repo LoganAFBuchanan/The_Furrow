@@ -10,6 +10,9 @@ public class Skill : MonoBehaviour
     public int damage;
     public int bonusDamage;
 
+    public GameObject hitVFX;
+    public GameObject tileVFX;
+
     public bool isSplash;
     public int splashDamage;
 
@@ -182,6 +185,7 @@ public class Skill : MonoBehaviour
 
         if(shieldTargets) target.DefenceFactor += shieldAmount;
 
+        SpawnHitEffect(target);
 
         if (!allyImmune)
         {
@@ -286,5 +290,14 @@ public class Skill : MonoBehaviour
         yield return 0;
     }
 
+    public void SpawnHitEffect(HeroControl target)
+    {
+        if(hitVFX != null)
+        {
+            GameObject spawnedVFX = Instantiate(hitVFX, target.Cell.transform);
+            //spawnedVFX.transform.position = new Vector3(0, 0, 0);
+
+        }
+    }
 
 }
