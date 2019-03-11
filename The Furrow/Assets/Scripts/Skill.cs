@@ -304,8 +304,8 @@ public class Skill : MonoBehaviour
     {
         if(tileVFX != null)
         {
-            GameObject spawnedVFX = Instantiate(tileVFX, target.transform);
-            //spawnedVFX.transform.position = new Vector3(0, 0, 0);
+            GameObject spawnedVFX = Instantiate(tileVFX);
+            spawnedVFX.transform.position = target.transform.position;
 
         }
     }
