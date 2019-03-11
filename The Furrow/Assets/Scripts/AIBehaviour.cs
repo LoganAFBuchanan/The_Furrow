@@ -75,7 +75,7 @@ public class AIBehaviour : MonoBehaviour
 
     public IEnumerator UseSkill(CellGrid _cellGrid, HeroControl unit)
     {
-        unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
+        unit.PlaySkillAnimationAI(skill, _cellGrid.Cells, _cellGrid.Units);
         yield return 0;
     }
 
@@ -123,7 +123,7 @@ public class AIBehaviour : MonoBehaviour
                     
                     while (unit.isMoving)
                         yield return 0;
-                    if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
+                    if(useSkill) unit.PlaySkillAnimationAI(skill, _cellGrid.Cells, _cellGrid.Units);
                     
                     shortestPath = null;
                     break;
@@ -143,13 +143,13 @@ public class AIBehaviour : MonoBehaviour
                         
                         while (unit.isMoving)
                             yield return 0;
-                        if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
+                        if(useSkill) unit.PlaySkillAnimationAI(skill, _cellGrid.Cells, _cellGrid.Units);
                         break;
                     }
                     
                     yield return 0;
                 }
-                //if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
+                //if(useSkill) unit.PlaySkillAnimationAI(skill, _cellGrid.Cells, _cellGrid.Units);
             }//If the path cost is greater than unit movement points, move as far as possible.
             //
             yield return 0;
@@ -182,7 +182,7 @@ public class AIBehaviour : MonoBehaviour
                     
                     while (unit.isMoving)
                         yield return 0;
-                    if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
+                    if(useSkill) unit.PlaySkillAnimationAI(skill, _cellGrid.Cells, _cellGrid.Units);
                     shortestPath = null;
                     break;
                 }
@@ -201,7 +201,7 @@ public class AIBehaviour : MonoBehaviour
                         
                         while (unit.isMoving)
                             yield return 0;
-                        if(useSkill) unit.UseSkill(skill, _cellGrid.Cells, _cellGrid.Units);
+                        if(useSkill) unit.PlaySkillAnimationAI(skill, _cellGrid.Cells, _cellGrid.Units);
                         break;
                     }
                     yield return 0;

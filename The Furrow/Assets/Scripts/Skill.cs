@@ -300,4 +300,14 @@ public class Skill : MonoBehaviour
         }
     }
 
+    public void SpawnTileEffect(Cell target)
+    {
+        if(tileVFX != null)
+        {
+            GameObject spawnedVFX = Instantiate(tileVFX, target.transform);
+            //spawnedVFX.transform.position = new Vector3(0, 0, 0);
+
+        }
+    }
+
 }

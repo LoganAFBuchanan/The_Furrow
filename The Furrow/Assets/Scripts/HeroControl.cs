@@ -15,6 +15,11 @@ public class HeroControl : Unit
     public GameObject skillObject2;
     public GameObject skillObject3;
 
+    private List<Cell> cells;
+    private List<Unit> units;
+    private Skill selectedSkill;
+    private GameObject selectedSkillObject;
+
     //This is me pretending to work 
 
     private SpriteGlowEffect highlightEffect;
@@ -104,37 +109,14 @@ public class HeroControl : Unit
     // <summary>
     // Basic Skill use function for player characters
     // </summary>
-    public void UseSkill(int skillNum, List<Cell> cells, List<Unit> units)
+    public void UseSkill()
     {
         List<Cell> targetCells = new List<Cell>();
         List<HeroControl> hitTargets = new List<HeroControl>();
 
-        GameObject selectedSkillObject = skillObject1;
-        Skill selectedSkill = skill1;
-
-        switch (skillNum)
-        {
-            case 1:
-                selectedSkillObject = skillObject1;
-                selectedSkill = skill1;
-                break;
-
-            case 2:
-                selectedSkillObject = skillObject2;
-                selectedSkill = skill2;
-                break;
-
-            case 3:
-                selectedSkillObject = skillObject3;
-                selectedSkill = skill3;
-                break;
-
-        }
-
-
         Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
         ActionPoints -= selectedSkill.actioncost;
-        if (animator != null) PlaySkillAnimation(selectedSkill);
+        //if (animator != null) PlaySkillAnimation(selectedSkill);
 
 
         //If a skill moves the caster this section determines whether the damage is dealt before or after
@@ -218,6 +200,15 @@ public class HeroControl : Unit
             selectedSkill.ApplyGroundEffect(targetCells);
         }
 
+        //Spawn Tile VFX
+        if(selectedSkill.tileVFX != null)
+        {
+            foreach(Cell effectCell in targetCells)
+            {
+                selectedSkill.SpawnTileEffect(effectCell);
+            }
+        }
+
         int bonusDamage = 0;
         if (selectedSkill.bonusDamage != 0)
         {
@@ -272,16 +263,18 @@ public class HeroControl : Unit
 
 
     //Overloaded version for AI use as they don't need a skill object
-    public void UseSkill(Skill selectedSkill, List<Cell> cells, List<Unit> units)
+    public void UseSkillAI()
     {
         List<Cell> targetCells;
         List<HeroControl> hitTargets = new List<HeroControl>();
 
         Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
         ActionPoints -= selectedSkill.actioncost;
-        if (animator != null) PlaySkillAnimation(selectedSkill);
+        //if (animator != null) PlaySkillAnimation(selectedSkill);
 
         targetCells = GetAvailableTargets(cells, selectedSkill);
+
+        
 
         if (selectedSkill.targetAllAllies && selectedSkill.targetAllEnemies)
         {
@@ -348,6 +341,15 @@ public class HeroControl : Unit
             Debug.Log("I am using a ground effect skill");
             if (targetCells.Count == 0) targetCells = GetAvailableTargets(cells, selectedSkill);
             selectedSkill.ApplyGroundEffect(targetCells);
+        }
+
+        //Spawn Tile VFX
+        if(selectedSkill.tileVFX != null)
+        {
+            foreach(Cell effectCell in targetCells)
+            {
+                selectedSkill.SpawnTileEffect(effectCell);
+            }
         }
 
         int bonusDamage = 0;
@@ -461,7 +463,7 @@ public class HeroControl : Unit
 
         Debug.Log(selectedSkill.skillname + " Used by " + UnitName);
         ActionPoints -= selectedSkill.actioncost;
-        if (animator != null) PlaySkillAnimation(selectedSkill);
+        //if (animator != null) PlaySkillAnimation(selectedSkill);
 
         targetCells = GetAvailableTargets(cells, selectedSkill);
 
@@ -516,6 +518,15 @@ public class HeroControl : Unit
         {
             if (targetCells.Count == 0) targetCells = GetAvailableTargets(cells, selectedSkill);
             selectedSkill.ApplyGroundEffect(targetCells);
+        }
+
+        //Spawn Tile VFX
+        if(selectedSkill.tileVFX != null)
+        {
+            foreach(Cell effectCell in targetCells)
+            {
+                selectedSkill.SpawnTileEffect(effectCell);
+            }
         }
 
         //Add bonus damage for movement, health loss, etc.  (ie: Ignition lance)
@@ -574,9 +585,44 @@ public class HeroControl : Unit
     }
 
 
-    private void PlaySkillAnimation(Skill skill)
+    //Player Skill ANimation trigger
+    public void PlaySkillAnimation(int _skillNum, List<Cell> _cells, List<Unit> _units)
     {
-        animator.Play(skill.skillname,0,0);
+
+        cells = _cells;
+        units = _units;
+
+        selectedSkillObject = skillObject1;
+        selectedSkill = skill1;
+
+        switch (_skillNum)
+        {
+            case 1:
+                selectedSkillObject = skillObject1;
+                selectedSkill = skill1;
+                break;
+
+            case 2:
+                selectedSkillObject = skillObject2;
+                selectedSkill = skill2;
+                break;
+
+            case 3:
+                selectedSkillObject = skillObject3;
+                selectedSkill = skill3;
+                break;
+
+        }
+        animator.Play(selectedSkill.skillname,0,0);
+    }
+
+    //Player Skill ANimation trigger
+    public void PlaySkillAnimationAI(Skill _selectedSkill, List<Cell> _cells, List<Unit> _units)
+    {
+        cells = _cells;
+        units = _units;
+        selectedSkill = _selectedSkill;
+        animator.Play(selectedSkill.skillname,0,0);
     }
 
     public override bool IsCellMovableTo(Cell cell)
