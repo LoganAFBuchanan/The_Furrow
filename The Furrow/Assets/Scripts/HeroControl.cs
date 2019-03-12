@@ -24,7 +24,7 @@ public class HeroControl : Unit
 
     private SpriteGlowEffect highlightEffect;
 
-    private Animator animator;
+    
 
     [System.NonSerialized]
     public Skill skill1;
@@ -44,7 +44,7 @@ public class HeroControl : Unit
         //GetComponent<Renderer>().material.color = LeadingColor;
 
         highlightEffect = GetComponent<SpriteGlowEffect>();
-        if (GetComponent<Animator>()) animator = GetComponent<Animator>();
+        
 
         //highlightEffect.GlowBrightness = 0.0f;
         highlightEffect.OutlineWidth = 0;
@@ -95,6 +95,14 @@ public class HeroControl : Unit
             ActionPoints--;
         }
 
+
+    }
+
+    public virtual void Defend(Unit other, int damage)
+    {
+        base.Defend(other, damage);
+
+        animator.Play("Hurt",0,0);
 
     }
 
@@ -613,7 +621,23 @@ public class HeroControl : Unit
                 break;
 
         }
+
         animator.Play(selectedSkill.skillname,0,0);
+
+        bool hasSkill = false;
+        foreach(AnimationClip ac in animator.runtimeAnimatorController.animationClips)
+        {
+        // look at all the animation clips here!
+            if(ac.name == selectedSkill.skillname)
+            {
+                hasSkill = true;
+            }
+        }
+
+        if(!hasSkill)
+        {
+            UseSkill();
+        }
     }
 
     //Player Skill ANimation trigger
@@ -623,6 +647,21 @@ public class HeroControl : Unit
         units = _units;
         selectedSkill = _selectedSkill;
         animator.Play(selectedSkill.skillname,0,0);
+
+        bool hasSkill = false;
+        foreach(AnimationClip ac in animator.runtimeAnimatorController.animationClips)
+        {
+        // look at all the animation clips here!
+            if(ac.name == selectedSkill.skillname)
+            {
+                hasSkill = true;
+            }
+        }
+
+        if(!hasSkill)
+        {
+            UseSkillAI();
+        }
     }
 
     public override bool IsCellMovableTo(Cell cell)

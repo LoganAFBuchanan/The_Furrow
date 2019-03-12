@@ -49,6 +49,8 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public event EventHandler<MovementEventArgs> UnitMoved;
 
+    public Animator animator;
+
     public UnitState UnitState { get; set; }
     public void SetState(UnitState state)
     {
@@ -110,6 +112,8 @@ public abstract class Unit : MonoBehaviour
         Buffs = new List<Buff>();
 
         UnitState = new UnitStateNormal(this);
+
+        if (GetComponent<Animator>()) animator = GetComponent<Animator>();
 
         TotalHitPoints = HitPoints;
         TotalMovementPoints = ActionPoints;
@@ -263,6 +267,8 @@ public abstract class Unit : MonoBehaviour
 
         int healthdamage = damage;
 
+
+
         if(DefenceFactor > 0){
             healthdamage -= DefenceFactor;
             healthdamage = Mathf.Max(0, healthdamage); //Adjust to 0 if negative
@@ -333,16 +339,31 @@ public abstract class Unit : MonoBehaviour
     {
         isMoving = true;
         path.Reverse();
+        if(path[0].transform.localPosition.x > transform.localPosition.x)
+        {
+            animator.Play("WalkForward",0,0);
+        }
+        else if(path[0].transform.localPosition.x < transform.localPosition.x)
+        {
+            animator.Play("WalkBackward",0,0);
+        }
+        else
+        {
+            animator.Play("WalkForward",0,0);
+        }
+        
         foreach (var cell in path)
         {
             Vector3 destination_pos = new Vector3(cell.transform.localPosition.x, transform.localPosition.y, cell.transform.localPosition.z);
             while (transform.localPosition != destination_pos)
             {
+                
                 transform.localPosition = Vector3.MoveTowards(transform.localPosition, destination_pos, Time.deltaTime * MovementSpeed);
                 yield return 0;
             }
         }
         isMoving = false;
+        animator.Play("Idle",0,0);
         
     }
 
