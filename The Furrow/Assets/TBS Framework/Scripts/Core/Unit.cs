@@ -412,24 +412,24 @@ public abstract class Unit : MonoBehaviour
         cachedTargets = new List<Cell>();
 
         Vector2 targetCoord = new Vector2();
-        
-        for (int i = 0; i < cells.Count(); i++)
+
+        for (int j = 0; j < skill.skillTargetX.Length; j++)
         {
 
-            for(int j = 0; j < skill.skillTargetX.Length; j++){
-                
+            for (int i = 0; i < cells.Count(); i++)
+            {
                 targetCoord = new Vector2(Cell.OffsetCoord.x + skill.skillTargetX[j], Cell.OffsetCoord.y + skill.skillTargetY[j]);
 
                 Debug.Log("Target Coordinate " + j + ": " + targetCoord.x + ", " + targetCoord.y);
 
-                if((int)cells[i].OffsetCoord.x == targetCoord.x && (int)cells[i].OffsetCoord.y == targetCoord.y)
+                if ((int)cells[i].OffsetCoord.x == targetCoord.x && (int)cells[i].OffsetCoord.y == targetCoord.y)
                 {
                     Debug.Log("Added cell to hover highlight at: " + cells[i].OffsetCoord.x + ", " + cells[i].OffsetCoord.y);
                     cachedTargets.Add(cells[i]);
                 }
             }
-            
-            
+
+
         }
 
         return cachedTargets;

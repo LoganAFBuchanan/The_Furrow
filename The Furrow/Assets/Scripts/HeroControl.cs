@@ -651,7 +651,9 @@ public class HeroControl : Unit
         bool hasSkill = false;
         foreach(AnimationClip ac in animator.runtimeAnimatorController.animationClips)
         {
-        // look at all the animation clips here!
+            Debug.Log("AI Skill name: " + ac.name);
+            // look at all the animation clips here!
+
             if(ac.name == selectedSkill.skillname)
             {
                 hasSkill = true;
