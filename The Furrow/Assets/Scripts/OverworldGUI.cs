@@ -136,4 +136,12 @@ public class OverworldGUI : MonoBehaviour
 
         
     }
+
+    public void CleanUpDelegates()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        mapControlScript.MapGenerated -= OnMapGenerated;
+        mapControlScript.ValuesChanged -= OnValuesChanged;
+    }
 }

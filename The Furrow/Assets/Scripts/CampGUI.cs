@@ -170,6 +170,7 @@ public class CampGUI : OverworldGUI
     {
         //Move Map Back
         mapControlScript.transform.position = mapControlScript.savedPosition;
+        CleanUpDelegates();
         SceneManager.LoadScene(0);
     }
 
@@ -320,5 +321,7 @@ public class CampGUI : OverworldGUI
         }
         BackToOverworld();
     }
+
+    
 
 }

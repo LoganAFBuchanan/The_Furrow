@@ -1,3 +1,7 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
 public static class Constants
 {
     public const int STARVING_COST = 2;
@@ -22,6 +26,9 @@ public static class Constants
     public const float PUSH_SPEED = 10f;
 
     public const float GRID_TRANSPARENCY = 0.5f;
+
+    public static readonly Vector3 ALDRIC_START_POS = new Vector3(3f, 0f, 1.5f);
+    public static readonly Vector3 IDE_START_POS = new Vector3(0f, 0f, 1.5f);
 
 
     public const int SLIME_LIFETIME = 2;

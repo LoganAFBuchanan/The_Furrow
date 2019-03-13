@@ -702,6 +702,7 @@ public class HeroControl : Unit
     public override void MarkAsFriendly()
     {
         //GetComponent<Renderer>().material.color = LeadingColor + new Color(0.8f, 1, 0.8f);
+        GetComponent<BoxCollider>().enabled = true;
         highlightEffect.OutlineWidth = 0;
     }
 
@@ -713,12 +714,15 @@ public class HeroControl : Unit
     public override void MarkAsSelected()
     {
         //GetComponent<Renderer>().material.color = LeadingColor + Color.green;
+        GetComponent<BoxCollider>().enabled = false;
         highlightEffect.OutlineWidth = 3;
     }
 
     public override void UnMark()
     {
         //GetComponent<Renderer>().material.color = LeadingColor;
+        Debug.Log("UNMARKING UNIT");
+        
         highlightEffect.OutlineWidth = 0;
     }
 }
