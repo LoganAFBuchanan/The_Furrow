@@ -206,9 +206,9 @@ public abstract class Unit : MonoBehaviour
         for(int i = 0; i < skill.skillTargetX.Count(); i++)
         {
             
-            if(other.Cell.transform.position == new Vector3(sourceCell.transform.position.x + skill.skillTargetX[i], 0, sourceCell.transform.position.z + skill.skillTargetY[i]))
+            if(other.Cell.OffsetCoord == new Vector2(sourceCell.OffsetCoord.x + skill.skillTargetX[i], sourceCell.OffsetCoord.y + skill.skillTargetY[i]))
             {
-                Debug.Log("Other transform is: " + other.Cell.transform.position + " and the source is " + new Vector3(sourceCell.transform.position.x + skill.skillTargetX[i], 0, sourceCell.transform.position.z + skill.skillTargetY[i]));
+                //Debug.Log("Other transform is: " + other.Cell.transform.position + " and the source is " + new Vector3(sourceCell.transform.position.x + skill.skillTargetX[i], 0, sourceCell.transform.position.z + skill.skillTargetY[i]));
                 return true;
             }
                 
