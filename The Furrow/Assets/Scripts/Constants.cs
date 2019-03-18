@@ -5,7 +5,8 @@ using UnityEngine;
 public static class Constants
 {
     public const int STARVING_COST = 2;
-    public const int STARTING_GOLD = 5;
+    
+    public const int STARTING_GOLD = 25;
     public const int STARTING_RATIONS = 5;
     public const int STARTING_BOND_LEVEL = 1;
 
@@ -22,6 +23,8 @@ public static class Constants
     public const int CAMP_HUNT_RATIONS = 3;
     public const float CAMP_REST_PCT = 0.33f;
     public const int CAMP_BOND_INC = 5;
+
+    public const int SHOP_RATION_COST = 3;
 
     public const float PUSH_SPEED = 10f;
 

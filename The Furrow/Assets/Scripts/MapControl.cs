@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 public class MapControl : MonoBehaviour
 {
 
+    public bool nodesEnabled = true;
+
     public GameObject node;
     public List<MapNode> nodeList;
     private UnityEngine.Object[] encounterObjectList;
@@ -223,23 +225,31 @@ public class MapControl : MonoBehaviour
 
     public void OnNodeClicked(object sender, EventArgs e)
     {
-        MapNode clickedNode = (sender as MapNode);
-        Debug.Log("Node CLicked!");
-        if(clickedNode.isTaken)
+        if(nodesEnabled)
         {
-            Debug.Log("Cannot Move Node is Taken");
-            return;
-        }
-
-        foreach (MapNode node in playerScript.currNode.accessNodes)
-        {
-            if(node.positionID == clickedNode.positionID)
+            MapNode clickedNode = (sender as MapNode);
+            Debug.Log("Node CLicked!");
+            if(clickedNode.isTaken)
             {
-                playerScript.MovePlayer(clickedNode);
-                if(isFirstMove) isFirstMove = false;
-                playerScript.ExecuteFlowchart("Start");
-                //playerScript.currNode.flowchart.ExecuteBlock("Start");
+                Debug.Log("Cannot Move Node is Taken");
+                return;
             }
+
+            foreach (MapNode node in playerScript.currNode.accessNodes)
+            {
+                if(node.positionID == clickedNode.positionID)
+                {
+                    playerScript.MovePlayer(clickedNode);
+                    if(isFirstMove) isFirstMove = false;
+                    
+                    playerScript.ExecuteFlowchart("Start");
+                    //playerScript.currNode.flowchart.ExecuteBlock("Start");
+                }
+            }
+        }
+        else
+        {
+            
         }
     }
 

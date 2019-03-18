@@ -213,5 +213,14 @@ public class MapNode : MonoBehaviour
         transform.position = new Vector3(0, 0, 0);
         SceneManager.LoadScene(1);
     }
+
+    public void OpenShop()
+    
+    {
+        OverworldGUI overworldUI = GameObject.Find("OverworldUI").GetComponent<OverworldGUI>();
+
+        Debug.Log("Sending Open shop call to the UI");
+        overworldUI.ShowShop();
+    }
 }
 

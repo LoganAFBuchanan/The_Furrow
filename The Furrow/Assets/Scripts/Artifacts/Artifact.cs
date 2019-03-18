@@ -1,5 +1,8 @@
-﻿using UnityEngine.UI;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System;
 /// <summary>
 /// Class representing an artifact the player can find on the overworld
 /// </summary>
@@ -15,6 +18,7 @@ public interface Artifact
     /// </summary>
     string name { get; set; }
     string desc { get; set; }
+    Image image { get; set; }
 
     /// <summary>
     /// Describes how the player should be affected
