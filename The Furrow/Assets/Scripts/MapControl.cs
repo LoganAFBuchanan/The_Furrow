@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 public class MapControl : MonoBehaviour
 {
 
+    public bool nodesEnabled = true;
+
     public GameObject node;
     public List<MapNode> nodeList;
     private UnityEngine.Object[] encounterObjectList;
@@ -45,21 +47,16 @@ public class MapControl : MonoBehaviour
         {
             Initialize();
         }
-        
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void Initialize()
     {
         GatherEncounterObjects();
         
-        GenerateMap();
+        //GenerateMap();
+
+        //Need to set access nodes for premade map
+        SetupPremadeMap();
 
         if(GameObject.Find("Player") != null)
         {
@@ -88,7 +85,7 @@ public class MapControl : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
         initialSceneIndex = SceneManager.GetActiveScene().buildIndex;
 
-        MapGenerated.Invoke(this, new EventArgs());
+        //MapGenerated.Invoke(this, new EventArgs());
     }
 
     //Collect all encounter objects from the resources folder
@@ -107,6 +104,8 @@ public class MapControl : MonoBehaviour
         }
     }
 
+
+    //Generates a pyramid structure map of all the same node
     public void GenerateMap()
     {
         for(int i = 0; i < tierNumber; i++)
@@ -143,10 +142,37 @@ public class MapControl : MonoBehaviour
 
     }
 
+
+    //Configures the access nodes for a premade map
+    public void SetupPremadeMap()
+    {
+        
+        for(int i = 0; i < this.transform.childCount; i++)
+        {
+            nodeList.Add(this.transform.GetChild(i).GetComponent<MapNode>());
+        }
+
+        foreach(MapNode node in nodeList)
+        {
+            node.moveDistance = moveDistance;
+            node.positionAdjust = positionAdjust;
+
+            node.HoverExit += OnNodeHoverExit;
+            node.HoverEnter += OnNodeHoverEnter;
+            node.NodeClicked += OnNodeClicked;
+            node.PlayerEntered += OnPlayerEnterNode;
+
+            node.positionID = UnityEngine.Random.Range(0, 1000000);
+
+            node.Initialize();
+            node.SetAccessNodes(nodeList);
+        }
+    }
+
     public void SetFirstMovement()
     {
         playerScript.currNode = new MapNode();
-        playerScript.currNode.accessNodes = new List<MapNode>(); 
+        playerScript.currNode.accessNodes = new List<MapNode>();
 
         //Set all first level nodes to moveable
         foreach(MapNode node in nodeList)
@@ -199,23 +225,31 @@ public class MapControl : MonoBehaviour
 
     public void OnNodeClicked(object sender, EventArgs e)
     {
-        MapNode clickedNode = (sender as MapNode);
-        Debug.Log("Node CLicked!");
-        if(clickedNode.isTaken)
+        if(nodesEnabled)
         {
-            Debug.Log("Cannot Move Node is Taken");
-            return;
-        }
-
-        foreach (MapNode node in playerScript.currNode.accessNodes)
-        {
-            if(node.tierPosition == clickedNode.tierPosition && node.worldTier == clickedNode.worldTier)
+            MapNode clickedNode = (sender as MapNode);
+            Debug.Log("Node CLicked!");
+            if(clickedNode.isTaken)
             {
-                playerScript.MovePlayer(clickedNode);
-                if(isFirstMove) isFirstMove = false;
-                playerScript.ExecuteFlowchart("Start");
-                //playerScript.currNode.flowchart.ExecuteBlock("Start");
+                Debug.Log("Cannot Move Node is Taken");
+                return;
             }
+
+            foreach (MapNode node in playerScript.currNode.accessNodes)
+            {
+                if(node.positionID == clickedNode.positionID)
+                {
+                    playerScript.MovePlayer(clickedNode);
+                    if(isFirstMove) isFirstMove = false;
+                    
+                    playerScript.ExecuteFlowchart("Start");
+                    //playerScript.currNode.flowchart.ExecuteBlock("Start");
+                }
+            }
+        }
+        else
+        {
+            
         }
     }
 
@@ -264,7 +298,6 @@ public class MapControl : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-
         MapGenerated.Invoke(this, new EventArgs());
 
         //if(scene.buildIndex != initialSceneIndex) CleanUpDelegates();

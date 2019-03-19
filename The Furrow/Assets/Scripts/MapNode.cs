@@ -14,6 +14,8 @@ public class MapNode : MonoBehaviour
     public int tierPosition;
     public bool isUnique;
 
+    public int positionID;
+
     public int combatGoldReward;
     public int combatBondReward;
     public int combatRationReward;
@@ -210,6 +212,15 @@ public class MapNode : MonoBehaviour
         transform.SetParent(null);
         transform.position = new Vector3(0, 0, 0);
         SceneManager.LoadScene(1);
+    }
+
+    public void OpenShop()
+    
+    {
+        OverworldGUI overworldUI = GameObject.Find("OverworldUI").GetComponent<OverworldGUI>();
+
+        Debug.Log("Sending Open shop call to the UI");
+        overworldUI.ShowShop();
     }
 }
 

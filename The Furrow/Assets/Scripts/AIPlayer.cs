@@ -19,6 +19,12 @@ public class AIPlayer : Player
         _rnd = new System.Random();
     }
 
+    public void InitializeAI(CellGrid cellGrid)
+    {
+        _cellGrid = cellGrid;
+        SetControllers();
+    }
+
     public override void Play(CellGrid cellGrid)
     {
         cellGrid.CellGridState = new CellGridStateAiTurn(cellGrid);
@@ -42,7 +48,7 @@ public class AIPlayer : Player
         {
             aiControllers.Add(unit.GetComponent<AIControl>());
             unit.GetComponent<AIControl>()._cellGrid = _cellGrid;
-            Debug.Log(aiControllers.Count);
+            Debug.Log("AMount of AI Controllers" + aiControllers.Count);
         }
     }
 

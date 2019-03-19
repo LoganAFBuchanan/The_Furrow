@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Fungus;
+using UnityEngine.EventSystems;
 
 public class OverworldPlayer : MonoBehaviour
 {
@@ -251,6 +252,71 @@ public class OverworldPlayer : MonoBehaviour
             newArtifact.Apply(this);
             GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact("FurtiveMushroom");
             UpdateGUI();
+            Debug.Log("Added Default Artifact");
+
+        }
+    }
+
+    public void AddArtifact(PointerEventData data, string name)
+    {
+        switch (name)
+            {
+                case "FurtiveMushroom":
+                    {
+                        availableArtifacts.Remove("FurtiveMushroom");
+                        FurtiveMushroom newArtifact = new FurtiveMushroom();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact("FurtiveMushroom");
+                        UpdateGUI();
+                        Debug.Log("Added FurtiveMushroom");
+                        break;
+                    }
+
+                default:
+                    {
+                        FurtiveMushroom newArtifact = new FurtiveMushroom();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact("FurtiveMushroom");
+                        UpdateGUI();
+                        Debug.Log("Added Default Artifact");
+                        break;
+                    }
+            }
+    }
+
+    //Return a random artifact from available artifacts
+    public Artifact GetRandomArtifact()
+    {
+        int randomNumber = UnityEngine.Random.Range(0, availableArtifacts.Count - 1);
+
+        if (availableArtifacts.Count > 0)
+        {
+            switch (availableArtifacts[randomNumber])
+            {
+                case "FurtiveMushroom":
+                    {
+                        availableArtifacts.Remove("FurtiveMushroom");
+                        FurtiveMushroom newArtifact = new FurtiveMushroom();
+                        return newArtifact;
+                        break;
+                    }
+
+                default:
+                    {
+                        FurtiveMushroom newArtifact = new FurtiveMushroom();
+                        return newArtifact;
+                        Debug.Log("Added Default Artifact");
+                        break;
+                    }
+            }
+
+        }
+        else
+        {
+            FurtiveMushroom newArtifact = new FurtiveMushroom();
+            return newArtifact;
             Debug.Log("Added Default Artifact");
 
         }

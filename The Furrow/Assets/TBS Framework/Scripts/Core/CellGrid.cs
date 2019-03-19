@@ -92,6 +92,7 @@ public class CellGrid : MonoBehaviour
             LevelLoadingDone.Invoke(this, new EventArgs());
 
         StartGame();
+        (Players[1] as AIPlayer).InitializeAI(this);
         TurnStarted.Invoke(this, new EventArgs());
     }
 
@@ -216,6 +217,7 @@ public class CellGrid : MonoBehaviour
         else
             Debug.LogError("No IUnitGenerator script attached to cell grid");
 
+        
         CheckContention();
     }
 
@@ -277,6 +279,10 @@ public class CellGrid : MonoBehaviour
         {
             if(unitList.transform.GetChild(j).gameObject.tag == "PlayerHero")
             {
+                //Reset Position of heroes after fight
+                if(unitList.transform.GetChild(j).GetComponent<HeroControl>().UnitName == "Aldric") unitList.transform.GetChild(j).transform.position = Constants.ALDRIC_START_POS;
+                if(unitList.transform.GetChild(j).GetComponent<HeroControl>().UnitName == "Ide") unitList.transform.GetChild(j).transform.position = Constants.IDE_START_POS;
+
                 unitList.transform.GetChild(j).gameObject.SetActive(false);
                 unitList.transform.GetChild(j).SetParent(overWorldPlayer.transform);
             }
@@ -433,10 +439,10 @@ public class CellGrid : MonoBehaviour
         Units.FindAll(u => u.PlayerNumber.Equals(CurrentPlayerNumber)).ForEach(u => { u.OnTurnStart(); });
         Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);
 
-        foreach(Player player in Players)
-        {
-            if(player.PlayerNumber == 1) (player as AIPlayer).SetControllers();
-        }
+        // foreach(Player player in Players)
+        // {
+        //     if(player.PlayerNumber == 1) (player as AIPlayer).SetControllers();
+        // }
     }
     /// <summary>
     /// Method makes turn transitions. It is called by player at the end of his turn.

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class OverworldGUI : MonoBehaviour
 {
@@ -28,6 +29,8 @@ public class OverworldGUI : MonoBehaviour
 
     public ArtifactContainer artifactContainer;
 
+    public GameObject shopPanel;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -50,7 +53,7 @@ public class OverworldGUI : MonoBehaviour
     {
         mapControlScript = GameObject.Find("MapControl").GetComponent<MapControl>();
 
-        
+        SceneManager.sceneLoaded += OnSceneLoaded;
 
         mapControlScript.MapGenerated += OnMapGenerated;
         mapControlScript.ValuesChanged += OnValuesChanged;
@@ -117,5 +120,104 @@ public class OverworldGUI : MonoBehaviour
         mapControlScript.savedPosition = mapControlScript.transform.position;
         mapControlScript.transform.position = new Vector3(-100000, -100000, -100000);
         SceneManager.LoadScene(2);
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        
+        Debug.Log("ONSCENE LOADED IS CALLED IN THE OVERWORLD GUI");
+
+        if(scene.name != "Overworld")
+        {
+            campButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            campButton.gameObject.SetActive(true);
+        }
+        //if(scene.buildIndex != initialSceneIndex) CleanUpDelegates();
+
+        
+    }
+
+    //Show shop and update available artifacts
+    public void ShowShop()
+    {
+        Debug.Log("ShowShop Begun");
+        OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
+        Debug.Log("Activating shop panel...");
+        shopPanel.SetActive(true);
+        campButton.interactable = false;
+        mapControlScript.nodesEnabled = false;
+        Debug.Log("Shop Panel Activated");
+        Debug.Log("Starting loop through artifact slot transforms");
+        foreach(Transform artifactSlot in shopPanel.transform.GetChild(0))
+        {
+            Debug.Log(artifactSlot.gameObject.name);
+            artifactSlot.gameObject.SetActive(true);
+            Image artifactImage = artifactSlot.Find("Image").GetComponent<Image>();;
+            Text artifactName = artifactSlot.Find("Name").GetComponent<Text>();
+            Text artifactDesc = artifactSlot.Find("Description").GetComponent<Text>();
+            Text artifactCost = artifactSlot.Find("Cost").GetComponent<Text>();
+
+            Artifact shopArtifact = player.GetRandomArtifact();
+            Debug.Log("Generated " + shopArtifact.name);
+
+            artifactImage.sprite = shopArtifact.image.sprite;
+            Debug.Log("Grabbed sprite");
+            artifactName.text = shopArtifact.name;
+            artifactDesc.text = shopArtifact.desc;
+            artifactCost.text = "Cost: " + shopArtifact.cost.ToString();
+
+            EventTrigger trigger = artifactSlot.gameObject.GetComponent<EventTrigger>();
+            EventTrigger.Entry entry = new EventTrigger.Entry();
+            entry.eventID = EventTriggerType.PointerClick;
+            entry.callback.AddListener((data) => 
+            { 
+                if(player.goldCount >= shopArtifact.cost)
+                {
+                    player.AddArtifact((PointerEventData)data, artifactName.text); 
+                    player.SetGoldCount(-shopArtifact.cost);
+                    artifactSlot.gameObject.SetActive(false);
+                }
+                else
+                {
+                    Debug.Log("Not enough gold!!");
+                }
+                
+            });
+            trigger.triggers.Add(entry);
+
+        }
+
+    }
+
+    public void CloseShop()
+    {
+        shopPanel.SetActive(false);
+        campButton.interactable = true;
+        mapControlScript.nodesEnabled = true;
+    }
+
+    public void BuyRation()
+    {
+        OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
+        if(player.goldCount >= Constants.SHOP_RATION_COST)
+        {
+            player.SetGoldCount(-Constants.SHOP_RATION_COST);
+            player.SetRationCount(1);
+        }
+        else
+        {
+            Debug.Log("Not Enough Gold!");
+        }
+    }
+
+    public void CleanUpDelegates()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        mapControlScript.MapGenerated -= OnMapGenerated;
+        mapControlScript.ValuesChanged -= OnValuesChanged;
     }
 }

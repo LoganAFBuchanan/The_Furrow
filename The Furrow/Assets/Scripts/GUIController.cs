@@ -121,7 +121,7 @@ public class GUIController : MonoBehaviour
             skill1button.gameObject.SetActive(true);
             skill1button.onClick.AddListener(delegate 
             { 
-                currentunit.UseSkill(1, CellGrid.Cells, CellGrid.Units); 
+                currentunit.PlaySkillAnimation(1, CellGrid.Cells, CellGrid.Units); 
                 CellGrid.CellGridState = new CellGridStateUnitSelected(CellGrid, currentunit);
             });
 
@@ -137,7 +137,7 @@ public class GUIController : MonoBehaviour
             skill2button.gameObject.SetActive(true);
             skill2button.onClick.AddListener(delegate 
             { 
-                currentunit.UseSkill(2, CellGrid.Cells, CellGrid.Units); 
+                currentunit.PlaySkillAnimation(2, CellGrid.Cells, CellGrid.Units); 
                 CellGrid.CellGridState = new CellGridStateUnitSelected(CellGrid, currentunit);
             });
 
@@ -153,7 +153,7 @@ public class GUIController : MonoBehaviour
             skill3button.gameObject.SetActive(true);
             skill3button.onClick.AddListener(delegate 
             { 
-                currentunit.UseSkill(3, CellGrid.Cells, CellGrid.Units); 
+                currentunit.PlaySkillAnimation(3, CellGrid.Cells, CellGrid.Units); 
                 CellGrid.CellGridState = new CellGridStateUnitSelected(CellGrid, currentunit);
             });
 

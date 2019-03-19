@@ -49,6 +49,8 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public event EventHandler<MovementEventArgs> UnitMoved;
 
+    public Animator animator;
+
     public UnitState UnitState { get; set; }
     public void SetState(UnitState state)
     {
@@ -110,6 +112,8 @@ public abstract class Unit : MonoBehaviour
         Buffs = new List<Buff>();
 
         UnitState = new UnitStateNormal(this);
+
+        if (GetComponent<Animator>()) animator = GetComponent<Animator>();
 
         TotalHitPoints = HitPoints;
         TotalMovementPoints = ActionPoints;
@@ -202,9 +206,9 @@ public abstract class Unit : MonoBehaviour
         for(int i = 0; i < skill.skillTargetX.Count(); i++)
         {
             
-            if(other.Cell.transform.position == new Vector3(sourceCell.transform.position.x + skill.skillTargetX[i], 0, sourceCell.transform.position.z + skill.skillTargetY[i]))
+            if(other.Cell.OffsetCoord == new Vector2(sourceCell.OffsetCoord.x + skill.skillTargetX[i], sourceCell.OffsetCoord.y + skill.skillTargetY[i]))
             {
-                Debug.Log("Other transform is: " + other.Cell.transform.position + " and the source is " + new Vector3(sourceCell.transform.position.x + skill.skillTargetX[i], 0, sourceCell.transform.position.z + skill.skillTargetY[i]));
+                //Debug.Log("Other transform is: " + other.Cell.transform.position + " and the source is " + new Vector3(sourceCell.transform.position.x + skill.skillTargetX[i], 0, sourceCell.transform.position.z + skill.skillTargetY[i]));
                 return true;
             }
                 
@@ -262,6 +266,8 @@ public abstract class Unit : MonoBehaviour
         //Damage is calculated by subtracting attack factor of attacker and defence factor of defender. 
 
         int healthdamage = damage;
+
+
 
         if(DefenceFactor > 0){
             healthdamage -= DefenceFactor;
@@ -333,16 +339,31 @@ public abstract class Unit : MonoBehaviour
     {
         isMoving = true;
         path.Reverse();
+        if(path[0].transform.localPosition.x > transform.localPosition.x)
+        {
+            animator.Play("WalkForward",0,0);
+        }
+        else if(path[0].transform.localPosition.x < transform.localPosition.x)
+        {
+            animator.Play("WalkBackward",0,0);
+        }
+        else
+        {
+            animator.Play("WalkForward",0,0);
+        }
+        
         foreach (var cell in path)
         {
             Vector3 destination_pos = new Vector3(cell.transform.localPosition.x, transform.localPosition.y, cell.transform.localPosition.z);
             while (transform.localPosition != destination_pos)
             {
+                
                 transform.localPosition = Vector3.MoveTowards(transform.localPosition, destination_pos, Time.deltaTime * MovementSpeed);
                 yield return 0;
             }
         }
         isMoving = false;
+        animator.Play("Idle",0,0);
         
     }
 
@@ -391,24 +412,24 @@ public abstract class Unit : MonoBehaviour
         cachedTargets = new List<Cell>();
 
         Vector2 targetCoord = new Vector2();
-        
-        for (int i = 0; i < cells.Count(); i++)
+
+        for (int j = 0; j < skill.skillTargetX.Length; j++)
         {
 
-            for(int j = 0; j < skill.skillTargetX.Length; j++){
-                
+            for (int i = 0; i < cells.Count(); i++)
+            {
                 targetCoord = new Vector2(Cell.OffsetCoord.x + skill.skillTargetX[j], Cell.OffsetCoord.y + skill.skillTargetY[j]);
 
                 Debug.Log("Target Coordinate " + j + ": " + targetCoord.x + ", " + targetCoord.y);
 
-                if((int)cells[i].OffsetCoord.x == targetCoord.x && (int)cells[i].OffsetCoord.y == targetCoord.y)
+                if ((int)cells[i].OffsetCoord.x == targetCoord.x && (int)cells[i].OffsetCoord.y == targetCoord.y)
                 {
                     Debug.Log("Added cell to hover highlight at: " + cells[i].OffsetCoord.x + ", " + cells[i].OffsetCoord.y);
                     cachedTargets.Add(cells[i]);
                 }
             }
-            
-            
+
+
         }
 
         return cachedTargets;
