@@ -24,7 +24,6 @@ public class HeroControl : Unit
 
     private SpriteGlowEffect highlightEffect;
 
-    
 
     [System.NonSerialized]
     public Skill skill1;

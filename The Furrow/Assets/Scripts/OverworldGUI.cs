@@ -200,6 +200,11 @@ public class OverworldGUI : MonoBehaviour
 
     public void CloseShop()
     {
+        foreach(Transform artifactSlot in shopPanel.transform.GetChild(0))
+        {
+            artifactSlot.gameObject.GetComponent<EventTrigger>().triggers.Clear();
+           
+        }
         shopPanel.SetActive(false);
         campButton.interactable = true;
         mapControlScript.nodesEnabled = true;

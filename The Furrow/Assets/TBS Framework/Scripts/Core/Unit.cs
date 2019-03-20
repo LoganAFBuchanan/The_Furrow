@@ -76,6 +76,10 @@ public abstract class Unit : MonoBehaviour
     public int AttackRange;
     public int AttackFactor;
     public int DefenceFactor;
+
+    public int startingDefence;
+    public int startingAPBoost;
+
     /// <summary>
     /// Determines how far on the grid the unit can move.
     /// </summary>
@@ -114,6 +118,8 @@ public abstract class Unit : MonoBehaviour
         UnitState = new UnitStateNormal(this);
 
         if (GetComponent<Animator>()) animator = GetComponent<Animator>();
+
+        //startingAPBoost = 0;
 
         TotalHitPoints = HitPoints;
         TotalMovementPoints = ActionPoints;

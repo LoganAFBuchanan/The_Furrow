@@ -439,10 +439,14 @@ public class CellGrid : MonoBehaviour
         Units.FindAll(u => u.PlayerNumber.Equals(CurrentPlayerNumber)).ForEach(u => { u.OnTurnStart(); });
         Players.Find(p => p.PlayerNumber.Equals(CurrentPlayerNumber)).Play(this);
 
-        // foreach(Player player in Players)
-        // {
-        //     if(player.PlayerNumber == 1) (player as AIPlayer).SetControllers();
-        // }
+        //Apply start of combat effect (ie: Artifacts)
+        foreach(Unit unit in Units)
+        {
+            if(unit.startingDefence != null) unit.DefenceFactor += unit.startingDefence; //Steel egg implementation
+            if(unit.startingAPBoost != null) unit.ActionPoints += unit.startingAPBoost; //Mercury Draught implementation
+        }
+
+
     }
     /// <summary>
     /// Method makes turn transitions. It is called by player at the end of his turn.
