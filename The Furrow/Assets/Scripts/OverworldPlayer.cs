@@ -257,7 +257,7 @@ public class OverworldPlayer : MonoBehaviour
                         FurtiveMushroom newArtifact = new FurtiveMushroom();
                         artifacts.Add(newArtifact);
                         newArtifact.Apply(this);
-                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact("FurtiveMushroom");
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
                         UpdateGUI();
                         Debug.Log("Added FurtiveMushroom");
                         break;
@@ -269,7 +269,7 @@ public class OverworldPlayer : MonoBehaviour
                         StarShard newArtifact = new StarShard();
                         artifacts.Add(newArtifact);
                         newArtifact.Apply(this);
-                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact("StarShard");
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
                         UpdateGUI();
                         Debug.Log("Added StarShard");
                         break;
@@ -280,7 +280,7 @@ public class OverworldPlayer : MonoBehaviour
                         FurtiveMushroom newArtifact = new FurtiveMushroom();
                         artifacts.Add(newArtifact);
                         newArtifact.Apply(this);
-                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact("FurtiveMushroom");
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
                         UpdateGUI();
                         Debug.Log("Added Default Artifact");
                         break;
@@ -293,7 +293,7 @@ public class OverworldPlayer : MonoBehaviour
             FurtiveMushroom newArtifact = new FurtiveMushroom();
             artifacts.Add(newArtifact);
             newArtifact.Apply(this);
-            GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact("FurtiveMushroom");
+            GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
             UpdateGUI();
             Debug.Log("Added Default Artifact");
 
@@ -310,7 +310,7 @@ public class OverworldPlayer : MonoBehaviour
                         FurtiveMushroom newArtifact = new FurtiveMushroom();
                         artifacts.Add(newArtifact);
                         newArtifact.Apply(this);
-                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact("FurtiveMushroom");
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
                         UpdateGUI();
                         Debug.Log("Added FurtiveMushroom");
                         break;
@@ -322,7 +322,7 @@ public class OverworldPlayer : MonoBehaviour
                         StarShard newArtifact = new StarShard();
                         artifacts.Add(newArtifact);
                         newArtifact.Apply(this);
-                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact("StarShard");
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
                         UpdateGUI();
                         Debug.Log("Added StarShard");
                         break;
@@ -333,7 +333,7 @@ public class OverworldPlayer : MonoBehaviour
                         FurtiveMushroom newArtifact = new FurtiveMushroom();
                         artifacts.Add(newArtifact);
                         newArtifact.Apply(this);
-                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact("FurtiveMushroom");
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
                         UpdateGUI();
                         Debug.Log("Added Default Artifact");
                         break;
@@ -349,7 +349,7 @@ public class OverworldPlayer : MonoBehaviour
             {
                 Debug.Log("Player: Removing " + name);
                 art.Undo(this);
-                GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().RemoveArtifact(art.name);
+                GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().RemoveArtifact(art);
             }
         }
     }

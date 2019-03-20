@@ -73,15 +73,15 @@ public class OverworldGUI : MonoBehaviour
         
     }
 
-    public void AddArtifact(string name)
+    public void AddArtifact(Artifact arti)
     {
-        artifactContainer.LoadArtifactToGUI(name);
+        artifactContainer.LoadArtifactToGUI(arti);
     }
 
-    public void RemoveArtifact(string name)
+    public void RemoveArtifact(Artifact arti)
     {
         //Debug.Log("Overworld UI: Removing " + name);
-        artifactContainer.RemoveArtifactFromGUI(name);
+        artifactContainer.RemoveArtifactFromGUI(arti);
     }
 
     private void OnMapGenerated(object sender, EventArgs e)
