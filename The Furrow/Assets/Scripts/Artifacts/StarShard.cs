@@ -3,26 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-public class FurtiveMushroom : Artifact
+public class StarShard : Artifact
 {
 
-    public int hpBoost;
+    public int apBoost;
     public int cost { get; set; }
     public string name { get; set; }
     public string title { get; set; }
     public string desc { get; set; }
     public Image image { get; set; }
 
-    public FurtiveMushroom()
+    public StarShard()
     {
-        name = "FurtiveMushroom";
-        title = "Furtive Mushroom";
-        desc = "+5 Max HP for both heroes";
-        hpBoost = 5;
+        name = "StarShard";
+        title = "Shard of the Star";
+        desc = "+1 Max AP for both heroes";
+        apBoost = 5;
         cost = 10;
         UnityEngine.GameObject artifactUI;
         Debug.Log("Loading Artifact asset for " + name);
-        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/FurtiveMushroom"));
+        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/StarShard"));
         image = artifactUI.GetComponent<Image>();
         UnityEngine.GameObject.Destroy(artifactUI);
     }
@@ -31,8 +31,7 @@ public class FurtiveMushroom : Artifact
     {
         foreach(HeroControl hero in player.characterList)
         {
-            hero.TotalHitPoints += hpBoost;
-            hero.HitPoints += hpBoost;
+            hero.TotalActionPoints += apBoost;
         }
         player.UpdateGUI();
     }
@@ -41,14 +40,13 @@ public class FurtiveMushroom : Artifact
     {
         foreach(HeroControl hero in player.characterList)
         {
-            hero.TotalHitPoints -= hpBoost;
-            hero.HitPoints -= hpBoost;
+            hero.TotalActionPoints -= apBoost;
         }
         player.UpdateGUI();
     }
 
     public Artifact Clone()
     {
-        return new FurtiveMushroom();
+        return new StarShard();
     }
 }

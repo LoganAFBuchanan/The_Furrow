@@ -147,6 +147,23 @@ public class OverworldPlayer : MonoBehaviour
         currNode.flowchart.SetStringVariable("char2Name", characterList[1].UnitName);
         Debug.Log("CHARACTER 1 NAME IS NOW: " + currNode.flowchart.GetStringVariable("char1Name"));
 
+        if(currNode.gameObject.name == "TitanPointEncounter")
+        {
+            bool hasStar = false;
+            Debug.Log("It's the Lichen Encounter!");
+            foreach(Artifact art in artifacts)
+            {
+                if(art.name == "StarShard")
+                {
+                    hasStar = true;
+                }
+            }
+
+            if(hasStar)
+            {
+                currNode.flowchart.SetBooleanVariable("hasStar", true);
+            }
+        }
 
     }
 
@@ -211,6 +228,20 @@ public class OverworldPlayer : MonoBehaviour
         UpdateGUI();
     }
 
+    public void SetChar1MaxAP(int change)
+    {
+        characterList[0].TotalActionPoints += change;
+        characterList[0].ActionPoints += change;
+        UpdateGUI();
+    }
+
+    public void SetChar2MaxAP(int change)
+    {
+        characterList[1].TotalActionPoints += change;
+        characterList[1].ActionPoints += change;
+        UpdateGUI();
+    }
+
     //Pull a random artifact from available artifacts and apply its benefit to the player
     public void AddRandomArtifact()
     {
@@ -229,6 +260,18 @@ public class OverworldPlayer : MonoBehaviour
                         GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact("FurtiveMushroom");
                         UpdateGUI();
                         Debug.Log("Added FurtiveMushroom");
+                        break;
+                    }
+
+                case "StarShard":
+                    {
+                        availableArtifacts.Remove("StarShard");
+                        StarShard newArtifact = new StarShard();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact("StarShard");
+                        UpdateGUI();
+                        Debug.Log("Added StarShard");
                         break;
                     }
 
@@ -273,6 +316,18 @@ public class OverworldPlayer : MonoBehaviour
                         break;
                     }
 
+                case "StarShard":
+                    {
+                        availableArtifacts.Remove("StarShard");
+                        StarShard newArtifact = new StarShard();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact("StarShard");
+                        UpdateGUI();
+                        Debug.Log("Added StarShard");
+                        break;
+                    }
+
                 default:
                     {
                         FurtiveMushroom newArtifact = new FurtiveMushroom();
@@ -284,6 +339,19 @@ public class OverworldPlayer : MonoBehaviour
                         break;
                     }
             }
+    }
+
+    public void RemoveArtifact(string name)
+    {
+        foreach(Artifact art in artifacts)
+        {
+            if(art.name == name)
+            {
+                Debug.Log("Player: Removing " + name);
+                art.Undo(this);
+                GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().RemoveArtifact(art.name);
+            }
+        }
     }
 
     //Return a random artifact from available artifacts
@@ -299,6 +367,14 @@ public class OverworldPlayer : MonoBehaviour
                     {
                         availableArtifacts.Remove("FurtiveMushroom");
                         FurtiveMushroom newArtifact = new FurtiveMushroom();
+                        return newArtifact;
+                        break;
+                    }
+                
+                case "StarShard":
+                    {
+                        availableArtifacts.Remove("StarShard");
+                        StarShard newArtifact = new StarShard();
                         return newArtifact;
                         break;
                     }

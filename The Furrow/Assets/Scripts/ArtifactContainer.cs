@@ -29,6 +29,25 @@ public class ArtifactContainer : MonoBehaviour
         UpdateCollection();
     }
 
+    //Eliminate a specified Artifact from the displayed list
+    public void RemoveArtifactFromGUI(string name)
+    {
+        //Debug.Log("Container: Removing " + name);
+        string clonedName = name + "(Clone)";
+        //Debug.Log("Cloned Name: " + clonedName);
+        foreach(GameObject art in artifacts)
+        {
+            //Debug.Log(art.name);
+            if(art.name == clonedName)
+            {
+                artifacts.Remove(art);
+                Destroy(art);
+                UpdateCollection();
+                return;
+            }
+        }
+    }
+
 
     //Position the artifacts in a row
     public void UpdateCollection()

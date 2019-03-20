@@ -17,6 +17,7 @@ public interface Artifact
     /// Name of the artifact
     /// </summary>
     string name { get; set; }
+    string title { get; set; }
     string desc { get; set; }
     Image image { get; set; }
 
