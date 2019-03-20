@@ -191,6 +191,18 @@ public class MapNode : MonoBehaviour
         player.SetChar2MaxHealth(change);
     }
 
+    public void SetChar1MaxAP(int change)
+    {
+        OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
+        player.SetChar1MaxAP(change);
+    }
+
+    public void SetChar2MaxAP(int change)
+    {
+        OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
+        player.SetChar2MaxAP(change);
+    }
+
     public void AddRandomArtifact()
     {
         Debug.Log("Player Gains an Artifact!");
@@ -199,9 +211,16 @@ public class MapNode : MonoBehaviour
 
     }
 
+    public void RemoveArtifact(string name)
+    {
+        OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
+        Debug.Log("MapNode: Removing " + name);
+        player.RemoveArtifact(name);
+    }
+
     public void IncreaseDarkness()
     {
-        Debug.Log("Darkness DOubles movement!");
+        Debug.Log("Darkness Doubles movement!");
     }
 
     public void FightEnemyGroup(int groupNum)

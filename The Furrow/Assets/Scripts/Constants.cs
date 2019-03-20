@@ -38,7 +38,8 @@ public static class Constants
 
     public static readonly string[] allArtifacts = new string[] 
     {
-        "FurtiveMushroom"
+        "FurtiveMushroom",
+        "StarShard"
     };
     
     

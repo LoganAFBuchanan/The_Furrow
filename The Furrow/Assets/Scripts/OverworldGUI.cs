@@ -73,9 +73,15 @@ public class OverworldGUI : MonoBehaviour
         
     }
 
-    public void AddArtifact(string name)
+    public void AddArtifact(Artifact arti)
     {
-        artifactContainer.LoadArtifactToGUI(name);
+        artifactContainer.LoadArtifactToGUI(arti);
+    }
+
+    public void RemoveArtifact(Artifact arti)
+    {
+        //Debug.Log("Overworld UI: Removing " + name);
+        artifactContainer.RemoveArtifactFromGUI(arti);
     }
 
     private void OnMapGenerated(object sender, EventArgs e)
@@ -165,7 +171,7 @@ public class OverworldGUI : MonoBehaviour
 
             artifactImage.sprite = shopArtifact.image.sprite;
             Debug.Log("Grabbed sprite");
-            artifactName.text = shopArtifact.name;
+            artifactName.text = shopArtifact.title;
             artifactDesc.text = shopArtifact.desc;
             artifactCost.text = "Cost: " + shopArtifact.cost.ToString();
 
@@ -176,7 +182,7 @@ public class OverworldGUI : MonoBehaviour
             { 
                 if(player.goldCount >= shopArtifact.cost)
                 {
-                    player.AddArtifact((PointerEventData)data, artifactName.text); 
+                    player.AddArtifact((PointerEventData)data, shopArtifact.name); 
                     player.SetGoldCount(-shopArtifact.cost);
                     artifactSlot.gameObject.SetActive(false);
                 }
