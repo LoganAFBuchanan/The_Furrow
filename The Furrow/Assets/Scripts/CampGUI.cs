@@ -103,7 +103,15 @@ public class CampGUI : OverworldGUI
         {
             if(hero.HitPoints < hero.TotalHitPoints)
             {
-                hero.HitPoints += Mathf.FloorToInt(hero.TotalHitPoints * Constants.CAMP_REST_PCT);
+                if(playerScript.isHealBoosted)
+                {
+                    hero.HitPoints += Mathf.FloorToInt(hero.TotalHitPoints * playerScript.healBoost);
+                }
+                else
+                {
+                    hero.HitPoints += Mathf.FloorToInt(hero.TotalHitPoints * Constants.CAMP_REST_PCT);
+                }
+                
 
                 if(hero.HitPoints > hero.TotalHitPoints) hero.HitPoints = hero.TotalHitPoints;
             }
@@ -117,6 +125,7 @@ public class CampGUI : OverworldGUI
     {
         Debug.Log("Hunt Clicked!");
         playerScript.rationCount += Constants.CAMP_HUNT_RATIONS;
+        if(playerScript.isHuntBoosted) playerScript.rationCount += playerScript.huntBoost;
         UpdateUIValues();
         BackToOverworld();
     }

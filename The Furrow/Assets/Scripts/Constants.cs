@@ -6,7 +6,7 @@ public static class Constants
 {
     public const int STARVING_COST = 2;
     
-    public const int STARTING_GOLD = 25;
+    public const int STARTING_GOLD = 250;
     public const int STARTING_RATIONS = 5;
     public const int STARTING_BOND_LEVEL = 1;
 
@@ -39,7 +39,12 @@ public static class Constants
     public static readonly string[] allArtifacts = new string[] 
     {
         "FurtiveMushroom",
-        "StarShard"
+        "StarShard",
+        "ScarredJournal",
+        "SteelEgg",
+        "FletcherKit",
+        "PatchPack",
+        "MercuryDraught"
     };
     
     

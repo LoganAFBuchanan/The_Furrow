@@ -48,6 +48,8 @@ public class GUIController : MonoBehaviour
             cell.GetComponent<Cell>().CellHighlighted += OnCellHighlighted;
             cell.GetComponent<Cell>().CellDehighlighted += OnCellDehighlighted;
         }
+
+        
         InitializeButtons();
 
         OnTurnEnded(sender,e);

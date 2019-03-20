@@ -122,7 +122,16 @@ public class MapNode : MonoBehaviour
     {
         //Add rewards to player and update GUI
         player.SetGoldCount(combatGoldReward);
-        player.SetBondCount(combatBondReward);
+
+        if(player.isBondBoosted)
+        {
+            Debug.Log(Mathf.RoundToInt((float)combatBondReward * (1f + player.bondBoost)));
+            player.SetBondCount(Mathf.RoundToInt((float)combatBondReward * (1f + player.bondBoost)));
+        }
+        else
+        {
+            player.SetBondCount(combatBondReward);
+        }
         player.SetRationCount(combatRationReward);
 
         for(int i = 0; i < combatArtifactReward; i++)

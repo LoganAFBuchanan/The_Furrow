@@ -21,6 +21,21 @@ public class OverworldPlayer : MonoBehaviour
     public List<string> availableArtifacts;
     public List<Artifact> artifacts;
 
+    [System.NonSerialized]
+    public bool isBondBoosted;
+    [System.NonSerialized]
+    public float bondBoost;
+
+    [System.NonSerialized]
+    public bool isHuntBoosted;
+    [System.NonSerialized]
+    public int huntBoost;
+
+    [System.NonSerialized]
+    public bool isHealBoosted;
+    [System.NonSerialized]
+    public float healBoost;
+
     public event System.EventHandler NodeChanged;
     public event System.EventHandler StatsChanged;
     
@@ -38,6 +53,16 @@ public class OverworldPlayer : MonoBehaviour
     {
         availableArtifacts = new List<string>();
         artifacts = new List<Artifact>();
+
+        isBondBoosted = false;
+        bondBoost = 0;
+
+        isHuntBoosted = false;
+        huntBoost = 0;
+
+        isHealBoosted = false;
+        healBoost = 0;
+
         foreach (string name in Constants.allArtifacts)
         {
             availableArtifacts.Add(name);
@@ -275,6 +300,66 @@ public class OverworldPlayer : MonoBehaviour
                         break;
                     }
 
+                case "ScarredJournal":
+                    {
+                        availableArtifacts.Remove("ScarredJournal");
+                        ScarredJournal newArtifact = new ScarredJournal();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added ScarredJournal");
+                        break;
+                    }
+
+                case "SteelEgg":
+                    {
+                        availableArtifacts.Remove("SteelEgg");
+                        SteelEgg newArtifact = new SteelEgg();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added SteelEgg");
+                        break;
+                    }
+
+                case "FletcherKit":
+                    {
+                        availableArtifacts.Remove("FletcherKit");
+                        FletcherKit newArtifact = new FletcherKit();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added FletcherKit");
+                        break;
+                    }
+
+                case "PatchPack":
+                    {
+                        availableArtifacts.Remove("PatchPack");
+                        PatchPack newArtifact = new PatchPack();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added PatchPack");
+                        break;
+                    }
+
+                case "MercuryDraught":
+                    {
+                        availableArtifacts.Remove("MercuryDraught");
+                        MercuryDraught newArtifact = new MercuryDraught();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added MercuryDraught");
+                        break;
+                    }
+
                 default:
                     {
                         FurtiveMushroom newArtifact = new FurtiveMushroom();
@@ -328,6 +413,66 @@ public class OverworldPlayer : MonoBehaviour
                         break;
                     }
 
+                case "ScarredJournal":
+                    {
+                        availableArtifacts.Remove("ScarredJournal");
+                        ScarredJournal newArtifact = new ScarredJournal();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added ScarredJournal");
+                        break;
+                    }
+
+                case "SteelEgg":
+                    {
+                        availableArtifacts.Remove("SteelEgg");
+                        SteelEgg newArtifact = new SteelEgg();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added SteelEgg");
+                        break;
+                    }
+
+                case "FletcherKit":
+                    {
+                        availableArtifacts.Remove("FletcherKit");
+                        FletcherKit newArtifact = new FletcherKit();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added FletcherKit");
+                        break;
+                    }
+
+                case "PatchPack":
+                    {
+                        availableArtifacts.Remove("PatchPack");
+                        PatchPack newArtifact = new PatchPack();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added PatchPack");
+                        break;
+                    }
+
+                case "MercuryDraught":
+                    {
+                        availableArtifacts.Remove("MercuryDraught");
+                        MercuryDraught newArtifact = new MercuryDraught();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added MercuryDraught");
+                        break;
+                    }
+
                 default:
                     {
                         FurtiveMushroom newArtifact = new FurtiveMushroom();
@@ -357,7 +502,9 @@ public class OverworldPlayer : MonoBehaviour
     //Return a random artifact from available artifacts
     public Artifact GetRandomArtifact()
     {
-        int randomNumber = UnityEngine.Random.Range(0, availableArtifacts.Count - 1);
+        int randomNumber = UnityEngine.Random.Range(0, availableArtifacts.Count);
+
+        Debug.Log("THE SHOPS RANDOM NUMBER IS: " + randomNumber);
 
         if (availableArtifacts.Count > 0)
         {
@@ -375,6 +522,46 @@ public class OverworldPlayer : MonoBehaviour
                     {
                         availableArtifacts.Remove("StarShard");
                         StarShard newArtifact = new StarShard();
+                        return newArtifact;
+                        break;
+                    }
+
+                case "ScarredJournal":
+                    {
+                        availableArtifacts.Remove("ScarredJournal");
+                        ScarredJournal newArtifact = new ScarredJournal();
+                        return newArtifact;
+                        break;
+                    }
+
+                case "SteelEgg":
+                    {
+                        availableArtifacts.Remove("SteelEgg");
+                        SteelEgg newArtifact = new SteelEgg();
+                        return newArtifact;
+                        break;
+                    }
+
+                case "FletcherKit":
+                    {
+                        availableArtifacts.Remove("FletcherKit");
+                        FletcherKit newArtifact = new FletcherKit();
+                        return newArtifact;
+                        break;
+                    }
+
+                case "PatchPack":
+                    {
+                        availableArtifacts.Remove("PatchPack");
+                        PatchPack newArtifact = new PatchPack();
+                        return newArtifact;
+                        break;
+                    }
+
+                case "MercuryDraught":
+                    {
+                        availableArtifacts.Remove("MercuryDraught");
+                        MercuryDraught newArtifact = new MercuryDraught();
                         return newArtifact;
                         break;
                     }
