@@ -3,26 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-public class FurtiveMushroom : Artifact
+public class AegisCharm : Artifact
 {
 
-    public int hpBoost;
+    public int defMultiplier;
     public int cost { get; set; }
     public string name { get; set; }
     public string title { get; set; }
     public string desc { get; set; }
     public Image image { get; set; }
 
-    public FurtiveMushroom()
+    public AegisCharm()
     {
-        name = "FurtiveMushroom";
-        title = "Furtive Mushroom";
-        desc = "+3 Max HP for both heroes";
-        hpBoost = 3;
-        cost = 8;
+        name = "AegisCharm";
+        title = "Aegis Charm";
+        desc = "Double the effectiveness of the Defend Action";
+        defMultiplier = 1;
+        cost = 14;
         UnityEngine.GameObject artifactUI;
         Debug.Log("Loading Artifact asset for " + name);
-        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/FurtiveMushroom"));
+        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/AegisCharm"));
         image = artifactUI.GetComponent<Image>();
         UnityEngine.GameObject.Destroy(artifactUI);
     }
@@ -31,8 +31,7 @@ public class FurtiveMushroom : Artifact
     {
         foreach(HeroControl hero in player.characterList)
         {
-            hero.TotalHitPoints += hpBoost;
-            hero.HitPoints += hpBoost;
+            hero.defenseStrength += defMultiplier;
         }
         player.UpdateGUI();
     }
@@ -41,14 +40,13 @@ public class FurtiveMushroom : Artifact
     {
         foreach(HeroControl hero in player.characterList)
         {
-            hero.TotalHitPoints -= hpBoost;
-            hero.HitPoints -= hpBoost;
+            hero.defenseStrength += defMultiplier;
         }
         player.UpdateGUI();
     }
 
     public Artifact Clone()
     {
-        return new FurtiveMushroom();
+        return new AegisCharm();
     }
 }

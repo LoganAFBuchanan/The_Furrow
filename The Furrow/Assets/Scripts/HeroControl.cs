@@ -11,6 +11,7 @@ public class HeroControl : Unit
     public string UnitName;
     public int defenseStrength;
 
+
     public GameObject skillObject1;
     public GameObject skillObject2;
     public GameObject skillObject3;
@@ -43,7 +44,6 @@ public class HeroControl : Unit
         //GetComponent<Renderer>().material.color = LeadingColor;
 
         highlightEffect = GetComponent<SpriteGlowEffect>();
-        
 
         //highlightEffect.GlowBrightness = 0.0f;
         highlightEffect.OutlineWidth = 0;

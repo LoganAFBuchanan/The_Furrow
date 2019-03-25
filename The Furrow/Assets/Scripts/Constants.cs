@@ -44,7 +44,15 @@ public static class Constants
         "SteelEgg",
         "FletcherKit",
         "PatchPack",
-        "MercuryDraught"
+        "MercuryDraught",
+        "StoutCap",
+        "FurrowMorel",
+        "StrappedBundle",
+        "HarvestSack",
+        "Cornucopia",
+        "ConsortsScribe",
+        "AegisCharm",
+        "SanguineFang"
     };
     
     

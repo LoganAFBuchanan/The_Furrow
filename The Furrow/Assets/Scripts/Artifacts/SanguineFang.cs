@@ -3,26 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-public class FurtiveMushroom : Artifact
+public class SanguineFang : Artifact
 {
 
-    public int hpBoost;
+    public int killHeal;
     public int cost { get; set; }
     public string name { get; set; }
     public string title { get; set; }
     public string desc { get; set; }
     public Image image { get; set; }
 
-    public FurtiveMushroom()
+    public SanguineFang()
     {
-        name = "FurtiveMushroom";
-        title = "Furtive Mushroom";
-        desc = "+3 Max HP for both heroes";
-        hpBoost = 3;
-        cost = 8;
+        name = "SanguineFang";
+        title = "Sanguine Fang";
+        desc = "Heal 1 HP upon killing an enemy";
+        killHeal = 1;
+        cost = 13;
         UnityEngine.GameObject artifactUI;
         Debug.Log("Loading Artifact asset for " + name);
-        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/FurtiveMushroom"));
+        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/SanguineFang"));
         image = artifactUI.GetComponent<Image>();
         UnityEngine.GameObject.Destroy(artifactUI);
     }
@@ -31,8 +31,8 @@ public class FurtiveMushroom : Artifact
     {
         foreach(HeroControl hero in player.characterList)
         {
-            hero.TotalHitPoints += hpBoost;
-            hero.HitPoints += hpBoost;
+            hero.isKillHeal = true;
+            hero.killHeal += killHeal;
         }
         player.UpdateGUI();
     }
@@ -41,8 +41,8 @@ public class FurtiveMushroom : Artifact
     {
         foreach(HeroControl hero in player.characterList)
         {
-            hero.TotalHitPoints -= hpBoost;
-            hero.HitPoints -= hpBoost;
+            hero.isKillHeal = false;
+            hero.killHeal -= killHeal;
         }
         player.UpdateGUI();
     }

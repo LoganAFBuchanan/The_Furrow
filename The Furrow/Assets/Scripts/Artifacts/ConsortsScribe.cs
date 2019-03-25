@@ -3,45 +3,45 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-public class FletcherKit : Artifact
+public class ConsortsScribe : Artifact
 {
 
-    public int huntBoost;
+    public int bondMultiplier;
     public int cost { get; set; }
     public string name { get; set; }
     public string title { get; set; }
     public string desc { get; set; }
     public Image image { get; set; }
 
-    public FletcherKit()
+    public ConsortsScribe()
     {
-        name = "FletcherKit";
-        title = "Fletcher's Kit";
-        desc = "+2 Rations when Hunting";
-        huntBoost = 2;
+        name = "ConsortsScribe";
+        title = "Consort's Scribe";
+        desc = "Gain double Bond Points at Camp";
+        bondMultiplier = 1;
         cost = 9;
         UnityEngine.GameObject artifactUI;
         Debug.Log("Loading Artifact asset for " + name);
-        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/FletcherKit"));
+        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/ConsortsScribe"));
         image = artifactUI.GetComponent<Image>();
         UnityEngine.GameObject.Destroy(artifactUI);
     }
 
     public void Apply(OverworldPlayer player)
     {
-        player.isHuntBoosted = true;
-        player.huntBoost += huntBoost;
+        player.isCampBondBoosted = true;
+        player.campBondBoost += bondMultiplier;
         player.UpdateGUI();
     }
 
     public void Undo(OverworldPlayer player)
     {
-        player.huntBoost -= huntBoost;
+        player.campBondBoost -= bondMultiplier;
         player.UpdateGUI();
     }
 
     public Artifact Clone()
     {
-        return new FletcherKit();
+        return new ConsortsScribe();
     }
 }

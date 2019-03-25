@@ -80,6 +80,11 @@ public abstract class Unit : MonoBehaviour
     public int startingDefence;
     public int startingAPBoost;
 
+    [System.NonSerialized]
+    public bool isKillHeal = false;
+    [System.NonSerialized]
+    public int killHeal = 0;
+
     /// <summary>
     /// Determines how far on the grid the unit can move.
     /// </summary>
@@ -291,6 +296,13 @@ public abstract class Unit : MonoBehaviour
         {
             if (UnitDestroyed != null)
                 UnitDestroyed.Invoke(this, new AttackEventArgs(other, this, healthdamage));
+
+            if(other.isKillHeal)
+            {
+                other.HitPoints += other.killHeal;
+                if(other.HitPoints > other.TotalHitPoints) other.HitPoints = other.TotalHitPoints;
+                GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().UpdateUIValues();
+            }
             OnDestroyed();
         }
     }

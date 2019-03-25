@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-public class FurtiveMushroom : Artifact
+public class StoutCap : Artifact
 {
 
     public int hpBoost;
@@ -13,16 +13,16 @@ public class FurtiveMushroom : Artifact
     public string desc { get; set; }
     public Image image { get; set; }
 
-    public FurtiveMushroom()
+    public StoutCap()
     {
-        name = "FurtiveMushroom";
-        title = "Furtive Mushroom";
-        desc = "+3 Max HP for both heroes";
-        hpBoost = 3;
-        cost = 8;
+        name = "StoutCap";
+        title = "Stout Cap";
+        desc = "+5 Max HP for both heroes";
+        hpBoost = 5;
+        cost = 12;
         UnityEngine.GameObject artifactUI;
         Debug.Log("Loading Artifact asset for " + name);
-        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/FurtiveMushroom"));
+        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/StoutCap"));
         image = artifactUI.GetComponent<Image>();
         UnityEngine.GameObject.Destroy(artifactUI);
     }
@@ -49,6 +49,6 @@ public class FurtiveMushroom : Artifact
 
     public Artifact Clone()
     {
-        return new FurtiveMushroom();
+        return new StoutCap();
     }
 }

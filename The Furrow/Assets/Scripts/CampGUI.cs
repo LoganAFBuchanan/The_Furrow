@@ -161,7 +161,7 @@ public class CampGUI : OverworldGUI
         }
         else
         {
-            playerScript.bondCount += Constants.CAMP_BOND_INC;
+            playerScript.bondCount += Constants.CAMP_BOND_INC * playerScript.campBondBoost;
             if(playerScript.bondCount > playerScript.bondMax) playerScript.bondCount = playerScript.bondMax;
             UpdateUIValues();
             BackToOverworld();

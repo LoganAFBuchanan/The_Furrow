@@ -3,45 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
-public class FletcherKit : Artifact
+public class HarvestSack : Artifact
 {
 
-    public int huntBoost;
+    public int rationBoost;
     public int cost { get; set; }
     public string name { get; set; }
     public string title { get; set; }
     public string desc { get; set; }
     public Image image { get; set; }
 
-    public FletcherKit()
+    public HarvestSack()
     {
-        name = "FletcherKit";
-        title = "Fletcher's Kit";
-        desc = "+2 Rations when Hunting";
-        huntBoost = 2;
-        cost = 9;
+        name = "HarvestSack";
+        title = "Harvest Sack";
+        desc = "+4 Rations";
+        rationBoost = 4;
+        cost = 11;
         UnityEngine.GameObject artifactUI;
         Debug.Log("Loading Artifact asset for " + name);
-        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/FletcherKit"));
+        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/HarvestSack"));
         image = artifactUI.GetComponent<Image>();
         UnityEngine.GameObject.Destroy(artifactUI);
     }
 
     public void Apply(OverworldPlayer player)
     {
-        player.isHuntBoosted = true;
-        player.huntBoost += huntBoost;
+        player.SetRationCount(rationBoost);
         player.UpdateGUI();
     }
 
     public void Undo(OverworldPlayer player)
     {
-        player.huntBoost -= huntBoost;
         player.UpdateGUI();
     }
 
     public Artifact Clone()
     {
-        return new FletcherKit();
+        return new HarvestSack();
     }
 }
