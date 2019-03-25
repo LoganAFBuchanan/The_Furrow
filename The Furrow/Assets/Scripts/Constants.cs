@@ -26,7 +26,7 @@ public static class Constants
 
     public const int SHOP_RATION_COST = 3;
 
-    public const float PUSH_SPEED = 10f;
+    public const float PUSH_SPEED = 6f;
 
     public const float GRID_TRANSPARENCY = 0.5f;
 

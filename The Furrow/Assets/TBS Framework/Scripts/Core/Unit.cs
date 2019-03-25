@@ -345,7 +345,7 @@ public abstract class Unit : MonoBehaviour
         destinationCell.IsTaken = true;
 
         if (MovementSpeed > 0)
-            StartCoroutine(MovementAnimation(path));
+            StartCoroutine(PushMovementAnimation(path, Constants.PUSH_SPEED));
         else
             transform.position = Cell.transform.position;
 
@@ -377,6 +377,38 @@ public abstract class Unit : MonoBehaviour
             {
                 
                 transform.localPosition = Vector3.MoveTowards(transform.localPosition, destination_pos, Time.deltaTime * MovementSpeed);
+                yield return 0;
+            }
+        }
+        isMoving = false;
+        animator.Play("Idle",0,0);
+        
+    }
+
+    protected virtual IEnumerator PushMovementAnimation(List<Cell> path, float pushSpeed)
+    {
+        isMoving = true;
+        path.Reverse();
+        if(path[0].transform.localPosition.x > transform.localPosition.x)
+        {
+            animator.Play("WalkForward",0,0);
+        }
+        else if(path[0].transform.localPosition.x < transform.localPosition.x)
+        {
+            animator.Play("WalkBackward",0,0);
+        }
+        else
+        {
+            animator.Play("WalkForward",0,0);
+        }
+        
+        foreach (var cell in path)
+        {
+            Vector3 destination_pos = new Vector3(cell.transform.localPosition.x, transform.localPosition.y, cell.transform.localPosition.z);
+            while (transform.localPosition != destination_pos)
+            {
+                
+                transform.localPosition = Vector3.MoveTowards(transform.localPosition, destination_pos, Time.deltaTime * pushSpeed);
                 yield return 0;
             }
         }
