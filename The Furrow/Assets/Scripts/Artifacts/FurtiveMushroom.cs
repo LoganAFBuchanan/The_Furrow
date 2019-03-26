@@ -17,9 +17,9 @@ public class FurtiveMushroom : Artifact
     {
         name = "FurtiveMushroom";
         title = "Furtive Mushroom";
-        desc = "+5 Max HP for both heroes";
-        hpBoost = 5;
-        cost = 10;
+        desc = "+3 Max HP for both heroes";
+        hpBoost = 3;
+        cost = 8;
         UnityEngine.GameObject artifactUI;
         Debug.Log("Loading Artifact asset for " + name);
         artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/FurtiveMushroom"));

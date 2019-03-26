@@ -11,6 +11,8 @@ public class HeroControl : Unit
     public string UnitName;
     public int defenseStrength;
 
+    private bool isGlow;
+
     public GameObject skillObject1;
     public GameObject skillObject2;
     public GameObject skillObject3;
@@ -43,7 +45,7 @@ public class HeroControl : Unit
         //GetComponent<Renderer>().material.color = LeadingColor;
 
         highlightEffect = GetComponent<SpriteGlowEffect>();
-        
+        isGlow = true;
 
         //highlightEffect.GlowBrightness = 0.0f;
         highlightEffect.OutlineWidth = 0;
@@ -95,6 +97,18 @@ public class HeroControl : Unit
         }
 
 
+    }
+
+    public void DisableGlow()
+    {
+        highlightEffect.OutlineWidth = 0;
+        isGlow = false;
+    }
+
+    public void EnableGlow()
+    {
+        highlightEffect.OutlineWidth = 3;
+        isGlow = true;
     }
 
     public virtual void Defend(Unit other, int damage)
@@ -714,7 +728,7 @@ public class HeroControl : Unit
     {
         //GetComponent<Renderer>().material.color = LeadingColor + Color.green;
         GetComponent<BoxCollider>().enabled = false;
-        highlightEffect.OutlineWidth = 3;
+        if(isGlow) highlightEffect.OutlineWidth = 3;
     }
 
     public override void UnMark()

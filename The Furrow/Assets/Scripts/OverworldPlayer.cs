@@ -27,6 +27,12 @@ public class OverworldPlayer : MonoBehaviour
     public float bondBoost;
 
     [System.NonSerialized]
+    public bool isCampBondBoosted;
+    [System.NonSerialized]
+    public int campBondBoost;
+
+
+    [System.NonSerialized]
     public bool isHuntBoosted;
     [System.NonSerialized]
     public int huntBoost;
@@ -56,6 +62,9 @@ public class OverworldPlayer : MonoBehaviour
 
         isBondBoosted = false;
         bondBoost = 0;
+
+        isCampBondBoosted = false;
+        campBondBoost = 1;
 
         isHuntBoosted = false;
         huntBoost = 0;
@@ -270,7 +279,7 @@ public class OverworldPlayer : MonoBehaviour
     //Pull a random artifact from available artifacts and apply its benefit to the player
     public void AddRandomArtifact()
     {
-        int randomNumber = UnityEngine.Random.Range(0, availableArtifacts.Count - 1);
+        int randomNumber = UnityEngine.Random.Range(0, availableArtifacts.Count);
 
         if (availableArtifacts.Count > 0)
         {
@@ -357,6 +366,102 @@ public class OverworldPlayer : MonoBehaviour
                         GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
                         UpdateGUI();
                         Debug.Log("Added MercuryDraught");
+                        break;
+                    }
+
+                case "StoutCap":
+                    {
+                        availableArtifacts.Remove("StoutCap");
+                        StoutCap newArtifact = new StoutCap();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added StoutCap");
+                        break;
+                    }
+
+                case "FurrowMorel":
+                    {
+                        availableArtifacts.Remove("FurrowMorel");
+                        FurrowMorel newArtifact = new FurrowMorel();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added FurrowMorel");
+                        break;
+                    }
+
+                case "StrappedBundle":
+                    {
+                        availableArtifacts.Remove("StrappedBundle");
+                        StrappedBundle newArtifact = new StrappedBundle();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added StrappedBundle");
+                        break;
+                    }
+
+                case "HarvestSack":
+                    {
+                        availableArtifacts.Remove("HarvestSack");
+                        HarvestSack newArtifact = new HarvestSack();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added HarvestSack");
+                        break;
+                    }
+
+                case "Cornucopia":
+                    {
+                        availableArtifacts.Remove("Cornucopia");
+                        Cornucopia newArtifact = new Cornucopia();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added Cornucopia");
+                        break;
+                    }
+
+                case "ConsortsScribe":
+                    {
+                        availableArtifacts.Remove("ConsortsScribe");
+                        ConsortsScribe newArtifact = new ConsortsScribe();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added ConsortsScribe");
+                        break;
+                    }
+
+                case "AegisCharm":
+                    {
+                        availableArtifacts.Remove("AegisCharm");
+                        AegisCharm newArtifact = new AegisCharm();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added AegisCharm");
+                        break;
+                    }
+                
+                case "SanguineFang":
+                    {
+                        availableArtifacts.Remove("SanguineFang");
+                        SanguineFang newArtifact = new SanguineFang();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added SanguineFang");
                         break;
                     }
 
@@ -473,6 +578,102 @@ public class OverworldPlayer : MonoBehaviour
                         break;
                     }
 
+                case "StoutCap":
+                    {
+                        availableArtifacts.Remove("StoutCap");
+                        StoutCap newArtifact = new StoutCap();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added StoutCap");
+                        break;
+                    }
+
+                case "FurrowMorel":
+                    {
+                        availableArtifacts.Remove("FurrowMorel");
+                        FurrowMorel newArtifact = new FurrowMorel();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added FurrowMorel");
+                        break;
+                    }
+
+                case "StrappedBundle":
+                    {
+                        availableArtifacts.Remove("StrappedBundle");
+                        StrappedBundle newArtifact = new StrappedBundle();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added StrappedBundle");
+                        break;
+                    }
+
+                case "HarvestSack":
+                    {
+                        availableArtifacts.Remove("HarvestSack");
+                        HarvestSack newArtifact = new HarvestSack();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added HarvestSack");
+                        break;
+                    }
+
+                case "Cornucopia":
+                    {
+                        availableArtifacts.Remove("Cornucopia");
+                        Cornucopia newArtifact = new Cornucopia();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added Cornucopia");
+                        break;
+                    }
+
+                case "ConsortsScribe":
+                    {
+                        availableArtifacts.Remove("ConsortsScribe");
+                        ConsortsScribe newArtifact = new ConsortsScribe();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added ConsortsScribe");
+                        break;
+                    }
+
+                case "AegisCharm":
+                    {
+                        availableArtifacts.Remove("AegisCharm");
+                        AegisCharm newArtifact = new AegisCharm();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added AegisCharm");
+                        break;
+                    }
+
+                case "SanguineFang":
+                    {
+                        availableArtifacts.Remove("SanguineFang");
+                        SanguineFang newArtifact = new SanguineFang();
+                        artifacts.Add(newArtifact);
+                        newArtifact.Apply(this);
+                        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().AddArtifact(newArtifact);
+                        UpdateGUI();
+                        Debug.Log("Added SanguineFang");
+                        break;
+                    }
+
                 default:
                     {
                         FurtiveMushroom newArtifact = new FurtiveMushroom();
@@ -562,6 +763,70 @@ public class OverworldPlayer : MonoBehaviour
                     {
                         availableArtifacts.Remove("MercuryDraught");
                         MercuryDraught newArtifact = new MercuryDraught();
+                        return newArtifact;
+                        break;
+                    }
+
+                case "StoutCap":
+                    {
+                        availableArtifacts.Remove("StoutCap");
+                        StoutCap newArtifact = new StoutCap();
+                        return newArtifact;
+                        break;
+                    }
+
+                case "FurrowMorel":
+                    {
+                        availableArtifacts.Remove("FurrowMorel");
+                        FurrowMorel newArtifact = new FurrowMorel();
+                        return newArtifact;
+                        break;
+                    }
+
+                case "StrappedBundle":
+                    {
+                        availableArtifacts.Remove("StrappedBundle");
+                        StrappedBundle newArtifact = new StrappedBundle();
+                        return newArtifact;
+                        break;
+                    }
+
+                case "HarvestSack":
+                    {
+                        availableArtifacts.Remove("HarvestSack");
+                        HarvestSack newArtifact = new HarvestSack();
+                        return newArtifact;
+                        break;
+                    }
+
+                case "Cornucopia":
+                    {
+                        availableArtifacts.Remove("Cornucopia");
+                        Cornucopia newArtifact = new Cornucopia();
+                        return newArtifact;
+                        break;
+                    }
+
+                case "ConsortsScribe":
+                    {
+                        availableArtifacts.Remove("ConsortsScribe");
+                        ConsortsScribe newArtifact = new ConsortsScribe();
+                        return newArtifact;
+                        break;
+                    }
+
+                case "AegisCharm":
+                    {
+                        availableArtifacts.Remove("AegisCharm");
+                        AegisCharm newArtifact = new AegisCharm();
+                        return newArtifact;
+                        break;
+                    }
+
+                case "SanguineFang":
+                    {
+                        availableArtifacts.Remove("SanguineFang");
+                        SanguineFang newArtifact = new SanguineFang();
                         return newArtifact;
                         break;
                     }

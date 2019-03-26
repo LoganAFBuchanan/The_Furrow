@@ -30,13 +30,13 @@ public class FletcherKit : Artifact
     public void Apply(OverworldPlayer player)
     {
         player.isHuntBoosted = true;
-        player.huntBoost += 2;
+        player.huntBoost += huntBoost;
         player.UpdateGUI();
     }
 
     public void Undo(OverworldPlayer player)
     {
-        player.huntBoost -= 2;
+        player.huntBoost -= huntBoost;
         player.UpdateGUI();
     }
 
