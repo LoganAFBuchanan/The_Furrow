@@ -123,9 +123,10 @@ class CellGridStateUnitSelected : CellGridState
             if (unit == null) continue;
             unit.SetState(new UnitStateNormal(unit));
         }
-        foreach (var cell in _cellGrid.Cells)
+        foreach (Cell cell in _cellGrid.Cells)
         {
-            cell.UnMark();
+            if(cell != null)
+                cell.UnMark();
         }   
     }
 }

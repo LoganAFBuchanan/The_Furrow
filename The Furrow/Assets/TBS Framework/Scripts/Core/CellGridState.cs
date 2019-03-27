@@ -7,7 +7,7 @@ public abstract class CellGridState
     
     protected CellGridState(CellGrid cellGrid)
     {
-        _cellGrid = cellGrid;
+        _cellGrid = GameObject.Find("CellGrid").GetComponent<CellGrid>();
     }
 
     /// <summary>

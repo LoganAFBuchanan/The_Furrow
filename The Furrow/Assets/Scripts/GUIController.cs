@@ -268,6 +268,10 @@ public class GUIController : MonoBehaviour
         defendButton.onClick.RemoveAllListeners();
         NextTurnButton.onClick.RemoveAllListeners();
 
+        UnitImage = null;
+        InfoText = null;
+        StatsText = null;
+
         foreach(HeroControl hero in CellGrid.Units)
         {
             hero.UnitHighlighted -= OnUnitHighlighted;

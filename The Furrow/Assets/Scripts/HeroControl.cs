@@ -26,6 +26,9 @@ public class HeroControl : Unit
 
     private SpriteGlowEffect highlightEffect;
 
+    [System.NonSerialized]
+    public bool isDead;
+
 
     [System.NonSerialized]
     public Skill skill1;
@@ -46,6 +49,8 @@ public class HeroControl : Unit
 
         highlightEffect = GetComponent<SpriteGlowEffect>();
         isGlow = true;
+
+        isDead = false;
 
         //highlightEffect.GlowBrightness = 0.0f;
         highlightEffect.OutlineWidth = 0;
@@ -87,6 +92,65 @@ public class HeroControl : Unit
         DefenceFactor = 0;
     }
 
+    protected override void OnDestroyed()
+    {
+        Cell.IsTaken = false;
+        animator.Play("Death",0,0);
+        //Destroy(gameObject);
+    }
+
+    public void JustDestroy()
+    {
+        StartCoroutine(FadeDeath());
+        //Destroy(gameObject);
+    }
+
+    // Fades corpse before destroying
+    // Adapted from: https://www.alanzucconi.com/2016/12/29/fading-sprites-unity-5/
+    public IEnumerator FadeDeath()
+    {
+        SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+        float duration = 1f;
+        float start = Time.time;
+
+        while (Time.time <= start + duration)
+        {
+            Color color = renderer.color;
+            color.a = 1f - Mathf.Clamp01((Time.time - start) / duration);
+            renderer.color = color;
+            yield return new WaitForEndOfFrame();
+        }
+        //Destory non-player characters
+        if(PlayerNumber != 0)
+        {
+            MarkAsDestroyed();
+            Destroy(gameObject);
+        }
+        else
+        {
+            MarkAsDestroyed();
+            SetCharacterDeath(true);
+        }
+        
+    }
+
+    public void SetCharacterDeath(bool setDead)
+    {
+        isDead = setDead;
+
+        if(isDead)
+        {
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            Color color = GetComponent<SpriteRenderer>().color;
+            color.a = 1f;
+            GetComponent<SpriteRenderer>().color = color;
+            gameObject.SetActive(true);
+        }
+    }
+
     public void GainDefence()
     {
 
@@ -95,7 +159,6 @@ public class HeroControl : Unit
             DefenceFactor += defenseStrength;
             ActionPoints--;
         }
-
 
     }
 
@@ -115,7 +178,7 @@ public class HeroControl : Unit
     {
         base.Defend(other, damage);
 
-        animator.Play("Hurt",0,0);
+        if(HitPoints > 0) animator.Play("Hurt",0,0); 
 
     }
 
@@ -705,6 +768,7 @@ public class HeroControl : Unit
 
     public override void MarkAsFinished()
     {
+        GetComponent<BoxCollider>().enabled = true;
         highlightEffect.OutlineWidth = 0;
     }
 
@@ -728,14 +792,14 @@ public class HeroControl : Unit
     {
         //GetComponent<Renderer>().material.color = LeadingColor + Color.green;
         GetComponent<BoxCollider>().enabled = false;
-        if(isGlow) highlightEffect.OutlineWidth = 3;
+        highlightEffect.OutlineWidth = 3;
     }
 
     public override void UnMark()
     {
         //GetComponent<Renderer>().material.color = LeadingColor;
         Debug.Log("UNMARKING UNIT");
-        
+        GetComponent<BoxCollider>().enabled = true;
         highlightEffect.OutlineWidth = 0;
     }
 }

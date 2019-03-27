@@ -81,6 +81,7 @@ public class CellGrid : MonoBehaviour
 
     private void Start()
     {
+        //_cellGridState = new CellGridState(this);
         PopulateUnits();
 
         if (LevelLoading != null)
@@ -112,8 +113,16 @@ public class CellGrid : MonoBehaviour
 
             for(int i = 0; i < listSize; i++)
             {
-              
-                overWorldPlayer.transform.GetChild(0).gameObject.SetActive(true);
+                
+                if(overWorldPlayer.transform.GetChild(0).gameObject.GetComponent<HeroControl>().isDead)
+                {
+                    overWorldPlayer.transform.GetChild(0).gameObject.GetComponent<HeroControl>().SetCharacterDeath(true);
+                }
+                else
+                {
+                    overWorldPlayer.transform.GetChild(0).gameObject.GetComponent<HeroControl>().SetCharacterDeath(false);
+                }
+                //overWorldPlayer.transform.GetChild(0).gameObject.SetActive(true);
                 overWorldPlayer.transform.GetChild(0).SetParent(unitList.transform);
                 
             }
@@ -292,6 +301,13 @@ public class CellGrid : MonoBehaviour
             }
             
                 
+        }
+
+        foreach (var cell in Cells)
+        {
+            cell.CellClicked -= OnCellClicked;
+            cell.CellHighlighted -= OnCellHighlighted;
+            cell.CellDehighlighted -= OnCellDehighlighted;
         }
 
         overWorldMap.SetActive(true);
