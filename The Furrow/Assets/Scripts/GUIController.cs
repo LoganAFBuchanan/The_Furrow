@@ -248,6 +248,15 @@ public class GUIController : MonoBehaviour
         //CleanUpDelegates();
     }
 
+    public void RemoveListenersFromHero(HeroControl hero)
+    {
+        hero.UnitHighlighted -= OnUnitHighlighted;
+        hero.UnitDehighlighted -= OnUnitDehighlighted;
+        hero.UnitAttacked -= OnUnitAttacked;
+        hero.UnitSelected -= OnUnitSelected;
+        hero.UnitDeselected -= OnUnitDeselected;
+    }
+
     private void CleanUpDelegates()
     {
         foreach (Transform cell in CellGrid.transform)

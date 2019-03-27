@@ -140,6 +140,10 @@ public class HeroControl : Unit
 
         if(isDead)
         {
+            if(GameObject.Find("GUIController") != null)
+            {
+                GameObject.Find("GUIController").GetComponent<GUIController>().RemoveListenersFromHero(this);
+            }
             gameObject.SetActive(false);
         }
         else
