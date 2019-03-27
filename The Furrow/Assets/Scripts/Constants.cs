@@ -24,6 +24,11 @@ public static class Constants
     public const float CAMP_REST_PCT = 0.33f;
     public const int CAMP_BOND_INC = 5;
 
+    public const int CAMP_DARKNESS_MOVE = 3;
+    public const int MOVE_DARKNESS_MOVE = 1;
+
+    public const int DARKNESS_DAMAGE = 2;
+
     public const int SHOP_RATION_COST = 3;
 
     public const float PUSH_SPEED = 6f;

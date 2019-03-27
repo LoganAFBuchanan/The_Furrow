@@ -14,6 +14,9 @@ public class MapNode : MonoBehaviour
     public int tierPosition;
     public bool isUnique;
 
+    //Has the node been touched by the shadow
+    public bool isCorrupted;
+
     public int positionID;
 
     public int combatGoldReward;
@@ -51,6 +54,7 @@ public class MapNode : MonoBehaviour
     {
         isVisited = false;
         isTaken = false;
+        isCorrupted = false;
         accessNodes = new List<MapNode>();
         flowchart = GetComponent<Flowchart>();
         enemyList = new List<GameObject>();

@@ -121,7 +121,18 @@ public class OverworldGUI : MonoBehaviour
     public void OnCampButtonClicked()
     {
         Debug.Log("Looks like Camping is back on the Menu! (Camp Button Clicked)");
+        
+        mapControlScript.darkness.MoveDarkness(Constants.CAMP_DARKNESS_MOVE);
+        
+        StartCoroutine(ChangeToCamp());
+    }
 
+    public IEnumerator ChangeToCamp()
+    {
+        while(mapControlScript.darkness.isMoving)
+        {
+            yield return 0;
+        }
         //Move Map Away
         mapControlScript.savedPosition = mapControlScript.transform.position;
         mapControlScript.transform.position = new Vector3(-100000, -100000, -100000);
