@@ -182,7 +182,7 @@ public class HeroControl : Unit
     {
         base.Defend(other, damage);
 
-        if(HitPoints > 0) animator.Play("Hurt",0,0); 
+        if(HitPoints > 0 && damage != 0) animator.Play("Hurt",0,0); 
 
     }
 
