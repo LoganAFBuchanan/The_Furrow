@@ -12,6 +12,7 @@ public class Skill : MonoBehaviour
 
     public GameObject hitVFX;
     public GameObject tileVFX;
+    public GameObject slimeSprayVFX;
 
     public bool isSplash;
     public int splashDamage;
@@ -305,6 +306,16 @@ public class Skill : MonoBehaviour
         if(tileVFX != null)
         {
             GameObject spawnedVFX = Instantiate(tileVFX);
+            spawnedVFX.transform.position = target.transform.position;
+
+        }
+    }
+
+    public void SpawnSprayEffect(Cell target)
+    {
+        if(slimeSprayVFX != null)
+        {
+            GameObject spawnedVFX = Instantiate(slimeSprayVFX);
             spawnedVFX.transform.position = target.transform.position;
 
         }

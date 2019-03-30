@@ -101,6 +101,7 @@ public class CampGUI : OverworldGUI
 
         foreach(HeroControl hero in heroList)
         {
+            
             if(hero.HitPoints < hero.TotalHitPoints)
             {
                 if(playerScript.isHealBoosted)
@@ -114,7 +115,9 @@ public class CampGUI : OverworldGUI
                 
 
                 if(hero.HitPoints > hero.TotalHitPoints) hero.HitPoints = hero.TotalHitPoints;
+                
             }
+            if(hero.isDead) hero.SetCharacterDeath(false);
         }
         UpdateUIValues();
         BackToOverworld();

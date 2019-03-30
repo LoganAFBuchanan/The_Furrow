@@ -19,6 +19,7 @@ public class MapControl : MonoBehaviour
     public OverworldPlayer playerScript;
 
     public GameObject playerObject;
+    public Darkness darkness;
 
     public int tierNumber;
     public int maxPositions;
@@ -57,6 +58,8 @@ public class MapControl : MonoBehaviour
 
         //Need to set access nodes for premade map
         SetupPremadeMap();
+
+        darkness.Initialize();
 
         if(GameObject.Find("Player") != null)
         {
@@ -149,7 +152,8 @@ public class MapControl : MonoBehaviour
         
         for(int i = 0; i < this.transform.childCount; i++)
         {
-            nodeList.Add(this.transform.GetChild(i).GetComponent<MapNode>());
+            if(this.transform.GetChild(i).gameObject.name != "Darkness")
+                nodeList.Add(this.transform.GetChild(i).GetComponent<MapNode>());
         }
 
         foreach(MapNode node in nodeList)
@@ -225,7 +229,7 @@ public class MapControl : MonoBehaviour
 
     public void OnNodeClicked(object sender, EventArgs e)
     {
-        if(nodesEnabled)
+        if(nodesEnabled && !darkness.isMoving)
         {
             MapNode clickedNode = (sender as MapNode);
             Debug.Log("Node CLicked!");
@@ -240,7 +244,21 @@ public class MapControl : MonoBehaviour
                 if(node.positionID == clickedNode.positionID)
                 {
                     playerScript.MovePlayer(clickedNode);
-                    if(isFirstMove) isFirstMove = false;
+
+                    if(clickedNode.isCorrupted)
+                    {
+                        playerScript.SetChar1Health(-Constants.DARKNESS_DAMAGE);
+                        playerScript.SetChar2Health(-Constants.DARKNESS_DAMAGE);
+                    }
+
+                    if(isFirstMove) 
+                    {
+                        isFirstMove = false;
+                    }
+                    else
+                    {
+                        darkness.MoveDarkness(Constants.MOVE_DARKNESS_MOVE);
+                    }
                     
                     playerScript.ExecuteFlowchart("Start");
                     //playerScript.currNode.flowchart.ExecuteBlock("Start");

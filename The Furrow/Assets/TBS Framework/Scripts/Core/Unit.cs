@@ -176,6 +176,7 @@ public abstract class Unit : MonoBehaviour
     {
         Cell.IsTaken = false;
         MarkAsDestroyed();
+        
         Destroy(gameObject);
     }
 
