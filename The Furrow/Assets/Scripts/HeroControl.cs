@@ -297,6 +297,16 @@ public class HeroControl : Unit
             }
         }
 
+        //Spawn spray vfx
+        if(selectedSkill.slimeSprayVFX != null)
+        {
+            foreach(Cell effectCell in targetCells)
+            {
+                if(effectCell.OffsetCoord.x == (Cell.OffsetCoord.x - 1))
+                    selectedSkill.SpawnSprayEffect(effectCell);
+            }
+        }
+
         int bonusDamage = 0;
         if (selectedSkill.bonusDamage != 0)
         {
@@ -437,6 +447,16 @@ public class HeroControl : Unit
             foreach(Cell effectCell in targetCells)
             {
                 selectedSkill.SpawnTileEffect(effectCell);
+            }
+        }
+
+        //Spawn spray vfx
+        if(selectedSkill.slimeSprayVFX != null)
+        {
+            foreach(Cell effectCell in targetCells)
+            {
+                if(effectCell.OffsetCoord.x == (Cell.OffsetCoord.x - 1))
+                    selectedSkill.SpawnSprayEffect(effectCell);
             }
         }
 
@@ -614,6 +634,16 @@ public class HeroControl : Unit
             foreach(Cell effectCell in targetCells)
             {
                 selectedSkill.SpawnTileEffect(effectCell);
+            }
+        }
+
+        //Spawn spray vfx
+        if(selectedSkill.slimeSprayVFX != null)
+        {
+            foreach(Cell effectCell in targetCells)
+            {
+                if(effectCell.OffsetCoord.x == (Cell.OffsetCoord.x - 1))
+                    selectedSkill.SpawnSprayEffect(effectCell);
             }
         }
 
