@@ -22,10 +22,18 @@ public class OverworldGUI : MonoBehaviour
     private Image char1Image;
     private Text char1HPText;
     private Text char1BondText;
+    private RectTransform char1BarMask;
+
 
     private Image char2Image;
     private Text char2HPText;
     private Text char2BondText;
+    private RectTransform char2BarMask;
+
+    private Image bondCircle;
+    public Image dropDownBondCircle;
+    
+    private float barMaxWidth;
 
     public ArtifactContainer artifactContainer;
 
@@ -61,10 +69,20 @@ public class OverworldGUI : MonoBehaviour
         char1Image = char1Stats.transform.GetChild(0).GetComponent<Image>();
         char1HPText = char1Stats.transform.GetChild(1).GetComponent<Text>();
         char1BondText = char1Stats.transform.GetChild(2).GetComponent<Text>();
+        char1BarMask = char1Stats.transform.GetChild(3).GetChild(0).GetComponent<RectTransform>();
 
         char2Image = char2Stats.transform.GetChild(0).GetComponent<Image>();
         char2HPText = char2Stats.transform.GetChild(1).GetComponent<Text>();
         char2BondText = char2Stats.transform.GetChild(2).GetComponent<Text>();
+        char2BarMask = char2Stats.transform.GetChild(3).GetChild(0).GetComponent<RectTransform>();
+
+        bondCircle = GameObject.Find("BondBackground").transform.GetChild(0).GetComponent<Image>();
+        //dropDownBondCircle = GameObject.Find("DropDownBondBackground").transform.GetChild(0).GetComponent<Image>();
+
+        barMaxWidth = char1BarMask.sizeDelta.x;
+        Debug.Log("The Health bar mask max width is: " + barMaxWidth);
+
+        UpdateHealthBars();
     }
 
     // Update is called once per frame
@@ -99,18 +117,36 @@ public class OverworldGUI : MonoBehaviour
 
     public virtual void UpdateUIValues()
     {
-        char1HPText.text = "HP: " + mapControlScript.playerScript.characterList[0].HitPoints.ToString();
+        char1HPText.text = "HP: " + mapControlScript.playerScript.characterList[0].HitPoints.ToString() + " / " + mapControlScript.playerScript.characterList[0].TotalHitPoints.ToString();
         char1BondText.text = "Bond Lvl: " + mapControlScript.playerScript.bondLevel.ToString();
 
-        char2HPText.text = "HP: " + mapControlScript.playerScript.characterList[1].HitPoints.ToString();
+        char2HPText.text = "HP: " + mapControlScript.playerScript.characterList[1].HitPoints.ToString() + " / " + mapControlScript.playerScript.characterList[1].TotalHitPoints.ToString();
         char2BondText.text = "Bond Lvl: " + mapControlScript.playerScript.bondLevel.ToString();
 
         goldText.text = "Gold: " + mapControlScript.playerScript.goldCount.ToString();
         rationText.text = "Rations: " + mapControlScript.playerScript.rationCount.ToString();
-        bondPointText.text = "Bond Points: " + mapControlScript.playerScript.bondCount.ToString() + " / " +mapControlScript.playerScript.bondMax.ToString();
+        bondPointText.text = mapControlScript.playerScript.bondCount.ToString() + " / " + mapControlScript.playerScript.bondMax.ToString();
 
         if(mapControlScript.isFirstMove) campButton.interactable = false;
         else campButton.interactable = true;
+
+        UpdateHealthBars();
+        UpdateBondBar();
+    }
+
+    public void UpdateHealthBars()
+    {   
+        //Map a width value based on the characters current and total health values and then update the bar width values accordingly
+
+        char1BarMask.sizeDelta = new Vector2(Map(mapControlScript.playerScript.characterList[0].HitPoints, 0, mapControlScript.playerScript.characterList[0].TotalHitPoints, 0, barMaxWidth), 44);
+        char2BarMask.sizeDelta = new Vector2(Map(mapControlScript.playerScript.characterList[1].HitPoints, 0, mapControlScript.playerScript.characterList[1].TotalHitPoints, 0, barMaxWidth), 44);
+
+    }
+
+    public void UpdateBondBar()
+    {
+        bondCircle.fillAmount = Map(mapControlScript.playerScript.bondCount, 0, mapControlScript.playerScript.bondMax, 0, 1);
+        dropDownBondCircle.fillAmount = Map(mapControlScript.playerScript.bondCount, 0, mapControlScript.playerScript.bondMax, 0, 1);
     }
 
     public void OnDebugArtifactButtonClicked()
@@ -241,5 +277,21 @@ public class OverworldGUI : MonoBehaviour
 
         mapControlScript.MapGenerated -= OnMapGenerated;
         mapControlScript.ValuesChanged -= OnValuesChanged;
+    }
+
+    //Adapted from several answers here: https://forum.unity.com/threads/re-map-a-number-from-one-range-to-another.119437/
+    public static float Map(float from, float fromMin, float fromMax, float toMin,  float toMax) 
+    {
+        var fromAbs  =  from - fromMin;
+        var fromMaxAbs = fromMax - fromMin;      
+       
+        var normal = fromAbs / fromMaxAbs;
+ 
+        var toMaxAbs = toMax - toMin;
+        var toAbs = toMaxAbs * normal;
+ 
+        var to = toAbs + toMin;
+       
+        return to;
     }
 }
