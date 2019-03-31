@@ -756,13 +756,43 @@ public class HeroControl : Unit
         cells = _cells;
         units = _units;
         selectedSkill = _selectedSkill;
-        animator.Play(selectedSkill.skillname,0,0);
+        Debug.Log("YOYOYO THIS BE THE AI SKILL ANIMATION!!!!!!!!!!! " + selectedSkill.skillname);
+        if(selectedSkill.skillname == "AttackDeer")
+            {
+                Debug.Log("YOYOYO THIS BE THE DEER ATTACK!!!!!!!!!!!");
+                bool hasted = false;
+                foreach(Buff __buff in Buffs)
+                {
+                    if(__buff is DamageBuff)
+                    {
+                        hasted = true;
+                    }
+                }
+                Debug.Log("Am I Hasted?: " + hasted);
+                if(hasted) 
+                {
+                    animator.Play("HastedAttack",0,0);
+                }
+                else 
+                {
+                    Debug.Log("Because I am not hasted, I am going to play the animation for: " + selectedSkill.skillname);
+                    animator.Play(selectedSkill.skillname,0,0);
+                }
+            }
+            else
+            {
+                animator.Play(selectedSkill.skillname,0,0);
+            }
+
+        
 
         bool hasSkill = false;
         foreach(AnimationClip ac in animator.runtimeAnimatorController.animationClips)
         {
             Debug.Log("AI Skill name: " + ac.name);
             // look at all the animation clips here!
+
+            
 
             if(ac.name == selectedSkill.skillname)
             {
