@@ -462,6 +462,11 @@ public class CellGrid : MonoBehaviour
             if(unit.startingAPBoost != null) unit.ActionPoints += unit.startingAPBoost; //Mercury Draught implementation
         }
 
+        foreach(Cell cell in Cells)
+        {
+            cell.UnMark();
+        }
+
 
     }
     /// <summary>
