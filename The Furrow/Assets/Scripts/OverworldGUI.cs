@@ -123,8 +123,8 @@ public class OverworldGUI : MonoBehaviour
         char2HPText.text = "HP: " + mapControlScript.playerScript.characterList[1].HitPoints.ToString() + " / " + mapControlScript.playerScript.characterList[1].TotalHitPoints.ToString();
         char2BondText.text = "Bond Lvl: " + mapControlScript.playerScript.bondLevel.ToString();
 
-        goldText.text = "Gold: " + mapControlScript.playerScript.goldCount.ToString();
-        rationText.text = "Rations: " + mapControlScript.playerScript.rationCount.ToString();
+        goldText.text = " " + mapControlScript.playerScript.goldCount.ToString();
+        rationText.text = " " + mapControlScript.playerScript.rationCount.ToString();
         bondPointText.text = mapControlScript.playerScript.bondCount.ToString() + " / " + mapControlScript.playerScript.bondMax.ToString();
 
         if(mapControlScript.isFirstMove) campButton.interactable = false;
