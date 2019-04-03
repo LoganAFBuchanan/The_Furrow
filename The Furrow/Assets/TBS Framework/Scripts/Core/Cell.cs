@@ -50,7 +50,7 @@ public abstract class Cell : MonoBehaviour, IGraphNode, IEquatable<Cell>
         if (CellDehighlighted != null)
             CellDehighlighted.Invoke(this, new EventArgs());
     }
-    void OnMouseDown()
+    public void OnCellClicked()
     {
         if (CellClicked != null)
             CellClicked.Invoke(this, new EventArgs());

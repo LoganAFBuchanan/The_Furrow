@@ -91,6 +91,7 @@ public class OverworldPlayer : MonoBehaviour
             {
                 hero.Initialize();
                 hero.UnitAttacked += OnHeroAttacked;
+                hero.combatUI.Initialize();
                 hero.gameObject.SetActive(false);
             }
         }
