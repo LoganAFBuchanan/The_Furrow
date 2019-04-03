@@ -50,6 +50,11 @@ public class CharacterCombatUI : MonoBehaviour
         }
     }
 
+    public void Update()
+    {
+        APText.text = hero.ActionPoints.ToString();
+    }
+
     public void ConnectGUIController(GUIController gui)
     {
         Debug.Log("CONNECTING THE GUI");
@@ -141,9 +146,5 @@ public class CharacterCombatUI : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        Debug.Log(combatGUI + " belonging to " + hero.UnitName);
-    }
+   
 }

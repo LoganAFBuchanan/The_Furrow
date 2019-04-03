@@ -90,7 +90,7 @@ public class CombatTile : Square
 
     public override void UnMark()
     {
-        Color newColor = Color.white;
+        Color newColor = Color.black;
         newColor.a -= 1f - Constants.GRID_TRANSPARENCY;
         GetComponent<Renderer>().material.color = newColor;
 
