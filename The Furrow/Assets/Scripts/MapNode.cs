@@ -19,6 +19,8 @@ public class MapNode : MonoBehaviour
 
     public int positionID;
 
+    public GameObject image;
+
     public int combatGoldReward;
     public int combatBondReward;
     public int combatRationReward;

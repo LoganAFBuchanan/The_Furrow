@@ -132,14 +132,17 @@ public class CellGrid : MonoBehaviour
         if(GameObject.FindGameObjectsWithTag("MapNode").Length > 0)
         {
             overWorldNode = GameObject.FindGameObjectsWithTag("MapNode")[0];
+            overWorldNode.GetComponent<MapNode>().image.SetActive(false);
             int listSize = overWorldNode.transform.childCount;
 
             for(int i = 0; i < listSize; i++)
             {
-                
-                    overWorldNode.transform.GetChild(0).gameObject.SetActive(true);
-                    overWorldNode.transform.GetChild(0).SetParent(unitList.transform);
-                
+                    if(overWorldNode.transform.GetChild(0).gameObject.tag =="Enemy")
+                    {
+                        overWorldNode.transform.GetChild(0).gameObject.SetActive(true);
+                        overWorldNode.transform.GetChild(0).SetParent(unitList.transform);
+                    }
+
                 
             }
             overWorldNode.SetActive(false);
@@ -309,7 +312,7 @@ public class CellGrid : MonoBehaviour
             cell.CellHighlighted -= OnCellHighlighted;
             cell.CellDehighlighted -= OnCellDehighlighted;
         }
-
+        overWorldNode.GetComponent<MapNode>().image.SetActive(true);
         overWorldMap.SetActive(true);
         overWorldNode.SetActive(true);
         overWorldNode.GetComponent<MapNode>().GiveCombatRewards(overWorldPlayer.GetComponent<OverworldPlayer>());
