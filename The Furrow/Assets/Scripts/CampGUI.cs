@@ -52,9 +52,14 @@ public class CampGUI : OverworldGUI
 
         GatherSkillObjects();
 
+        SetupHeroes();
+
+
+    }
+
+    public void SetupHeroes()
+    {
         
-
-
     }
 
     // Grab all skills from resources
