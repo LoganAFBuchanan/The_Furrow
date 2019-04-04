@@ -9,6 +9,7 @@ public class Skill : MonoBehaviour
     public Sprite gridImage;
     public string skillname;
     public string character;
+    public string desc;
     public int actioncost;
     public int damage;
     public int bonusDamage;

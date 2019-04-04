@@ -23,12 +23,14 @@ public class OverworldGUI : MonoBehaviour
     private Text char1HPText;
     private Text char1BondText;
     private RectTransform char1BarMask;
+    public GameObject char1SkillContainer;
 
 
     private Image char2Image;
     private Text char2HPText;
     private Text char2BondText;
     private RectTransform char2BarMask;
+    public GameObject char2SkillContainer;
 
     private Image bondCircle;
     public Image dropDownBondCircle;
@@ -83,6 +85,7 @@ public class OverworldGUI : MonoBehaviour
         Debug.Log("The Health bar mask max width is: " + barMaxWidth);
 
         UpdateHealthBars();
+        UpdateSkills();
     }
 
     // Update is called once per frame
@@ -132,6 +135,7 @@ public class OverworldGUI : MonoBehaviour
 
         UpdateHealthBars();
         UpdateBondBar();
+        UpdateSkills();
     }
 
     public void UpdateHealthBars()
@@ -147,6 +151,30 @@ public class OverworldGUI : MonoBehaviour
     {
         bondCircle.fillAmount = Map(mapControlScript.playerScript.bondCount, 0, mapControlScript.playerScript.bondMax, 0, 1);
         dropDownBondCircle.fillAmount = Map(mapControlScript.playerScript.bondCount, 0, mapControlScript.playerScript.bondMax, 0, 1);
+    }
+
+    public void UpdateSkills()
+    {
+        int index = 1;
+        foreach(Transform child in char1SkillContainer.transform)
+        {
+            if(index == 1) child.GetComponent<SkillUI>().FillSkillUI(mapControlScript.playerScript.characterList[0].skill2);
+            if(index == 2) child.GetComponent<SkillUI>().FillSkillUI(mapControlScript.playerScript.characterList[0].skill3);
+            if(index == 3) child.GetComponent<SkillUI>().FillSkillUI(null);
+
+            index++;
+        }
+
+        index = 1;
+        foreach(Transform child in char2SkillContainer.transform)
+        {
+            if(index == 1) child.GetComponent<SkillUI>().FillSkillUI(mapControlScript.playerScript.characterList[1].skill2);
+            if(index == 2) child.GetComponent<SkillUI>().FillSkillUI(mapControlScript.playerScript.characterList[1].skill3);
+            if(index == 3) child.GetComponent<SkillUI>().FillSkillUI(null);
+
+            index++;
+        }
+        
     }
 
     public void OnDebugArtifactButtonClicked()
