@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class Skill : MonoBehaviour
 {
-    public Image skillImage;
+    public Sprite skillImage;
+    public Sprite gridImage;
     public string skillname;
     public string character;
     public int actioncost;
