@@ -51,10 +51,11 @@ public class GUIController : MonoBehaviour
 
         OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
 
-        foreach(HeroControl hero in player.characterList)
+        foreach(Unit hero in CellGrid.Units)
         {
-            Debug.Log("GUIController connecting to " + hero.UnitName);
-            hero.combatUI.ConnectGUIController(this.gameObject.GetComponent<GUIController>());
+            HeroControl _hero = (hero as HeroControl);
+            Debug.Log("GUIController connecting to " + _hero.UnitName);
+            _hero.combatUI.ConnectGUIController(this.gameObject.GetComponent<GUIController>());
         }
 
         InitializeButtons();

@@ -7,9 +7,12 @@ using SpriteGlow;
 
 public class HeroControl : Unit
 {
+    
+
     public Color LeadingColor;
     public string UnitName;
     public int defenseStrength;
+    public GameObject defenceEffect;
 
     private bool isGlow;
 
@@ -157,9 +160,12 @@ public class HeroControl : Unit
         }
     }
 
+    
+
     public void GainDefence()
     {
-
+        GameObject newEffect = GameObject.Instantiate(defenceEffect, this.transform);
+        newEffect.transform.position += new Vector3(0.2f, 1.2f, 0);
         while (ActionPoints > 0)
         {
             DefenceFactor += defenseStrength;

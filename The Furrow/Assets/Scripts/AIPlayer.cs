@@ -58,9 +58,10 @@ public class AIPlayer : Player
         foreach(AIControl ai in aiControllers)
         {
             ai.PlayNextBehaviour();
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1.5f);
             
         }
+        yield return new WaitForSeconds(1.5f);
         _cellGrid.EndTurn();
     }
 

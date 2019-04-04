@@ -15,6 +15,7 @@ public class CharacterCombatUI : MonoBehaviour
 
     private Text APText;
     private Image healthBar;
+    private Image armorBar;
 
     private GameObject attackButton;
     private GameObject defendButton;
@@ -35,6 +36,7 @@ public class CharacterCombatUI : MonoBehaviour
 
         APText = transform.Find("ActionPointBackground").GetChild(0).GetComponent<Text>();
         healthBar = transform.Find("HealthBarBackground").GetChild(0).GetComponent<Image>();
+        armorBar = transform.Find("HealthBarBackground").GetChild(1).GetComponent<Image>();
 
         attackButton = transform.Find("SkillContainer").Find("AttackButton").gameObject;
         defendButton = transform.Find("SkillContainer").Find("Defend").gameObject;
@@ -44,24 +46,48 @@ public class CharacterCombatUI : MonoBehaviour
             skillSlots.Add(transform.Find("SkillContainer").Find("Skill" + i).gameObject);
         }
 
+        int index = 1;
         foreach(GameObject skillObject in skillSlots)
         {
+            skillObject.GetComponent<Image>().color = new Color(255, 255, 255, 0);
+
             Debug.Log("Found skill object: " + skillObject.name);
+            if(index == 1 && hero.skill2 != null) 
+            {
+                skillObject.GetComponent<Image>().sprite = hero.skill2.skillImage;
+                skillObject.GetComponent<Image>().color = new Color(255, 255, 255, 1);
+            }
+            if(index == 2 && hero.skill3 != null) 
+            {
+                skillObject.GetComponent<Image>().sprite = hero.skill3.skillImage;
+                skillObject.GetComponent<Image>().color = new Color(255, 255, 255, 1);
+            }
+            
+            index++;
         }
     }
 
     public void Update()
     {
         APText.text = hero.ActionPoints.ToString();
+        UpdateHealthAndArmor();
     }
 
     public void ConnectGUIController(GUIController gui)
     {
         Debug.Log("CONNECTING THE GUI");
         combatGUI = gui;
+        Initialize();
 
         GetComponent<Canvas>().worldCamera = GameObject.Find("CombatCamera").GetComponent<Camera>();
         Debug.Log(combatGUI.gameObject.name);
+    }
+
+    public void UpdateHealthAndArmor()
+    {
+        healthBar.fillAmount = Map(hero.HitPoints, 0, hero.TotalHitPoints, 0, 1);
+        armorBar.fillAmount = Map(hero.DefenceFactor, 0, hero.TotalHitPoints, 0, 1);
+        
     }
 
     public void ShowSkills(bool setting)
@@ -144,6 +170,22 @@ public class CharacterCombatUI : MonoBehaviour
             case "Skill3":
                 break;
         }
+    }
+
+    //Adapted from several answers here: https://forum.unity.com/threads/re-map-a-number-from-one-range-to-another.119437/
+    public static float Map(float from, float fromMin, float fromMax, float toMin,  float toMax) 
+    {
+        var fromAbs  =  from - fromMin;
+        var fromMaxAbs = fromMax - fromMin;      
+       
+        var normal = fromAbs / fromMaxAbs;
+ 
+        var toMaxAbs = toMax - toMin;
+        var toAbs = toMaxAbs * normal;
+ 
+        var to = toAbs + toMin;
+       
+        return to;
     }
 
    

@@ -19,6 +19,13 @@ public class CombatTile : Square
 
     public bool isSlimed = false;
     public GameObject slimeObject;
+    public GameObject movementTile;
+    public GameObject allyTile;
+    public GameObject enemyTile;
+    public GameObject targetTile;
+    public GameObject pathTile;
+    public GameObject highlightTile;
+
     private int slimeLife;
 
     public void ApplySlimed()
@@ -46,6 +53,16 @@ public class CombatTile : Square
         }
     }
 
+    public void ToggleOffTileEffects()
+    {
+        movementTile.SetActive(false);
+        allyTile.SetActive(false);
+        enemyTile.SetActive(false);
+        targetTile.SetActive(false);
+        pathTile.SetActive(false);
+        highlightTile.SetActive(false);
+    }
+
     public void MarkAsContested()
     {
         Color newColor = Color.blue;
@@ -61,38 +78,35 @@ public class CombatTile : Square
     public override void MarkAsTargetable()
     {
         
-        Color newColor = Color.red;
-        newColor.a -= 1f - Constants.GRID_TRANSPARENCY;
-        GetComponent<Renderer>().material.color = newColor;
+        ToggleOffTileEffects();
+        targetTile.SetActive(true);
     }
 
     public override void MarkAsHighlighted()
     {
-        Color newColor = new Color(0.75f, 0.75f, 0.75f);
-        newColor.a -= 1f - Constants.GRID_TRANSPARENCY;
-        GetComponent<Renderer>().material.color = newColor;
+        ToggleOffTileEffects();
+        highlightTile.SetActive(true);
     }
 
     public override void MarkAsPath()
     {
-        Color newColor = Color.green;
-        newColor.a -= 1f - Constants.GRID_TRANSPARENCY;
-        GetComponent<Renderer>().material.color = newColor;
+        ToggleOffTileEffects();
+        pathTile.SetActive(true);
         
     }
 
     public override void MarkAsReachable()
     {
-        Color newColor = Color.yellow;
-        newColor.a -= 1f - Constants.GRID_TRANSPARENCY;
-        GetComponent<Renderer>().material.color = newColor;
+        ToggleOffTileEffects();
+        movementTile.SetActive(true);
     }
 
     public override void UnMark()
     {
-        Color newColor = Color.black;
-        newColor.a -= 1f - Constants.GRID_TRANSPARENCY;
-        GetComponent<Renderer>().material.color = newColor;
+        ToggleOffTileEffects();
+        if(tiletype == TileType.ALLY || tiletype == TileType.CONTESTED) allyTile.SetActive(true);
+        else enemyTile.SetActive(true);
+        
 
         //if(tiletype == TileType.CONTESTED) MarkAsContested();
     }
