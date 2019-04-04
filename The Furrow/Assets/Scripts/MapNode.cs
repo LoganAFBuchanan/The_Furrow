@@ -160,6 +160,7 @@ public class MapNode : MonoBehaviour
     public void UpdateVariables()
     {
         Debug.Log("EVENT IS OVER!!!");
+        GameObject.Find("OverworldCamera").GetComponent<OverworldCamera>().inEncounter = false;
         OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
         player.GetEncounterVariables();
     }

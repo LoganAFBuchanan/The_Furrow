@@ -152,6 +152,7 @@ public class OverworldPlayer : MonoBehaviour
         if (!currNode.isVisited)
         {
             SetEncounterVariables();
+            GameObject.Find("OverworldCamera").GetComponent<OverworldCamera>().inEncounter = true;
             currNode.flowchart.ExecuteBlock(startBlock);
             currNode.isVisited = true;
         }
