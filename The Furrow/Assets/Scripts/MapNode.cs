@@ -51,6 +51,20 @@ public class MapNode : MonoBehaviour
 
     public List<GameObject> enemyList;
 
+    private float takenSize = 2.0f;
+    private float notTakenSize = 1.5f;
+    private float animationSpeed = 1f;
+
+    private float arrowTop = 1.8f;
+    private float arrowBottom = 1.4f;
+
+    private float fadeBottom = 0.5f;
+    public bool isFading = false;
+
+    private bool floatSwitch = true;
+    private bool fadeSwitch = false;
+    private GameObject arrow;
+
     // Start is called before the first frame update
     public void Initialize()
     {
@@ -61,6 +75,8 @@ public class MapNode : MonoBehaviour
         flowchart = GetComponent<Flowchart>();
         enemyList = new List<GameObject>();
 
+        arrow = image.transform.GetChild(0).gameObject;
+
         for(int i = 0; i < transform.childCount; i++)
         {
             enemyList.Add(transform.GetChild(i).gameObject);
@@ -70,7 +86,9 @@ public class MapNode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        TakenAnimation();
+        ArrowAnimation();
+        FadeAnimation();
     }
 
     public void SetAccessNodes(List<MapNode> nodeList)
@@ -84,6 +102,66 @@ public class MapNode : MonoBehaviour
             {
                 accessNodes.Add(node);
             }
+        }
+    }
+
+    private void ArrowAnimation()
+    {
+        if(isTaken)
+        {
+            arrow.SetActive(true);
+            if(floatSwitch) arrow.transform.localPosition += new Vector3(0, Time.deltaTime * animationSpeed, 0);
+            else arrow.transform.localPosition -= new Vector3(0, Time.deltaTime * animationSpeed, 0);
+            
+            if(arrow.transform.localPosition.y > arrowTop)
+            {
+                floatSwitch = false;
+            }
+            if(arrow.transform.localPosition.y < arrowBottom)
+            {
+                floatSwitch = true;
+            }
+        }
+        else
+        {
+            arrow.SetActive(false);
+        }
+    }
+
+    private void TakenAnimation()
+    {
+        if(isTaken && image.transform.localScale.x < takenSize)
+        {
+            image.transform.localScale += new Vector3(Time.deltaTime * animationSpeed, Time.deltaTime * animationSpeed, 0);
+        }
+        if(!isTaken && image.transform.localScale.x > notTakenSize)
+        {
+            image.transform.localScale -= new Vector3(Time.deltaTime * animationSpeed, Time.deltaTime * animationSpeed, 0);
+        }
+    }
+
+    private void FadeAnimation()
+    {
+        if(isFading)
+        {
+            Color tempColor = new Color();
+            if(fadeSwitch) tempColor = new Color(255, 255, 255, image.GetComponent<SpriteRenderer>().color.a + (Time.deltaTime * animationSpeed));
+            else tempColor = new Color(255, 255, 255, image.GetComponent<SpriteRenderer>().color.a - (Time.deltaTime * animationSpeed));
+            
+            image.GetComponent<SpriteRenderer>().color = tempColor;
+
+            if(image.GetComponent<SpriteRenderer>().color.a >= 1.0f)
+            {
+                fadeSwitch = false;
+            }
+            if(image.GetComponent<SpriteRenderer>().color.a <= fadeBottom)
+            {
+                fadeSwitch = true;
+            }
+        }
+        else
+        {
+           
         }
     }
 
@@ -107,11 +185,14 @@ public class MapNode : MonoBehaviour
     public void OnHighlightNode()
     {
         GetComponent<Renderer>().material.color = Color.red;
+        isFading = true;
     }
 
     public void OnDeHighlightNode()
     {
         GetComponent<Renderer>().material.color = Color.white;
+        isFading = false;
+        image.GetComponent<SpriteRenderer>().color = new Color(255, 255, 255, 1);
     }
 
     public void OnPlayerHighlight()

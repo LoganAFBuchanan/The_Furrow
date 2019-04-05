@@ -34,6 +34,8 @@ public class OverworldGUI : MonoBehaviour
 
     private Image bondCircle;
     public Image dropDownBondCircle;
+
+    public bool isCampGUI;
     
     private float barMaxWidth;
 
@@ -52,6 +54,7 @@ public class OverworldGUI : MonoBehaviour
         else
         {
             DontDestroyOnLoad(this.gameObject);
+            isCampGUI = false;
             Initialize();
         }
 
@@ -65,27 +68,32 @@ public class OverworldGUI : MonoBehaviour
 
         SceneManager.sceneLoaded += OnSceneLoaded;
 
-        mapControlScript.MapGenerated += OnMapGenerated;
-        mapControlScript.ValuesChanged += OnValuesChanged;
+        if(!isCampGUI)
+        {
+            mapControlScript.MapGenerated += OnMapGenerated;
+            mapControlScript.ValuesChanged += OnValuesChanged;
         
-        char1Image = char1Stats.transform.GetChild(0).GetComponent<Image>();
-        char1HPText = char1Stats.transform.GetChild(1).GetComponent<Text>();
-        char1BondText = char1Stats.transform.GetChild(2).GetComponent<Text>();
-        char1BarMask = char1Stats.transform.GetChild(3).GetChild(0).GetComponent<RectTransform>();
+            char1Image = char1Stats.transform.GetChild(0).GetComponent<Image>();
+            char1HPText = char1Stats.transform.GetChild(1).GetComponent<Text>();
+            char1BondText = char1Stats.transform.GetChild(2).GetComponent<Text>();
+            char1BarMask = char1Stats.transform.GetChild(3).GetChild(0).GetComponent<RectTransform>();
 
-        char2Image = char2Stats.transform.GetChild(0).GetComponent<Image>();
-        char2HPText = char2Stats.transform.GetChild(1).GetComponent<Text>();
-        char2BondText = char2Stats.transform.GetChild(2).GetComponent<Text>();
-        char2BarMask = char2Stats.transform.GetChild(3).GetChild(0).GetComponent<RectTransform>();
+            char2Image = char2Stats.transform.GetChild(0).GetComponent<Image>();
+            char2HPText = char2Stats.transform.GetChild(1).GetComponent<Text>();
+            char2BondText = char2Stats.transform.GetChild(2).GetComponent<Text>();
+            char2BarMask = char2Stats.transform.GetChild(3).GetChild(0).GetComponent<RectTransform>();
 
-        bondCircle = GameObject.Find("BondBackground").transform.GetChild(0).GetComponent<Image>();
-        //dropDownBondCircle = GameObject.Find("DropDownBondBackground").transform.GetChild(0).GetComponent<Image>();
+            bondCircle = GameObject.Find("BondBackground").transform.GetChild(0).GetComponent<Image>();
+            //dropDownBondCircle = GameObject.Find("DropDownBondBackground").transform.GetChild(0).GetComponent<Image>();
 
-        barMaxWidth = char1BarMask.sizeDelta.x;
+            barMaxWidth = char1BarMask.sizeDelta.x;
+        
+        
         Debug.Log("The Health bar mask max width is: " + barMaxWidth);
 
         UpdateHealthBars();
         UpdateSkills();
+        }
     }
 
     // Update is called once per frame

@@ -104,7 +104,7 @@ public class CombatTile : Square
     public override void UnMark()
     {
         ToggleOffTileEffects();
-        if(tiletype == TileType.ALLY || tiletype == TileType.CONTESTED) allyTile.SetActive(true);
+        if(tileteam == "ALLY" || tileteam == "CONTESTED") allyTile.SetActive(true);
         else enemyTile.SetActive(true);
         
 

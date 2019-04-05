@@ -30,7 +30,7 @@ public class CampGUI : OverworldGUI
     void Awake()
     {
 
-        
+            isCampGUI = true;
             Initialize();
 
         
@@ -156,7 +156,7 @@ public class CampGUI : OverworldGUI
             }
             if(hero.isDead) hero.SetCharacterDeath(false);
         }
-        UpdateUIValues();
+        //UpdateUIValues();
         BackToOverworld();
 
     }
@@ -166,7 +166,7 @@ public class CampGUI : OverworldGUI
         Debug.Log("Hunt Clicked!");
         playerScript.rationCount += Constants.CAMP_HUNT_RATIONS;
         if(playerScript.isHuntBoosted) playerScript.rationCount += playerScript.huntBoost;
-        UpdateUIValues();
+        //UpdateUIValues();
         BackToOverworld();
     }
 
@@ -203,7 +203,7 @@ public class CampGUI : OverworldGUI
         {
             playerScript.bondCount += Constants.CAMP_BOND_INC * playerScript.campBondBoost;
             if(playerScript.bondCount > playerScript.bondMax) playerScript.bondCount = playerScript.bondMax;
-            UpdateUIValues();
+            //UpdateUIValues();
             BackToOverworld();
         }
     }
