@@ -27,9 +27,8 @@ public class HeroControl : Unit
 
     public CharacterCombatUI combatUI;
 
-    //This is me pretending to work 
-
-    private SpriteGlowEffect highlightEffect;
+    [System.NonSerialized]
+    public SpriteGlowEffect highlightEffect;
 
     [System.NonSerialized]
     public bool isDead;
@@ -102,6 +101,16 @@ public class HeroControl : Unit
         Cell.IsTaken = false;
         animator.Play("Death",0,0);
         //Destroy(gameObject);
+    }
+
+    public void PlaySit()
+    {
+        animator.Play("sitting",0,0);
+    }
+
+    public void PlayIdle()
+    {
+        animator.Play("Idle",0,0);
     }
 
     public void JustDestroy()

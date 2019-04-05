@@ -11,6 +11,9 @@ public class CampGUI : OverworldGUI
 
     public GameObject choicePanel;
 
+    public Transform idePosition;
+    public Transform aldricPosition;
+
     private Button restButton;
     private Button huntButton;
     private Button bondButton;
@@ -59,7 +62,36 @@ public class CampGUI : OverworldGUI
 
     public void SetupHeroes()
     {
-        
+        playerScript.characterList[0].transform.position = aldricPosition.position;
+        playerScript.characterList[1].transform.position = idePosition.position;
+
+        playerScript.characterList[0].gameObject.SetActive(true);
+        playerScript.characterList[1].gameObject.SetActive(true);
+
+        playerScript.characterList[0].highlightEffect.OutlineWidth = 0;
+        playerScript.characterList[1].highlightEffect.OutlineWidth = 0;
+
+        playerScript.characterList[0].transform.Find("CombatUI").gameObject.SetActive(false);
+        playerScript.characterList[1].transform.Find("CombatUI").gameObject.SetActive(false);
+
+        playerScript.characterList[0].PlaySit();
+        playerScript.characterList[1].PlaySit();
+    }
+
+    public void ResetHeroes()
+    {
+        playerScript.characterList[0].transform.position = Constants.ALDRIC_START_POS;
+        playerScript.characterList[1].transform.position = Constants.IDE_START_POS;
+
+        playerScript.characterList[0].PlayIdle();
+        playerScript.characterList[1].PlayIdle();
+
+        playerScript.characterList[0].transform.Find("CombatUI").gameObject.SetActive(true);
+        playerScript.characterList[1].transform.Find("CombatUI").gameObject.SetActive(true);
+
+        playerScript.characterList[0].gameObject.SetActive(false);
+        playerScript.characterList[1].gameObject.SetActive(false);
+
     }
 
     // Grab all skills from resources
@@ -186,6 +218,9 @@ public class CampGUI : OverworldGUI
     public void BackToOverworld()
     {
         //Move Map Back
+
+
+        ResetHeroes();
         mapControlScript.transform.position = mapControlScript.savedPosition;
         CleanUpDelegates();
         SceneManager.LoadScene(0);
