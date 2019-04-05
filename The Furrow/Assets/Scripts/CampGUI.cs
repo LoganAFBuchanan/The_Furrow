@@ -41,9 +41,9 @@ public class CampGUI : OverworldGUI
     {
         base.Initialize();
 
-        restButton = choicePanel.transform.GetChild(0).gameObject.GetComponent<Button>();
-        huntButton = choicePanel.transform.GetChild(1).gameObject.GetComponent<Button>();
-        bondButton = choicePanel.transform.GetChild(2).gameObject.GetComponent<Button>();
+        restButton = choicePanel.transform.Find("RestButton").gameObject.GetComponent<Button>();
+        huntButton = choicePanel.transform.Find("HuntButton").gameObject.GetComponent<Button>();
+        bondButton = choicePanel.transform.Find("BondButton").gameObject.GetComponent<Button>();
 
         restButton.onClick.AddListener(OnRestClicked);
         huntButton.onClick.AddListener(OnHuntClicked);
@@ -224,6 +224,7 @@ public class CampGUI : OverworldGUI
         mapControlScript.transform.position = mapControlScript.savedPosition;
         CleanUpDelegates();
         SceneManager.LoadScene(0);
+        Destroy(this.gameObject);
     }
 
     public override void UpdateUIValues()
@@ -319,13 +320,15 @@ public class CampGUI : OverworldGUI
 
         foreach(GameObject skillCard in skillCards)
         {
-            Text skillName = skillCard.transform.GetChild(0).GetComponent<Text>();
-            Text skillDesc = skillCard.transform.GetChild(1).GetComponent<Text>();
-            Image skillImage = skillCard.transform.GetChild(2).GetComponent<Image>();
+            // Text skillName = skillCard.transform.GetChild(0).GetComponent<Text>();
+            // Text skillDesc = skillCard.transform.GetChild(1).GetComponent<Text>();
+            // Image skillImage = skillCard.transform.GetChild(2).GetComponent<Image>();
 
-            skillName.text = _chosenSkills[i].GetComponent<Skill>().skillname;
-            skillDesc.text = _chosenSkills[i].GetComponent<Skill>().character;
+            // skillName.text = _chosenSkills[i].GetComponent<Skill>().skillname;
+            // skillDesc.text = _chosenSkills[i].GetComponent<Skill>().character;
             //Add skill image here
+
+            skillCard.GetComponent<SkillUI>().FillSkillUI(_chosenSkills[i].GetComponent<Skill>());
 
             //Add listener
             GameObject thisSkill = _chosenSkills[i];

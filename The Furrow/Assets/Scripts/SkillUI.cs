@@ -20,7 +20,7 @@ public class SkillUI : MonoBehaviour
     {
         if(skill != null)
         {
-            GetComponent<Image>().sprite = skill.skillImage;
+            if(GetComponent<Button>() == null)GetComponent<Image>().sprite = skill.skillImage;
             GetComponent<Image>().color = new Color(255, 255, 255, 1);
             skillImage.sprite = skill.skillImage;
             gridImage.sprite = skill.gridImage;
