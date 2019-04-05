@@ -89,10 +89,10 @@ public class OverworldGUI : MonoBehaviour
             barMaxWidth = char1BarMask.sizeDelta.x;
         
         
-        Debug.Log("The Health bar mask max width is: " + barMaxWidth);
+            Debug.Log("The Health bar mask max width is: " + barMaxWidth);
 
-        UpdateHealthBars();
-        UpdateSkills();
+            UpdateHealthBars();
+            UpdateSkills();
         }
     }
 
@@ -128,15 +128,15 @@ public class OverworldGUI : MonoBehaviour
 
     public virtual void UpdateUIValues()
     {
-        char1HPText.text = "HP: " + mapControlScript.playerScript.characterList[0].HitPoints.ToString() + " / " + mapControlScript.playerScript.characterList[0].TotalHitPoints.ToString();
-        char1BondText.text = "Bond Lvl: " + mapControlScript.playerScript.bondLevel.ToString();
+        if(char1HPText != null)char1HPText.text = "HP: " + mapControlScript.playerScript.characterList[0].HitPoints.ToString() + " / " + mapControlScript.playerScript.characterList[0].TotalHitPoints.ToString();
+        if(char1BondText != null)char1BondText.text = "Bond Lvl: " + mapControlScript.playerScript.bondLevel.ToString();
 
-        char2HPText.text = "HP: " + mapControlScript.playerScript.characterList[1].HitPoints.ToString() + " / " + mapControlScript.playerScript.characterList[1].TotalHitPoints.ToString();
-        char2BondText.text = "Bond Lvl: " + mapControlScript.playerScript.bondLevel.ToString();
+        if(char2HPText != null)char2HPText.text = "HP: " + mapControlScript.playerScript.characterList[1].HitPoints.ToString() + " / " + mapControlScript.playerScript.characterList[1].TotalHitPoints.ToString();
+        if(char2BondText != null)char2BondText.text = "Bond Lvl: " + mapControlScript.playerScript.bondLevel.ToString();
 
-        goldText.text = " " + mapControlScript.playerScript.goldCount.ToString();
-        rationText.text = " " + mapControlScript.playerScript.rationCount.ToString();
-        bondPointText.text = mapControlScript.playerScript.bondCount.ToString() + " / " + mapControlScript.playerScript.bondMax.ToString();
+        if(goldText != null)goldText.text = " " + mapControlScript.playerScript.goldCount.ToString();
+        if(rationText != null)rationText.text = " " + mapControlScript.playerScript.rationCount.ToString();
+        if(bondPointText != null)bondPointText.text = mapControlScript.playerScript.bondCount.ToString() + " / " + mapControlScript.playerScript.bondMax.ToString();
 
         if(mapControlScript.isFirstMove) campButton.interactable = false;
         else campButton.interactable = true;
@@ -150,15 +150,15 @@ public class OverworldGUI : MonoBehaviour
     {   
         //Map a width value based on the characters current and total health values and then update the bar width values accordingly
 
-        char1BarMask.sizeDelta = new Vector2(Map(mapControlScript.playerScript.characterList[0].HitPoints, 0, mapControlScript.playerScript.characterList[0].TotalHitPoints, 0, barMaxWidth), 44);
-        char2BarMask.sizeDelta = new Vector2(Map(mapControlScript.playerScript.characterList[1].HitPoints, 0, mapControlScript.playerScript.characterList[1].TotalHitPoints, 0, barMaxWidth), 44);
+        if(char1BarMask != null)char1BarMask.sizeDelta = new Vector2(Map(mapControlScript.playerScript.characterList[0].HitPoints, 0, mapControlScript.playerScript.characterList[0].TotalHitPoints, 0, barMaxWidth), 44);
+        if(char2BarMask != null)char2BarMask.sizeDelta = new Vector2(Map(mapControlScript.playerScript.characterList[1].HitPoints, 0, mapControlScript.playerScript.characterList[1].TotalHitPoints, 0, barMaxWidth), 44);
 
     }
 
     public void UpdateBondBar()
     {
-        bondCircle.fillAmount = Map(mapControlScript.playerScript.bondCount, 0, mapControlScript.playerScript.bondMax, 0, 1);
-        dropDownBondCircle.fillAmount = Map(mapControlScript.playerScript.bondCount, 0, mapControlScript.playerScript.bondMax, 0, 1);
+        if(bondCircle != null)bondCircle.fillAmount = Map(mapControlScript.playerScript.bondCount, 0, mapControlScript.playerScript.bondMax, 0, 1);
+        if(dropDownBondCircle != null)dropDownBondCircle.fillAmount = Map(mapControlScript.playerScript.bondCount, 0, mapControlScript.playerScript.bondMax, 0, 1);
     }
 
     public void UpdateSkills()
