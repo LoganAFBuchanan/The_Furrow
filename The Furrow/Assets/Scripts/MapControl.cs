@@ -88,7 +88,7 @@ public class MapControl : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
         initialSceneIndex = SceneManager.GetActiveScene().buildIndex;
 
-        //MapGenerated.Invoke(this, new EventArgs());
+        MapGenerated.Invoke(this, new EventArgs());
     }
 
     //Collect all encounter objects from the resources folder

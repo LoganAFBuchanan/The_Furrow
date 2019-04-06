@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Skill : MonoBehaviour
 {
+    public Sprite skillImage;
+    public Sprite gridImage;
     public string skillname;
     public string character;
+    public string desc;
     public int actioncost;
     public int damage;
     public int bonusDamage;

@@ -11,6 +11,9 @@ public class CampGUI : OverworldGUI
 
     public GameObject choicePanel;
 
+    public Transform idePosition;
+    public Transform aldricPosition;
+
     private Button restButton;
     private Button huntButton;
     private Button bondButton;
@@ -27,7 +30,7 @@ public class CampGUI : OverworldGUI
     void Awake()
     {
 
-        
+            isCampGUI = true;
             Initialize();
 
         
@@ -38,9 +41,9 @@ public class CampGUI : OverworldGUI
     {
         base.Initialize();
 
-        restButton = choicePanel.transform.GetChild(0).gameObject.GetComponent<Button>();
-        huntButton = choicePanel.transform.GetChild(1).gameObject.GetComponent<Button>();
-        bondButton = choicePanel.transform.GetChild(2).gameObject.GetComponent<Button>();
+        restButton = choicePanel.transform.Find("RestButton").gameObject.GetComponent<Button>();
+        huntButton = choicePanel.transform.Find("HuntButton").gameObject.GetComponent<Button>();
+        bondButton = choicePanel.transform.Find("BondButton").gameObject.GetComponent<Button>();
 
         restButton.onClick.AddListener(OnRestClicked);
         huntButton.onClick.AddListener(OnHuntClicked);
@@ -52,8 +55,42 @@ public class CampGUI : OverworldGUI
 
         GatherSkillObjects();
 
-        
+        SetupHeroes();
 
+
+    }
+
+    public void SetupHeroes()
+    {
+        playerScript.characterList[0].transform.position = aldricPosition.position;
+        playerScript.characterList[1].transform.position = idePosition.position;
+
+        playerScript.characterList[0].gameObject.SetActive(true);
+        playerScript.characterList[1].gameObject.SetActive(true);
+
+        playerScript.characterList[0].highlightEffect.OutlineWidth = 0;
+        playerScript.characterList[1].highlightEffect.OutlineWidth = 0;
+
+        playerScript.characterList[0].transform.Find("CombatUI").gameObject.SetActive(false);
+        playerScript.characterList[1].transform.Find("CombatUI").gameObject.SetActive(false);
+
+        playerScript.characterList[0].PlaySit();
+        playerScript.characterList[1].PlaySit();
+    }
+
+    public void ResetHeroes()
+    {
+        playerScript.characterList[0].transform.position = Constants.ALDRIC_START_POS;
+        playerScript.characterList[1].transform.position = Constants.IDE_START_POS;
+
+        playerScript.characterList[0].PlayIdle();
+        playerScript.characterList[1].PlayIdle();
+
+        playerScript.characterList[0].transform.Find("CombatUI").gameObject.SetActive(true);
+        playerScript.characterList[1].transform.Find("CombatUI").gameObject.SetActive(true);
+
+        playerScript.characterList[0].gameObject.SetActive(false);
+        playerScript.characterList[1].gameObject.SetActive(false);
 
     }
 
@@ -119,7 +156,7 @@ public class CampGUI : OverworldGUI
             }
             if(hero.isDead) hero.SetCharacterDeath(false);
         }
-        UpdateUIValues();
+        //UpdateUIValues();
         BackToOverworld();
 
     }
@@ -129,7 +166,7 @@ public class CampGUI : OverworldGUI
         Debug.Log("Hunt Clicked!");
         playerScript.rationCount += Constants.CAMP_HUNT_RATIONS;
         if(playerScript.isHuntBoosted) playerScript.rationCount += playerScript.huntBoost;
-        UpdateUIValues();
+        //UpdateUIValues();
         BackToOverworld();
     }
 
@@ -166,7 +203,7 @@ public class CampGUI : OverworldGUI
         {
             playerScript.bondCount += Constants.CAMP_BOND_INC * playerScript.campBondBoost;
             if(playerScript.bondCount > playerScript.bondMax) playerScript.bondCount = playerScript.bondMax;
-            UpdateUIValues();
+            //UpdateUIValues();
             BackToOverworld();
         }
     }
@@ -181,9 +218,13 @@ public class CampGUI : OverworldGUI
     public void BackToOverworld()
     {
         //Move Map Back
+
+
+        ResetHeroes();
         mapControlScript.transform.position = mapControlScript.savedPosition;
         CleanUpDelegates();
         SceneManager.LoadScene(0);
+        Destroy(this.gameObject);
     }
 
     public override void UpdateUIValues()
@@ -279,13 +320,15 @@ public class CampGUI : OverworldGUI
 
         foreach(GameObject skillCard in skillCards)
         {
-            Text skillName = skillCard.transform.GetChild(0).GetComponent<Text>();
-            Text skillDesc = skillCard.transform.GetChild(1).GetComponent<Text>();
-            Image skillImage = skillCard.transform.GetChild(2).GetComponent<Image>();
+            // Text skillName = skillCard.transform.GetChild(0).GetComponent<Text>();
+            // Text skillDesc = skillCard.transform.GetChild(1).GetComponent<Text>();
+            // Image skillImage = skillCard.transform.GetChild(2).GetComponent<Image>();
 
-            skillName.text = _chosenSkills[i].GetComponent<Skill>().skillname;
-            skillDesc.text = _chosenSkills[i].GetComponent<Skill>().character;
+            // skillName.text = _chosenSkills[i].GetComponent<Skill>().skillname;
+            // skillDesc.text = _chosenSkills[i].GetComponent<Skill>().character;
             //Add skill image here
+
+            skillCard.GetComponent<SkillUI>().FillSkillUI(_chosenSkills[i].GetComponent<Skill>());
 
             //Add listener
             GameObject thisSkill = _chosenSkills[i];

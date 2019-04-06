@@ -49,7 +49,15 @@ public class GUIController : MonoBehaviour
             cell.GetComponent<Cell>().CellDehighlighted += OnCellDehighlighted;
         }
 
-        
+        OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
+
+        foreach(Unit hero in CellGrid.Units)
+        {
+            HeroControl _hero = (hero as HeroControl);
+            Debug.Log("GUIController connecting to " + _hero.UnitName);
+            _hero.combatUI.ConnectGUIController(this.gameObject.GetComponent<GUIController>());
+        }
+
         InitializeButtons();
 
         OnTurnEnded(sender,e);
@@ -97,12 +105,16 @@ public class GUIController : MonoBehaviour
     }
     private void OnUnitDehighlighted(object sender, EventArgs e)
     {
+        var unit = sender as HeroControl;
         StatsText.text = "";
+        //unit.combatUI.ShowSkills(false);
         UnitImage.color = Color.gray;
     }
     private void OnUnitHighlighted(object sender, EventArgs e)
     {
         var unit = sender as HeroControl;
+
+        //unit.combatUI.ShowSkills(true);
         //currentunit = unit;
         StatsText.text = unit.UnitName + "\nHit Points: " + unit.HitPoints +"/"+unit.TotalHitPoints + "\nDefence: " + unit.DefenceFactor + "\nAction Points: " + unit.ActionPoints + "/" + unit.TotalActionPoints + "\nAttack: " + unit.AttackFactor + "\nDefence: " + unit.DefenceFactor + "\nRange: " + unit.AttackRange;
         UnitImage.color = unit.LeadingColor;
@@ -113,10 +125,12 @@ public class GUIController : MonoBehaviour
     {
         var unit = sender as HeroControl;
         currentunit = unit;
+        //unit.combatUI.ShowSkills(true);
         Debug.Log("Selected Unit is " + currentunit.UnitName);
         defendButton.gameObject.SetActive(true);
         if(currentunit.ActionPoints <= 0) defendButton.interactable = false;
         else defendButton.interactable = true;
+        
        //Dynamically create buttons for each skill that a unit possesses. 
         if(currentunit.skillObject1 != null)
         {
@@ -171,6 +185,8 @@ public class GUIController : MonoBehaviour
 
     private void OnUnitDeselected(object sender, EventArgs e)
     {
+        var unit = sender as HeroControl;
+        //unit.combatUI.ShowSkills(false);
         //Avoid doubling listeners when selecting other units
         skill1button.onClick.RemoveAllListeners();
         skill2button.onClick.RemoveAllListeners();
@@ -241,6 +257,34 @@ public class GUIController : MonoBehaviour
 
     public void OnSkill3HoverExit(){
         skill3hoverexit.Invoke(this, new EventArgs());
+    }
+
+
+    public void OnSkill1Clicked()
+    {
+        if(currentunit.ActionPoints >= currentunit.skill1.actioncost)
+        {
+            currentunit.PlaySkillAnimation(1, CellGrid.Cells, CellGrid.Units); 
+            CellGrid.CellGridState = new CellGridStateUnitSelected(CellGrid, currentunit);
+        }
+    }
+
+    public void OnSkill2Clicked()
+    {
+        if(currentunit.ActionPoints >= currentunit.skill2.actioncost)
+        {
+            currentunit.PlaySkillAnimation(2, CellGrid.Cells, CellGrid.Units); 
+            CellGrid.CellGridState = new CellGridStateUnitSelected(CellGrid, currentunit);
+        }
+    }
+
+    public void OnSkill3Clicked()
+    {
+        if(currentunit.ActionPoints >= currentunit.skill3.actioncost)
+        {
+            currentunit.PlaySkillAnimation(3, CellGrid.Cells, CellGrid.Units); 
+            CellGrid.CellGridState = new CellGridStateUnitSelected(CellGrid, currentunit);
+        }
     }
 
     public void OnSceneUnloaded(Scene current)

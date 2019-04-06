@@ -23,15 +23,19 @@ public class OverworldGUI : MonoBehaviour
     private Text char1HPText;
     private Text char1BondText;
     private RectTransform char1BarMask;
+    public GameObject char1SkillContainer;
 
 
     private Image char2Image;
     private Text char2HPText;
     private Text char2BondText;
     private RectTransform char2BarMask;
+    public GameObject char2SkillContainer;
 
     private Image bondCircle;
     public Image dropDownBondCircle;
+
+    public bool isCampGUI;
     
     private float barMaxWidth;
 
@@ -50,6 +54,7 @@ public class OverworldGUI : MonoBehaviour
         else
         {
             DontDestroyOnLoad(this.gameObject);
+            isCampGUI = false;
             Initialize();
         }
 
@@ -63,26 +68,32 @@ public class OverworldGUI : MonoBehaviour
 
         SceneManager.sceneLoaded += OnSceneLoaded;
 
-        mapControlScript.MapGenerated += OnMapGenerated;
-        mapControlScript.ValuesChanged += OnValuesChanged;
+        if(!isCampGUI)
+        {
+            mapControlScript.MapGenerated += OnMapGenerated;
+            mapControlScript.ValuesChanged += OnValuesChanged;
         
-        char1Image = char1Stats.transform.GetChild(0).GetComponent<Image>();
-        char1HPText = char1Stats.transform.GetChild(1).GetComponent<Text>();
-        char1BondText = char1Stats.transform.GetChild(2).GetComponent<Text>();
-        char1BarMask = char1Stats.transform.GetChild(3).GetChild(0).GetComponent<RectTransform>();
+            char1Image = char1Stats.transform.GetChild(0).GetComponent<Image>();
+            char1HPText = char1Stats.transform.GetChild(1).GetComponent<Text>();
+            char1BondText = char1Stats.transform.GetChild(2).GetComponent<Text>();
+            char1BarMask = char1Stats.transform.GetChild(3).GetChild(0).GetComponent<RectTransform>();
 
-        char2Image = char2Stats.transform.GetChild(0).GetComponent<Image>();
-        char2HPText = char2Stats.transform.GetChild(1).GetComponent<Text>();
-        char2BondText = char2Stats.transform.GetChild(2).GetComponent<Text>();
-        char2BarMask = char2Stats.transform.GetChild(3).GetChild(0).GetComponent<RectTransform>();
+            char2Image = char2Stats.transform.GetChild(0).GetComponent<Image>();
+            char2HPText = char2Stats.transform.GetChild(1).GetComponent<Text>();
+            char2BondText = char2Stats.transform.GetChild(2).GetComponent<Text>();
+            char2BarMask = char2Stats.transform.GetChild(3).GetChild(0).GetComponent<RectTransform>();
 
-        bondCircle = GameObject.Find("BondBackground").transform.GetChild(0).GetComponent<Image>();
-        //dropDownBondCircle = GameObject.Find("DropDownBondBackground").transform.GetChild(0).GetComponent<Image>();
+            bondCircle = GameObject.Find("BondBackground").transform.GetChild(0).GetComponent<Image>();
+            //dropDownBondCircle = GameObject.Find("DropDownBondBackground").transform.GetChild(0).GetComponent<Image>();
 
-        barMaxWidth = char1BarMask.sizeDelta.x;
-        Debug.Log("The Health bar mask max width is: " + barMaxWidth);
+            barMaxWidth = char1BarMask.sizeDelta.x;
+        
+        
+            Debug.Log("The Health bar mask max width is: " + barMaxWidth);
 
-        UpdateHealthBars();
+            UpdateHealthBars();
+            UpdateSkills();
+        }
     }
 
     // Update is called once per frame
@@ -117,36 +128,61 @@ public class OverworldGUI : MonoBehaviour
 
     public virtual void UpdateUIValues()
     {
-        char1HPText.text = "HP: " + mapControlScript.playerScript.characterList[0].HitPoints.ToString() + " / " + mapControlScript.playerScript.characterList[0].TotalHitPoints.ToString();
-        char1BondText.text = "Bond Lvl: " + mapControlScript.playerScript.bondLevel.ToString();
+        if(char1HPText != null)char1HPText.text = "HP: " + mapControlScript.playerScript.characterList[0].HitPoints.ToString() + " / " + mapControlScript.playerScript.characterList[0].TotalHitPoints.ToString();
+        if(char1BondText != null)char1BondText.text = "Bond Lvl: " + mapControlScript.playerScript.bondLevel.ToString();
 
-        char2HPText.text = "HP: " + mapControlScript.playerScript.characterList[1].HitPoints.ToString() + " / " + mapControlScript.playerScript.characterList[1].TotalHitPoints.ToString();
-        char2BondText.text = "Bond Lvl: " + mapControlScript.playerScript.bondLevel.ToString();
+        if(char2HPText != null)char2HPText.text = "HP: " + mapControlScript.playerScript.characterList[1].HitPoints.ToString() + " / " + mapControlScript.playerScript.characterList[1].TotalHitPoints.ToString();
+        if(char2BondText != null)char2BondText.text = "Bond Lvl: " + mapControlScript.playerScript.bondLevel.ToString();
 
-        goldText.text = "Gold: " + mapControlScript.playerScript.goldCount.ToString();
-        rationText.text = "Rations: " + mapControlScript.playerScript.rationCount.ToString();
-        bondPointText.text = mapControlScript.playerScript.bondCount.ToString() + " / " + mapControlScript.playerScript.bondMax.ToString();
+        if(goldText != null)goldText.text = " " + mapControlScript.playerScript.goldCount.ToString();
+        if(rationText != null)rationText.text = " " + mapControlScript.playerScript.rationCount.ToString();
+        if(bondPointText != null)bondPointText.text = mapControlScript.playerScript.bondCount.ToString() + " / " + mapControlScript.playerScript.bondMax.ToString();
 
         if(mapControlScript.isFirstMove) campButton.interactable = false;
         else campButton.interactable = true;
 
         UpdateHealthBars();
         UpdateBondBar();
+        UpdateSkills();
     }
 
     public void UpdateHealthBars()
     {   
         //Map a width value based on the characters current and total health values and then update the bar width values accordingly
 
-        char1BarMask.sizeDelta = new Vector2(Map(mapControlScript.playerScript.characterList[0].HitPoints, 0, mapControlScript.playerScript.characterList[0].TotalHitPoints, 0, barMaxWidth), 44);
-        char2BarMask.sizeDelta = new Vector2(Map(mapControlScript.playerScript.characterList[1].HitPoints, 0, mapControlScript.playerScript.characterList[1].TotalHitPoints, 0, barMaxWidth), 44);
+        if(char1BarMask != null)char1BarMask.sizeDelta = new Vector2(Map(mapControlScript.playerScript.characterList[0].HitPoints, 0, mapControlScript.playerScript.characterList[0].TotalHitPoints, 0, barMaxWidth), 44);
+        if(char2BarMask != null)char2BarMask.sizeDelta = new Vector2(Map(mapControlScript.playerScript.characterList[1].HitPoints, 0, mapControlScript.playerScript.characterList[1].TotalHitPoints, 0, barMaxWidth), 44);
 
     }
 
     public void UpdateBondBar()
     {
-        bondCircle.fillAmount = Map(mapControlScript.playerScript.bondCount, 0, mapControlScript.playerScript.bondMax, 0, 1);
-        dropDownBondCircle.fillAmount = Map(mapControlScript.playerScript.bondCount, 0, mapControlScript.playerScript.bondMax, 0, 1);
+        if(bondCircle != null)bondCircle.fillAmount = Map(mapControlScript.playerScript.bondCount, 0, mapControlScript.playerScript.bondMax, 0, 1);
+        if(dropDownBondCircle != null)dropDownBondCircle.fillAmount = Map(mapControlScript.playerScript.bondCount, 0, mapControlScript.playerScript.bondMax, 0, 1);
+    }
+
+    public void UpdateSkills()
+    {
+        int index = 1;
+        foreach(Transform child in char1SkillContainer.transform)
+        {
+            if(index == 1) child.GetComponent<SkillUI>().FillSkillUI(mapControlScript.playerScript.characterList[0].skill2);
+            if(index == 2) child.GetComponent<SkillUI>().FillSkillUI(mapControlScript.playerScript.characterList[0].skill3);
+            if(index == 3) child.GetComponent<SkillUI>().FillSkillUI(null);
+
+            index++;
+        }
+
+        index = 1;
+        foreach(Transform child in char2SkillContainer.transform)
+        {
+            if(index == 1) child.GetComponent<SkillUI>().FillSkillUI(mapControlScript.playerScript.characterList[1].skill2);
+            if(index == 2) child.GetComponent<SkillUI>().FillSkillUI(mapControlScript.playerScript.characterList[1].skill3);
+            if(index == 3) child.GetComponent<SkillUI>().FillSkillUI(null);
+
+            index++;
+        }
+        
     }
 
     public void OnDebugArtifactButtonClicked()

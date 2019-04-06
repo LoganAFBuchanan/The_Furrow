@@ -7,9 +7,12 @@ using SpriteGlow;
 
 public class HeroControl : Unit
 {
+    
+
     public Color LeadingColor;
     public string UnitName;
     public int defenseStrength;
+    public GameObject defenceEffect;
 
     private bool isGlow;
 
@@ -22,9 +25,10 @@ public class HeroControl : Unit
     private Skill selectedSkill;
     private GameObject selectedSkillObject;
 
-    //This is me pretending to work 
+    public CharacterCombatUI combatUI;
 
-    private SpriteGlowEffect highlightEffect;
+    [System.NonSerialized]
+    public SpriteGlowEffect highlightEffect;
 
     [System.NonSerialized]
     public bool isDead;
@@ -69,9 +73,9 @@ public class HeroControl : Unit
 
     }
 
-    protected override void OnMouseDown()
+    public override void OnUnitClicked()
     {
-        base.OnMouseDown();
+        base.OnUnitClicked();
     }
     protected override void OnMouseEnter()
     {
@@ -97,6 +101,16 @@ public class HeroControl : Unit
         Cell.IsTaken = false;
         animator.Play("Death",0,0);
         //Destroy(gameObject);
+    }
+
+    public void PlaySit()
+    {
+        animator.Play("sitting",0,0);
+    }
+
+    public void PlayIdle()
+    {
+        animator.Play("Idle",0,0);
     }
 
     public void JustDestroy()
@@ -155,9 +169,12 @@ public class HeroControl : Unit
         }
     }
 
+    
+
     public void GainDefence()
     {
-
+        GameObject newEffect = GameObject.Instantiate(defenceEffect, this.transform);
+        newEffect.transform.position += new Vector3(0.2f, 1.2f, 0);
         while (ActionPoints > 0)
         {
             DefenceFactor += defenseStrength;
@@ -834,6 +851,7 @@ public class HeroControl : Unit
     {
         GetComponent<BoxCollider>().enabled = true;
         highlightEffect.OutlineWidth = 0;
+        if(combatUI != null)combatUI.ShowSkills(false);
     }
 
     public override void MarkAsDefending(Unit other)
@@ -845,6 +863,7 @@ public class HeroControl : Unit
         //GetComponent<Renderer>().material.color = LeadingColor + new Color(0.8f, 1, 0.8f);
         GetComponent<BoxCollider>().enabled = true;
         highlightEffect.OutlineWidth = 0;
+        if(combatUI != null)combatUI.ShowSkills(false);
     }
 
     public override void MarkAsReachableEnemy()
@@ -857,7 +876,11 @@ public class HeroControl : Unit
         //GetComponent<Renderer>().material.color = LeadingColor + Color.green;
         GetComponent<BoxCollider>().enabled = false;
         highlightEffect.OutlineWidth = 3;
+        if(combatUI != null)combatUI.ShowSkills(true);
+        
     }
+
+    
 
     public override void UnMark()
     {
@@ -865,5 +888,6 @@ public class HeroControl : Unit
         Debug.Log("UNMARKING UNIT");
         GetComponent<BoxCollider>().enabled = true;
         highlightEffect.OutlineWidth = 0;
+        if(combatUI != null)combatUI.ShowSkills(false);
     }
 }

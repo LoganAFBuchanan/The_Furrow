@@ -91,6 +91,7 @@ public class OverworldPlayer : MonoBehaviour
             {
                 hero.Initialize();
                 hero.UnitAttacked += OnHeroAttacked;
+                hero.combatUI.Initialize();
                 hero.gameObject.SetActive(false);
             }
         }
@@ -151,6 +152,7 @@ public class OverworldPlayer : MonoBehaviour
         if (!currNode.isVisited)
         {
             SetEncounterVariables();
+            GameObject.Find("OverworldCamera").GetComponent<OverworldCamera>().inEncounter = true;
             currNode.flowchart.ExecuteBlock(startBlock);
             currNode.isVisited = true;
         }

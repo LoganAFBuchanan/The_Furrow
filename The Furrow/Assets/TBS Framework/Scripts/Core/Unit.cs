@@ -131,7 +131,7 @@ public abstract class Unit : MonoBehaviour
         TotalActionPoints = Constants.STARTING_AP_MAX;
     }
 
-    protected virtual void OnMouseDown()
+    public virtual void OnUnitClicked()
     {
         if (UnitClicked != null)
             UnitClicked.Invoke(this, new EventArgs());
@@ -185,6 +185,7 @@ public abstract class Unit : MonoBehaviour
     /// </summary>
     public virtual void OnUnitSelected()
     {
+        MarkAsSelected();
         SetState(new UnitStateMarkedAsSelected(this));
         if (UnitSelected != null)
             UnitSelected.Invoke(this, new EventArgs());
