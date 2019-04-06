@@ -22,6 +22,7 @@ public class OverworldCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        inEncounter = false;
         if(Input.mousePosition.y > (Screen.height - (Screen.height * scrollPercentage)) && transform.position.z < mapTop && !inEncounter)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + scrollSpeed * Time.deltaTime);

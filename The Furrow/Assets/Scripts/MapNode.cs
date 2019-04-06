@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using Fungus;
 using UnityEngine.SceneManagement;
+using SpriteGlow;
 
 public class MapNode : MonoBehaviour
 {
@@ -61,6 +62,11 @@ public class MapNode : MonoBehaviour
     private float fadeBottom = 0.5f;
     public bool isFading = false;
 
+    [System.NonSerialized]
+    public SpriteGlowEffect highlightEffect;
+
+    private int glowWidth = 5;
+
     private bool floatSwitch = true;
     private bool fadeSwitch = false;
     private GameObject arrow;
@@ -75,6 +81,10 @@ public class MapNode : MonoBehaviour
         flowchart = GetComponent<Flowchart>();
         enemyList = new List<GameObject>();
 
+        highlightEffect = image.GetComponent<SpriteGlowEffect>();
+        highlightEffect.OutlineWidth = 0;
+        highlightEffect.GlowBrightness = glowWidth;
+
         arrow = image.transform.GetChild(0).gameObject;
 
         for(int i = 0; i < transform.childCount; i++)
@@ -88,7 +98,8 @@ public class MapNode : MonoBehaviour
     {
         TakenAnimation();
         ArrowAnimation();
-        FadeAnimation();
+        //FadeAnimation();
+        GlowAnimation();
     }
 
     public void SetAccessNodes(List<MapNode> nodeList)
@@ -162,6 +173,33 @@ public class MapNode : MonoBehaviour
         else
         {
            
+        }
+    }
+
+    private void GlowAnimation()
+    {
+        if(isFading)
+        {
+            highlightEffect.OutlineWidth = glowWidth;
+            Color tempColor = new Color();
+            if(fadeSwitch) highlightEffect.GlowBrightness += Time.deltaTime * animationSpeed;
+            else highlightEffect.GlowBrightness -= Time.deltaTime * animationSpeed;
+            
+            //image.GetComponent<SpriteRenderer>().color = tempColor;
+
+            if(highlightEffect.GlowBrightness >= 2.0f)
+            {
+                fadeSwitch = false;
+            }
+            if(highlightEffect.GlowBrightness <= 1.0f)
+            {
+                fadeSwitch = true;
+            }
+        }
+        else
+        {
+           highlightEffect.OutlineWidth = 0;
+           highlightEffect.GlowBrightness = 1.0f;
         }
     }
 
@@ -243,7 +281,7 @@ public class MapNode : MonoBehaviour
         Debug.Log("EVENT IS OVER!!!");
         GameObject.Find("OverworldCamera").GetComponent<OverworldCamera>().inEncounter = false;
         OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
-        player.GetEncounterVariables();
+        //player.GetEncounterVariables();
     }
 
     public void SetGoldCount(int change)
