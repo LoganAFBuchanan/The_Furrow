@@ -7,7 +7,8 @@ using SpriteGlow;
 
 public class HeroControl : Unit
 {
-    
+    [FMODUnity.EventRef]
+    public List<string> hurtSounds;
 
     public Color LeadingColor;
     public string UnitName;
@@ -210,6 +211,38 @@ public class HeroControl : Unit
         if (skillObject3 != null) skill3 = skillObject3.GetComponent<Skill>();
     }
 
+    public void PlayHurtSFX()
+    {
+        if(hurtSounds != null)
+        {
+            Rigidbody rigidBodytest = null;
+            int rand = UnityEngine.Random.Range(0, hurtSounds.Count);
+            FMOD.Studio.EventInstance soundEvent;
+            string soundPath = hurtSounds[rand];
+            soundEvent = FMODUnity.RuntimeManager.CreateInstance(soundPath);
+            FMODUnity.RuntimeManager.AttachInstanceToGameObject(soundEvent, GetComponent<Transform>(), rigidBodytest);
+            soundEvent.start();
+        }
+        
+        
+    }
+    
+
+    public void PlaySkillSFX()
+    {
+        FMOD.Studio.EventInstance soundEvent;
+        string soundPath;
+        Rigidbody rigidBodytest = null;
+
+        if(selectedSkill.SFX != null)
+        {
+            soundPath = selectedSkill.SFX;
+            soundEvent = FMODUnity.RuntimeManager.CreateInstance(soundPath);
+            FMODUnity.RuntimeManager.AttachInstanceToGameObject(soundEvent, GetComponent<Transform>(), rigidBodytest);
+            soundEvent.start();
+        }
+
+    }
 
     // <summary>
     // Basic Skill use function for player characters
@@ -766,6 +799,8 @@ public class HeroControl : Unit
             UseSkill();
         }
     }
+
+
 
     //Player Skill ANimation trigger
     public void PlaySkillAnimationAI(Skill _selectedSkill, List<Cell> _cells, List<Unit> _units)

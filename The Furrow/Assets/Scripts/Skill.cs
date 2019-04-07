@@ -13,6 +13,9 @@ public class Skill : MonoBehaviour
     public int actioncost;
     public int damage;
     public int bonusDamage;
+    
+    [FMODUnity.EventRef]
+    public string SFX;
 
     public GameObject hitVFX;
     public GameObject tileVFX;
