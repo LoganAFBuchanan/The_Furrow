@@ -69,7 +69,7 @@ public class CharacterCombatUI : MonoBehaviour
 
     public void Update()
     {
-        APText.text = hero.ActionPoints.ToString();
+        if(APText != null) APText.text = hero.ActionPoints.ToString();
         UpdateHealthAndArmor();
     }
 

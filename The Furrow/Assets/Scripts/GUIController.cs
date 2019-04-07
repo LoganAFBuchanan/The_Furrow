@@ -56,6 +56,7 @@ public class GUIController : MonoBehaviour
             HeroControl _hero = (hero as HeroControl);
             Debug.Log("GUIController connecting to " + _hero.UnitName);
             _hero.combatUI.ConnectGUIController(this.gameObject.GetComponent<GUIController>());
+            Debug.Log("GUIController connected to " + _hero.UnitName);
         }
 
         InitializeButtons();

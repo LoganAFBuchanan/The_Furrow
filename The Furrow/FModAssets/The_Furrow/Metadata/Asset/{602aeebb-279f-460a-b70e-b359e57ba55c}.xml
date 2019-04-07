@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="EncodableAsset" id="{602aeebb-279f-460a-b70e-b359e57ba55c}">
+        <property name="assetPath">
+            <value>SlimeDog/</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{c6eebc22-0e83-4c17-a22c-3eb0b092ed32}</destination>
+        </relationship>
+    </object>
+</objects>
