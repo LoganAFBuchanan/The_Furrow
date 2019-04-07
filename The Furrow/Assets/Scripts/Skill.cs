@@ -13,6 +13,9 @@ public class Skill : MonoBehaviour
     public int actioncost;
     public int damage;
     public int bonusDamage;
+    
+    [FMODUnity.EventRef]
+    public string SFX;
 
     public GameObject hitVFX;
     public GameObject tileVFX;
@@ -165,6 +168,7 @@ public class Skill : MonoBehaviour
         var unitScript = newUnit.GetComponent<HeroControl>();
 
         unitScript.Initialize();
+        unitScript.combatUI.ConnectGUIController(GameObject.Find("GUIController").GetComponent<GUIController>());
 
         //Place new Unit within the Units GameObject
         newUnit.transform.SetParent(GameObject.Find("Units").GetComponent<Transform>());
