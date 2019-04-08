@@ -151,6 +151,7 @@ public class OverworldPlayer : MonoBehaviour
 
         if (!currNode.isVisited)
         {
+            GetComponent<PlaySFX>().PlayFrom(Camera.main.gameObject.transform);
             SetEncounterVariables();
             GameObject.Find("OverworldCamera").GetComponent<OverworldCamera>().inEncounter = true;
             currNode.flowchart.ExecuteBlock(startBlock);

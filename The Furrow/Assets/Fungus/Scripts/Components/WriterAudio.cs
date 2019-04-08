@@ -141,10 +141,12 @@ namespace Fungus
 
         protected virtual void Stop()
         {
+            Camera.main.gameObject.GetComponent<PlayScribble>().Stop();
             if (targetAudioSource == null)
             {
                 return;
             }
+            
 
             // There's an audible click if you call audioSource.Stop() so instead we just switch off
             // looping and let the audio stop automatically at the end of the clip
@@ -209,8 +211,10 @@ namespace Fungus
         
         public virtual void OnEnd(bool stopAudio)
         {
+            
             if (stopAudio)
             {
+                Camera.main.gameObject.GetComponent<PlayScribble>().Stop();
                 Stop();
             }
         }
