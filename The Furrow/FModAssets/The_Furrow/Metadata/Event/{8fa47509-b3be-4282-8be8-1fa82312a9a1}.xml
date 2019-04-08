@@ -95,6 +95,9 @@
         <property name="length">
             <value>120.048</value>
         </property>
+        <relationship name="fadeInCurve">
+            <destination>{a3009211-f37e-4488-a9de-1a355574b6ca}</destination>
+        </relationship>
         <relationship name="audioFile">
             <destination>{fb8f2294-b359-42b8-b2c9-653754721fb1}</destination>
         </relationship>
@@ -137,6 +140,14 @@
     </object>
     <object class="MixerBusPanner" id="{b121ba09-9a0d-43d4-a680-9c0397bdaa48}"/>
     <object class="MixerBusFader" id="{814e83a1-3dab-49ac-ae1c-b05443c47c1e}"/>
+    <object class="FadeCurve" id="{a3009211-f37e-4488-a9de-1a355574b6ca}">
+        <relationship name="startPoint">
+            <destination>{a6166665-535b-41ba-85c0-051f3dc693b4}</destination>
+        </relationship>
+        <relationship name="endPoint">
+            <destination>{0dc0617f-80c0-4541-bcb0-c8f09f1f8aa9}</destination>
+        </relationship>
+    </object>
     <object class="ADSRModulator" id="{42221926-6f21-4488-bdc5-55a5c07c60ea}">
         <property name="nameOfPropertyBeingModulated">
             <value>volume</value>
@@ -170,5 +181,24 @@
     </object>
     <object class="MixerBusPanner" id="{6a06e3d6-b7c2-4f4d-8415-804e1ac1c50d}"/>
     <object class="MixerBusFader" id="{cc8ef4a8-2646-4a47-8eb0-67a6caf7ef42}"/>
+    <object class="AutomationPoint" id="{a6166665-535b-41ba-85c0-051f3dc693b4}">
+        <property name="position">
+            <value>0</value>
+        </property>
+        <property name="value">
+            <value>0</value>
+        </property>
+        <property name="curveShape">
+            <value>-0.2547189</value>
+        </property>
+    </object>
+    <object class="AutomationPoint" id="{0dc0617f-80c0-4541-bcb0-c8f09f1f8aa9}">
+        <property name="position">
+            <value>10</value>
+        </property>
+        <property name="value">
+            <value>1</value>
+        </property>
+    </object>
     <object class="MixerBusFader" id="{6bb656e6-0031-49bd-ba81-04925716f00c}"/>
 </objects>

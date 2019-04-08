@@ -33,4 +33,30 @@ public class PlaySFX : MonoBehaviour
         
         
     }
+
+    public void PlayFrom(Transform transfom)
+    {
+        Rigidbody rigidBodytest = null;
+            int rand = UnityEngine.Random.Range(0, sounds.Count);
+            FMOD.Studio.EventInstance soundEvent;
+            string soundPath = sounds[rand];
+            soundEvent = FMODUnity.RuntimeManager.CreateInstance(soundPath);
+            FMODUnity.RuntimeManager.AttachInstanceToGameObject(soundEvent, transfom, rigidBodytest);
+            soundEvent.start();
+    }
+
+
+    public void PlayFromCamera()
+    {
+        Transform transfom = Camera.main.gameObject.transform;
+        Rigidbody rigidBodytest = null;
+            int rand = UnityEngine.Random.Range(0, sounds.Count);
+            FMOD.Studio.EventInstance soundEvent;
+            string soundPath = sounds[rand];
+            soundEvent = FMODUnity.RuntimeManager.CreateInstance(soundPath);
+            FMODUnity.RuntimeManager.AttachInstanceToGameObject(soundEvent, transfom, rigidBodytest);
+            soundEvent.start();
+    }
 }
+
+

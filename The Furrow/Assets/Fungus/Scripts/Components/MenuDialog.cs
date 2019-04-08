@@ -232,6 +232,7 @@ namespace Fungus
             var block = targetBlock;
             UnityEngine.Events.UnityAction action = delegate
             {
+                GetComponent<PlaySFX>().PlayFrom(Camera.main.gameObject.transform);
                 EventSystem.current.SetSelectedGameObject(null);
                 StopAllCoroutines();
                 // Stop timeout

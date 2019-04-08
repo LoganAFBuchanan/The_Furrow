@@ -466,12 +466,14 @@ namespace Fungus
                 case TokenType.AudioStop:
                     {
                         AudioSource audioSource = null;
+                        Camera.main.gameObject.GetComponent<PlayScribble>().Stop();
                         if (CheckParamCount(token.paramList, 1)) 
                         {
                             audioSource = FindAudio(token.paramList[0]);
                         }
                         if (audioSource != null)
                         {
+                            
                             audioSource.Stop();
                         }
                     }
@@ -495,6 +497,7 @@ namespace Fungus
 
             if (onComplete != null)
             {
+                Camera.main.gameObject.GetComponent<PlayScribble>().Stop();
                 onComplete();
             }
         }
@@ -533,6 +536,7 @@ namespace Fungus
                 // Exit immediately if the exit flag has been set
                 if (exitFlag)
                 {
+                    Camera.main.gameObject.GetComponent<PlayScribble>().Stop();
                     break;
                 }
 
@@ -693,6 +697,7 @@ namespace Fungus
         protected virtual IEnumerator DoWaitForInput(bool clear)
         {
             NotifyPause();
+            Camera.main.gameObject.GetComponent<PlayScribble>().Stop();
 
             inputFlag = false;
             isWaitingForInput = true;
@@ -763,6 +768,7 @@ namespace Fungus
         protected virtual void NotifyInput()
         {
             WriterSignals.DoWriterInput(this);
+            
 
             for (int i = 0; i < writerListeners.Count; i++)
             {
@@ -788,6 +794,7 @@ namespace Fungus
 
             for (int i = 0; i < writerListeners.Count; i++)
             {
+                
                 var writerListener = writerListeners[i];
                 writerListener.OnPause();
             }
@@ -807,9 +814,11 @@ namespace Fungus
         protected virtual void NotifyEnd(bool stopAudio)
         {
             WriterSignals.DoWriterState(this, WriterState.End);
-
+            
+            Camera.main.gameObject.GetComponent<PlayScribble>().Stop();
             for (int i = 0; i < writerListeners.Count; i++)
             {
+                
                 var writerListener = writerListeners[i];
                 writerListener.OnEnd(stopAudio);
             }
@@ -818,6 +827,7 @@ namespace Fungus
         protected virtual void NotifyGlyph()
         {
             WriterSignals.DoWriterGlyph(this); 
+            
 
             for (int i = 0; i < writerListeners.Count; i++)
             {
@@ -896,6 +906,7 @@ namespace Fungus
         /// </summary>
         public virtual void Stop()
         {
+            Camera.main.gameObject.GetComponent<PlayScribble>().Stop();
             if (isWriting || isWaitingForInput)
             {
                 exitFlag = true;
@@ -1033,6 +1044,7 @@ namespace Fungus
         public virtual void OnNextLineEvent()
         {
             inputFlag = true;
+            
 
             if (isWriting)
             {

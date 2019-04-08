@@ -291,6 +291,10 @@ public abstract class Unit : MonoBehaviour
         }
 
         HitPoints -= healthdamage;  
+        if(PlayerNumber == 0)
+        {
+            if(HitPoints <= 0) HitPoints = 1;
+        }
         if (UnitAttacked != null)
             UnitAttacked.Invoke(this, new AttackEventArgs(other, this, healthdamage));
 

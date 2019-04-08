@@ -65,7 +65,7 @@ public class MapNode : MonoBehaviour
     [System.NonSerialized]
     public SpriteGlowEffect highlightEffect;
 
-    private int glowWidth = 5;
+    private int glowWidth = 3;
 
     private bool floatSwitch = true;
     private bool fadeSwitch = false;
@@ -205,6 +205,7 @@ public class MapNode : MonoBehaviour
 
     private void OnMouseEnter() 
     {
+        
         //Debug.Log("MouseEntered!");
         HoverEnter.Invoke(this, new EventArgs());
     }
@@ -216,8 +217,19 @@ public class MapNode : MonoBehaviour
 
     private void OnMouseUpAsButton() 
     {
-        Debug.Log("The Node Recognizes this as a button click!");
-        NodeClicked.Invoke(this, new EventArgs());
+        if(GameObject.Find("SayDialog") != null)
+        {
+            if(GameObject.Find("SayDialog").activeSelf)
+            {
+                return;
+            }
+        }
+        else
+        {
+            Debug.Log("The Node Recognizes this as a button click!");
+            NodeClicked.Invoke(this, new EventArgs());
+        }
+        
     }
 
     public void OnHighlightNode()
@@ -365,7 +377,25 @@ public class MapNode : MonoBehaviour
         savedPosition = transform.position;
         transform.SetParent(null);
         transform.position = new Vector3(0, 0, 0);
-        SceneManager.LoadScene(1);
+        switch(biome)
+        {
+            case "Forest":
+                SceneManager.LoadScene(1);
+                break;
+            
+            case "Swamp":
+                SceneManager.LoadScene(4);
+                break;
+
+            case "Ruins":
+                SceneManager.LoadScene(3);
+                break;
+
+            default:
+                SceneManager.LoadScene(1);
+                break;
+        }
+        
     }
 
     public void OpenShop()

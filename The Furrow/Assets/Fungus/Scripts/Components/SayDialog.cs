@@ -156,6 +156,7 @@ namespace Fungus
 
             if (continueButton != null)
             {
+                
                 continueButton.gameObject.SetActive( GetWriter().IsWaitingForInput );
             }
         }
@@ -199,6 +200,7 @@ namespace Fungus
 
         protected virtual void ClearStoryText()
         {
+            Debug.Log("WE CLEARING DIS STORY TEXT");
             if (storyText != null)
             {
                 storyText.text = "";
@@ -430,6 +432,7 @@ namespace Fungus
         /// <param name="onComplete">Callback to execute when writing and player input have finished.</param>
         public virtual void Say(string text, bool clearPrevious, bool waitForInput, bool fadeWhenDone, bool stopVoiceover, bool waitForVO, AudioClip voiceOverClip, Action onComplete)
         {
+            Camera.main.gameObject.GetComponent<PlayScribble>().Play();
             StartCoroutine(DoSay(text, clearPrevious, waitForInput, fadeWhenDone, stopVoiceover, waitForVO, voiceOverClip, onComplete));
         }
 
@@ -486,6 +489,8 @@ namespace Fungus
 
             writer.AttachedWriterAudio = writerAudio;
 
+            
+
             yield return StartCoroutine(writer.Write(text, clearPrevious, waitForInput, stopVoiceover, waitForVO, soundEffectClip, onComplete));
         }
 
@@ -499,6 +504,7 @@ namespace Fungus
         /// </summary>
         public virtual void Stop()
         {
+            Camera.main.gameObject.GetComponent<PlayScribble>().Stop();
             fadeWhenDone = true;
             GetWriter().Stop();
         }
@@ -508,6 +514,8 @@ namespace Fungus
         /// </summary>
         public virtual void Clear()
         {
+            
+            Camera.main.gameObject.GetComponent<PlayScribble>().Stop();
             ClearStoryText();
 
             // Kill any active write coroutine

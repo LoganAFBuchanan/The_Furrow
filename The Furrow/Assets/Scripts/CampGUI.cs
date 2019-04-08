@@ -134,6 +134,7 @@ public class CampGUI : OverworldGUI
     public void OnRestClicked()
     {
         Debug.Log("Rest Clicked!");
+        GetComponent<PlaySFX>().PlayFrom(Camera.main.gameObject.transform);
         List<HeroControl> heroList = playerScript.characterList;
 
         foreach(HeroControl hero in heroList)
@@ -163,6 +164,7 @@ public class CampGUI : OverworldGUI
 
     public void OnHuntClicked()
     {
+        GetComponent<PlaySFX>().PlayFrom(Camera.main.gameObject.transform);
         Debug.Log("Hunt Clicked!");
         playerScript.rationCount += Constants.CAMP_HUNT_RATIONS;
         if(playerScript.isHuntBoosted) playerScript.rationCount += playerScript.huntBoost;
@@ -173,6 +175,7 @@ public class CampGUI : OverworldGUI
     public void OnBondClicked()
     {
         Debug.Log("Bond Clicked!");
+        GetComponent<PlaySFX>().PlayFrom(Camera.main.gameObject.transform);
 
         if(playerScript.bondCount == playerScript.bondMax)
         {

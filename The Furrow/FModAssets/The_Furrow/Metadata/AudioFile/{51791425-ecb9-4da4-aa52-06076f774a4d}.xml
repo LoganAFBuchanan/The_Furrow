@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{51791425-ecb9-4da4-aa52-06076f774a4d}">
+        <property name="assetPath">
+            <value>Lichen/Lichen Melee and Ranged Attacks.mp3</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>48</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>0.59999999999999998</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{c6eebc22-0e83-4c17-a22c-3eb0b092ed32}</destination>
+        </relationship>
+    </object>
+</objects>
