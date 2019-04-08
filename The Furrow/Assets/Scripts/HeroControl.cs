@@ -202,6 +202,8 @@ public class HeroControl : Unit
 
         if(HitPoints > 0 && damage != 0) animator.Play("Hurt",0,0); 
 
+        
+
     }
 
     public void AttachSkills()

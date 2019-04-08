@@ -193,6 +193,8 @@ public class OverworldGUI : MonoBehaviour
     public void OnCampButtonClicked()
     {
         Debug.Log("Looks like Camping is back on the Menu! (Camp Button Clicked)");
+
+        GetComponent<PlaySFX>().PlayFrom(Camera.main.gameObject.transform);
         
         mapControlScript.darkness.MoveDarkness(Constants.CAMP_DARKNESS_MOVE);
         

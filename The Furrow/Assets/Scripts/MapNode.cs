@@ -365,7 +365,25 @@ public class MapNode : MonoBehaviour
         savedPosition = transform.position;
         transform.SetParent(null);
         transform.position = new Vector3(0, 0, 0);
-        SceneManager.LoadScene(1);
+        switch(biome)
+        {
+            case "Forest":
+                SceneManager.LoadScene(1);
+                break;
+            
+            case "Swamp":
+                SceneManager.LoadScene(4);
+                break;
+
+            case "Ruins":
+                SceneManager.LoadScene(3);
+                break;
+
+            default:
+                SceneManager.LoadScene(1);
+                break;
+        }
+        
     }
 
     public void OpenShop()

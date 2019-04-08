@@ -241,7 +241,7 @@ public class OverworldPlayer : MonoBehaviour
     {
         characterList[0].HitPoints += change;
         if (characterList[0].HitPoints > characterList[0].TotalHitPoints) characterList[0].HitPoints = characterList[0].TotalHitPoints;
-        if(characterList[0].HitPoints <= 0) characterList[0].SetCharacterDeath(true);
+        if(characterList[0].HitPoints <= 0) characterList[0].HitPoints = 1;
         UpdateGUI();
     }
 
@@ -249,7 +249,7 @@ public class OverworldPlayer : MonoBehaviour
     {
         characterList[1].HitPoints += change;
         if (characterList[1].HitPoints > characterList[1].TotalHitPoints) characterList[1].HitPoints = characterList[1].TotalHitPoints;
-        if(characterList[1].HitPoints <= 0) characterList[1].SetCharacterDeath(true);
+        if(characterList[1].HitPoints <= 0) characterList[1].HitPoints = 1;
         UpdateGUI();
     }
 

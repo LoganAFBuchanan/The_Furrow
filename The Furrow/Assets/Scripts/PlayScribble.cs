@@ -29,7 +29,10 @@ public class PlayScribble : MonoBehaviour
     {
         if(sounds != null)
         {
-            
+            int rand = UnityEngine.Random.Range(0, sounds.Count);
+        soundPath = sounds[rand];
+        soundEvent = FMODUnity.RuntimeManager.CreateInstance(soundPath);
+        FMODUnity.RuntimeManager.AttachInstanceToGameObject(soundEvent, GetComponent<Transform>(), rigidBodytest);
             
             soundEvent.start();
         }

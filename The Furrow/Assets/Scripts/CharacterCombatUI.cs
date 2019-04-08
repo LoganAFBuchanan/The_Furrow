@@ -97,6 +97,7 @@ public class CharacterCombatUI : MonoBehaviour
 
     public void OnSkillClicked(GameObject hoveredObject)
     {
+        GetComponent<PlaySFX>().PlayFrom(Camera.main.gameObject.transform);
         switch(hoveredObject.name)
         {
             case "AttackButton":
