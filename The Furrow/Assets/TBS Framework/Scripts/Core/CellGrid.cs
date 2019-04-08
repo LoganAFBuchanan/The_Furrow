@@ -481,6 +481,7 @@ public class CellGrid : MonoBehaviour
         {
             return;
         }
+        GetComponent<PlaySFX>().PlayFrom(Camera.main.gameObject.transform);
         CellGridState = new CellGridStateTurnChanging(this);
 
         Units.FindAll(u => u.PlayerNumber.Equals(CurrentPlayerNumber)).ForEach(u => { u.OnTurnEnd(); });

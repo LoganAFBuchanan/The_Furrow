@@ -205,6 +205,7 @@ public class MapNode : MonoBehaviour
 
     private void OnMouseEnter() 
     {
+        
         //Debug.Log("MouseEntered!");
         HoverEnter.Invoke(this, new EventArgs());
     }
@@ -216,8 +217,19 @@ public class MapNode : MonoBehaviour
 
     private void OnMouseUpAsButton() 
     {
-        Debug.Log("The Node Recognizes this as a button click!");
-        NodeClicked.Invoke(this, new EventArgs());
+        if(GameObject.Find("SayDialog") != null)
+        {
+            if(GameObject.Find("SayDialog").activeSelf)
+            {
+                return;
+            }
+        }
+        else
+        {
+            Debug.Log("The Node Recognizes this as a button click!");
+            NodeClicked.Invoke(this, new EventArgs());
+        }
+        
     }
 
     public void OnHighlightNode()
