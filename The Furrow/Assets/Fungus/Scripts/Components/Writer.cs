@@ -768,6 +768,7 @@ namespace Fungus
         protected virtual void NotifyInput()
         {
             WriterSignals.DoWriterInput(this);
+            
 
             for (int i = 0; i < writerListeners.Count; i++)
             {
@@ -813,6 +814,7 @@ namespace Fungus
         protected virtual void NotifyEnd(bool stopAudio)
         {
             WriterSignals.DoWriterState(this, WriterState.End);
+            
             Camera.main.gameObject.GetComponent<PlayScribble>().Stop();
             for (int i = 0; i < writerListeners.Count; i++)
             {
@@ -825,6 +827,7 @@ namespace Fungus
         protected virtual void NotifyGlyph()
         {
             WriterSignals.DoWriterGlyph(this); 
+            
 
             for (int i = 0; i < writerListeners.Count; i++)
             {
@@ -1041,6 +1044,7 @@ namespace Fungus
         public virtual void OnNextLineEvent()
         {
             inputFlag = true;
+            
 
             if (isWriting)
             {

@@ -149,6 +149,7 @@ namespace Fungus
         /// </summary>
         public virtual void SetNextLineFlag()
         {
+            
             nextLineInputFlag = true;
         }
 
@@ -157,13 +158,14 @@ namespace Fungus
         /// </summary>
         public virtual void SetDialogClickedFlag()
         {
+            
             // Ignore repeat clicks for a short time to prevent accidentally clicking through the character dialogue
             if (ignoreClickTimer > 0f)
             {
                 return;
             }
             ignoreClickTimer = nextClickDelay;
-
+            
             // Only applies in Click On Dialog mode
             if (clickMode == ClickMode.ClickOnDialog)
             {
@@ -176,9 +178,11 @@ namespace Fungus
         /// </summary>
         public virtual void SetButtonClickedFlag()
         {
+            
             // Only applies if clicking is not disabled
             if (clickMode != ClickMode.Disabled)
             {
+                
                 SetNextLineFlag();
             }
         }

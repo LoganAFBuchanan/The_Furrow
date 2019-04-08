@@ -65,7 +65,7 @@ public class MapNode : MonoBehaviour
     [System.NonSerialized]
     public SpriteGlowEffect highlightEffect;
 
-    private int glowWidth = 5;
+    private int glowWidth = 3;
 
     private bool floatSwitch = true;
     private bool fadeSwitch = false;

@@ -156,6 +156,7 @@ namespace Fungus
 
             if (continueButton != null)
             {
+                
                 continueButton.gameObject.SetActive( GetWriter().IsWaitingForInput );
             }
         }
@@ -199,6 +200,7 @@ namespace Fungus
 
         protected virtual void ClearStoryText()
         {
+            Debug.Log("WE CLEARING DIS STORY TEXT");
             if (storyText != null)
             {
                 storyText.text = "";
@@ -512,6 +514,7 @@ namespace Fungus
         /// </summary>
         public virtual void Clear()
         {
+            
             Camera.main.gameObject.GetComponent<PlayScribble>().Stop();
             ClearStoryText();
 
