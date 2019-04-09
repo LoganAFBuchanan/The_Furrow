@@ -182,6 +182,8 @@ public class CampGUI : OverworldGUI
             //Bond Level up! Initiate appropriate flowchart
             choicePanel.SetActive(false);
 
+            
+
             switch(playerScript.bondLevel)
             {
                 case 1:   
@@ -189,17 +191,31 @@ public class CampGUI : OverworldGUI
                     break;
                 
                 case 2:
-                    GameObject.Find("BondMoment1").GetComponent<Flowchart>().ExecuteBlock("Start");
+                    int rand = UnityEngine.Random.Range(0, 4);
+                    if(rand == 0) GameObject.Find("BondMoment2a").GetComponent<Flowchart>().ExecuteBlock("Start");
+                    if(rand == 1) GameObject.Find("BondMoment2b").GetComponent<Flowchart>().ExecuteBlock("Start");
+                    if(rand == 2) GameObject.Find("BondMoment2c").GetComponent<Flowchart>().ExecuteBlock("Start");
+                    if(rand == 3) GameObject.Find("BondMoment2d").GetComponent<Flowchart>().ExecuteBlock("Start");
+                    
                     break;
                 
                 case 3:
-                    GameObject.Find("BondMoment1").GetComponent<Flowchart>().ExecuteBlock("Start");
+                    GameObject.Find("BondMoment3").GetComponent<Flowchart>().ExecuteBlock("Start");
                     break;
                 
                 case 4:
-                    GameObject.Find("BondMoment1").GetComponent<Flowchart>().ExecuteBlock("Start");
+                    int rand1 = UnityEngine.Random.Range(0, 4);
+                    if(rand1 == 0) GameObject.Find("BondMoment4a").GetComponent<Flowchart>().ExecuteBlock("Start");
+                    if(rand1 == 1) GameObject.Find("BondMoment4b").GetComponent<Flowchart>().ExecuteBlock("Start");
+                    if(rand1 == 2) GameObject.Find("BondMoment4c").GetComponent<Flowchart>().ExecuteBlock("Start");
+                    if(rand1 == 3) GameObject.Find("BondMoment4d").GetComponent<Flowchart>().ExecuteBlock("Start");
+                    break;
+
+                case 5:
+                    GameObject.Find("BondMoment5").GetComponent<Flowchart>().ExecuteBlock("Start");
                     break;
             }
+            playerScript.bondLevel++;
             
         }
         else
