@@ -67,11 +67,19 @@ public class GUIController : MonoBehaviour
     private void OnGameEnded(object sender, EventArgs e)
     {
 
-        InfoText.text = "Player " + ((sender as CellGrid).CurrentPlayerNumber + 1) + " wins!";
+        // InfoText.text = "Player " + ((sender as CellGrid).CurrentPlayerNumber + 1) + " wins!";
+        // StartCoroutine(GameObject.Find("Fade").GetComponent<SceneFader>().FadeAndLoadScene( SceneFader.FadeDirection.In, 0));
+        // CleanUpDelegates();
+
+        GameObject.Find("OverworldUI").GetComponent<OverworldGUI>().rewardScreen.GetComponent<RewardScreenControl>().UpdateRewardScreen(CellGrid.overWorldNode.GetComponent<MapNode>());
+        
+        
+    }
+
+    public void ReallyEndTheGame()
+    {
         StartCoroutine(GameObject.Find("Fade").GetComponent<SceneFader>().FadeAndLoadScene( SceneFader.FadeDirection.In, 0));
         CleanUpDelegates();
-        
-        
     }
 
     public void OnTurnStarted(object sender, EventArgs e)

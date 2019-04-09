@@ -27,6 +27,8 @@ public class OverworldGUI : MonoBehaviour
 
     public GameObject shopdropandroll;
 
+    public GameObject rewardScreen;
+
 
     private Image char2Image;
     private Text char2HPText;

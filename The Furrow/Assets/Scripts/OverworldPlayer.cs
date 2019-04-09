@@ -137,6 +137,7 @@ public class OverworldPlayer : MonoBehaviour
             {
                 //Reduce character health if ration count is 0
                 hero.HitPoints -= Constants.STARVING_COST;
+                if(hero.HitPoints <= 0) hero.HitPoints = 1;
             }
         }
 
