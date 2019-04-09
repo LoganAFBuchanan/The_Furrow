@@ -25,6 +25,8 @@ public class OverworldGUI : MonoBehaviour
     private RectTransform char1BarMask;
     public GameObject char1SkillContainer;
 
+    public GameObject shopdropandroll;
+
 
     private Image char2Image;
     private Text char2HPText;
@@ -234,6 +236,7 @@ public class OverworldGUI : MonoBehaviour
     //Show shop and update available artifacts
     public void ShowShop()
     {
+        shopdropandroll.SetActive(true);
         Debug.Log("ShowShop Begun");
         OverworldPlayer player = GameObject.Find("Player").GetComponent<OverworldPlayer>();
         Debug.Log("Activating shop panel...");
@@ -285,11 +288,13 @@ public class OverworldGUI : MonoBehaviour
 
     public void CloseShop()
     {
+
         foreach(Transform artifactSlot in shopPanel.transform.GetChild(0))
         {
             artifactSlot.gameObject.GetComponent<EventTrigger>().triggers.Clear();
            
         }
+        shopdropandroll.SetActive(false);
         shopPanel.SetActive(false);
         campButton.interactable = true;
         mapControlScript.nodesEnabled = true;
