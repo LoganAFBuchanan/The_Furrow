@@ -377,22 +377,26 @@ public class MapNode : MonoBehaviour
         savedPosition = transform.position;
         transform.SetParent(null);
         transform.position = new Vector3(0, 0, 0);
+        Debug.Log("Fade is found: " + GameObject.Find("Fade").GetComponent<SceneFader>());
+        SceneFader scenetransition = GameObject.Find("Fade").GetComponent<SceneFader>();
+        Debug.Log("scenetransition is " + scenetransition);
         switch(biome)
         {
             case "Forest":
-                SceneManager.LoadScene(1);
+                Debug.Log("WE GOING TO DA FOREST");
+                StartCoroutine(scenetransition.FadeAndLoadScene( SceneFader.FadeDirection.In, 1));
                 break;
             
             case "Swamp":
-                SceneManager.LoadScene(4);
+                StartCoroutine(scenetransition.FadeAndLoadScene( SceneFader.FadeDirection.In, 4));
                 break;
 
             case "Ruins":
-                SceneManager.LoadScene(3);
+                StartCoroutine(scenetransition.FadeAndLoadScene( SceneFader.FadeDirection.In, 3));
                 break;
 
             default:
-                SceneManager.LoadScene(1);
+                StartCoroutine(scenetransition.FadeAndLoadScene( SceneFader.FadeDirection.In, 1));
                 break;
         }
         

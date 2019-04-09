@@ -68,9 +68,10 @@ public class GUIController : MonoBehaviour
     {
 
         InfoText.text = "Player " + ((sender as CellGrid).CurrentPlayerNumber + 1) + " wins!";
+        StartCoroutine(GameObject.Find("Fade").GetComponent<SceneFader>().FadeAndLoadScene( SceneFader.FadeDirection.In, 0));
         CleanUpDelegates();
         
-        SceneManager.LoadScene(0);
+        
     }
 
     public void OnTurnStarted(object sender, EventArgs e)

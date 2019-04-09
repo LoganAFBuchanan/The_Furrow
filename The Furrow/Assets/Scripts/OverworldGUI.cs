@@ -217,7 +217,7 @@ public class OverworldGUI : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        
+        GameObject.Find("Fade").GetComponent<SceneFader>().OnEnable();
         Debug.Log("ONSCENE LOADED IS CALLED IN THE OVERWORLD GUI");
 
         if(scene.name != "Overworld")
