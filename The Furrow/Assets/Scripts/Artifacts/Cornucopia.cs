@@ -12,17 +12,19 @@ public class Cornucopia : Artifact
     public string title { get; set; }
     public string desc { get; set; }
     public Image image { get; set; }
+    public string lore { get; set; }
 
     public Cornucopia()
     {
-        name = "Cornucopia";
-        title = "Cornucopia";
-        desc = "+6 Rations";
+        name = "SpiritdCornucopia";
+        title = "Spirit’d Cornucopia";
+        desc = "You find that whatever you put into this horn becomes many meals of food.";
+        lore ="";
         rationBoost = 6;
         cost = 15;
         UnityEngine.GameObject artifactUI;
         Debug.Log("Loading Artifact asset for " + name);
-        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/Cornucopia"));
+        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/SpiritdCornucopia"));
         image = artifactUI.GetComponent<Image>();
         UnityEngine.GameObject.Destroy(artifactUI);
     }

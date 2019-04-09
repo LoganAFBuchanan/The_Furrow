@@ -12,17 +12,19 @@ public class HarvestSack : Artifact
     public string title { get; set; }
     public string desc { get; set; }
     public Image image { get; set; }
+    public string lore { get; set; }
 
     public HarvestSack()
     {
-        name = "HarvestSack";
-        title = "Harvest Sack";
+        name = "SpiritdPlatter";
+        title = "Spirit’d Platter";
         desc = "+4 Rations";
+        lore = "You find that whatever you put onto this platter becomes a hearty meal.";
         rationBoost = 4;
         cost = 11;
         UnityEngine.GameObject artifactUI;
         Debug.Log("Loading Artifact asset for " + name);
-        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/HarvestSack"));
+        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/SpiritdPlatter"));
         image = artifactUI.GetComponent<Image>();
         UnityEngine.GameObject.Destroy(artifactUI);
     }

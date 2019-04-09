@@ -20,6 +20,7 @@ public interface Artifact
     string title { get; set; }
     string desc { get; set; }
     Image image { get; set; }
+    string lore { get; set; }
 
     /// <summary>
     /// Describes how the player should be affected

@@ -12,12 +12,14 @@ public class AegisCharm : Artifact
     public string title { get; set; }
     public string desc { get; set; }
     public Image image { get; set; }
+    public string lore { get; set; }
 
     public AegisCharm()
     {
         name = "AegisCharm";
         title = "Aegis Charm";
         desc = "Double the effectiveness of the Defend Action";
+        lore = "Some poor hero’s lost charm… You find that when you put it on, you feel bolstered.";
         defMultiplier = 1;
         cost = 14;
         UnityEngine.GameObject artifactUI;

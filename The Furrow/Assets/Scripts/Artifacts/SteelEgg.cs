@@ -12,17 +12,19 @@ public class SteelEgg : Artifact
     public string title { get; set; }
     public string desc { get; set; }
     public Image image { get; set; }
+    public string lore { get; set; }
 
     public SteelEgg()
     {
-        name = "SteelEgg";
-        title = "Steel Egg";
+        name = "TitanstoneShield";
+        title = "Titanstone Shield";
         desc = "Start Each Combat with +3 Defense";
+        lore = "A shield studded with blue stones, which glow like diluted stars.";
         defBoost = 3;
         cost = 7;
         UnityEngine.GameObject artifactUI;
         Debug.Log("Loading Artifact asset for " + name);
-        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/SteelEgg"));
+        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/TitanstoneShield"));
         image = artifactUI.GetComponent<Image>();
         UnityEngine.GameObject.Destroy(artifactUI);
     }

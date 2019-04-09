@@ -22,9 +22,11 @@ public class ArtifactContainer : MonoBehaviour
 
         Text artifactName = artifactUI.transform.GetChild(0).Find("Name").GetComponent<Text>();
         Text artifactDesc = artifactUI.transform.GetChild(0).Find("Desc").GetComponent<Text>();
+        Text artifactLore = artifactUI.transform.GetChild(0).Find("Lore").GetComponent<Text>();
 
         artifactName.text = arti.title;
         artifactDesc.text = arti.desc;
+        artifactLore.text = arti.lore;
 
         RectTransform rectT = artifactUI.GetComponent<RectTransform>();
         rectT.SetParent(this.GetComponent<RectTransform>());

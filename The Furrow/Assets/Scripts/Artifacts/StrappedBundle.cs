@@ -12,17 +12,19 @@ public class StrappedBundle : Artifact
     public string title { get; set; }
     public string desc { get; set; }
     public Image image { get; set; }
+    public string lore { get; set; }
 
     public StrappedBundle()
     {
-        name = "StrappedBundle";
-        title = "Strapped Bundle";
+        name = "SpiritdDish";
+        title = "Spirit’d Dish";
         desc = "+2 Rations";
+        lore = "You find that whatever you put onto this dish becomes a small meal.";
         rationBoost = 2;
         cost = 8;
         UnityEngine.GameObject artifactUI;
         Debug.Log("Loading Artifact asset for " + name);
-        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/StrappedBundle"));
+        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/SpiritdDish"));
         image = artifactUI.GetComponent<Image>();
         UnityEngine.GameObject.Destroy(artifactUI);
     }

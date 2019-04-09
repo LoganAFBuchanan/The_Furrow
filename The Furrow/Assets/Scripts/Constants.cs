@@ -56,8 +56,7 @@ public static class Constants
         "HarvestSack",
         "Cornucopia",
         "ConsortsScribe",
-        "AegisCharm",
-        "SanguineFang"
+        "AegisCharm"
     };
     
     

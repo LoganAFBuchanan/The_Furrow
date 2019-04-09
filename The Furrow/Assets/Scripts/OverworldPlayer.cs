@@ -499,7 +499,7 @@ public class OverworldPlayer : MonoBehaviour
     {
         switch (name)
             {
-                case "FurtiveMushroom":
+                case "ShardedFlask":
                     {
                         availableArtifacts.Remove("FurtiveMushroom");
                         FurtiveMushroom newArtifact = new FurtiveMushroom();
@@ -523,7 +523,7 @@ public class OverworldPlayer : MonoBehaviour
                         break;
                     }
 
-                case "ScarredJournal":
+                case "CompatriotsLink":
                     {
                         availableArtifacts.Remove("ScarredJournal");
                         ScarredJournal newArtifact = new ScarredJournal();
@@ -535,7 +535,7 @@ public class OverworldPlayer : MonoBehaviour
                         break;
                     }
 
-                case "SteelEgg":
+                case "TitanstoneShield":
                     {
                         availableArtifacts.Remove("SteelEgg");
                         SteelEgg newArtifact = new SteelEgg();
@@ -547,7 +547,7 @@ public class OverworldPlayer : MonoBehaviour
                         break;
                     }
 
-                case "FletcherKit":
+                case "TravelersTrap":
                     {
                         availableArtifacts.Remove("FletcherKit");
                         FletcherKit newArtifact = new FletcherKit();
@@ -559,7 +559,7 @@ public class OverworldPlayer : MonoBehaviour
                         break;
                     }
 
-                case "PatchPack":
+                case "HealersHarp":
                     {
                         availableArtifacts.Remove("PatchPack");
                         PatchPack newArtifact = new PatchPack();
@@ -571,7 +571,7 @@ public class OverworldPlayer : MonoBehaviour
                         break;
                     }
 
-                case "MercuryDraught":
+                case "DraughtofGoodHaste":
                     {
                         availableArtifacts.Remove("MercuryDraught");
                         MercuryDraught newArtifact = new MercuryDraught();
@@ -583,7 +583,7 @@ public class OverworldPlayer : MonoBehaviour
                         break;
                     }
 
-                case "StoutCap":
+                case "ShardedTankard":
                     {
                         availableArtifacts.Remove("StoutCap");
                         StoutCap newArtifact = new StoutCap();
@@ -595,7 +595,7 @@ public class OverworldPlayer : MonoBehaviour
                         break;
                     }
 
-                case "FurrowMorel":
+                case "CurativeCuff":
                     {
                         availableArtifacts.Remove("FurrowMorel");
                         FurrowMorel newArtifact = new FurrowMorel();
@@ -607,7 +607,7 @@ public class OverworldPlayer : MonoBehaviour
                         break;
                     }
 
-                case "StrappedBundle":
+                case "SpiritdDish":
                     {
                         availableArtifacts.Remove("StrappedBundle");
                         StrappedBundle newArtifact = new StrappedBundle();
@@ -619,7 +619,7 @@ public class OverworldPlayer : MonoBehaviour
                         break;
                     }
 
-                case "HarvestSack":
+                case "SpiritdPlatter":
                     {
                         availableArtifacts.Remove("HarvestSack");
                         HarvestSack newArtifact = new HarvestSack();
@@ -631,7 +631,7 @@ public class OverworldPlayer : MonoBehaviour
                         break;
                     }
 
-                case "Cornucopia":
+                case "SpiritdCornucopia":
                     {
                         availableArtifacts.Remove("Cornucopia");
                         Cornucopia newArtifact = new Cornucopia();
@@ -643,7 +643,7 @@ public class OverworldPlayer : MonoBehaviour
                         break;
                     }
 
-                case "ConsortsScribe":
+                case "FlamepaintingWand":
                     {
                         availableArtifacts.Remove("ConsortsScribe");
                         ConsortsScribe newArtifact = new ConsortsScribe();

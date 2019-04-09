@@ -12,12 +12,14 @@ public class SanguineFang : Artifact
     public string title { get; set; }
     public string desc { get; set; }
     public Image image { get; set; }
+    public string lore { get; set; }
 
     public SanguineFang()
     {
         name = "SanguineFang";
         title = "Sanguine Fang";
         desc = "Heal 1 HP upon killing an enemy";
+        lore = "A beast's wretched fang laced with crimson.";
         killHeal = 1;
         cost = 13;
         UnityEngine.GameObject artifactUI;

@@ -12,17 +12,19 @@ public class ConsortsScribe : Artifact
     public string title { get; set; }
     public string desc { get; set; }
     public Image image { get; set; }
+    public string lore { get; set; }
 
     public ConsortsScribe()
     {
-        name = "ConsortsScribe";
-        title = "Consort's Scribe";
+        name = "FlamepaintingWand";
+        title = "Flamepainting Wand";
         desc = "Gain double Bond Points at Camp";
+        lore ="Some mage’s lost wand which draws flame to it, perfect for campfire entertainment.";
         bondMultiplier = 1;
         cost = 9;
         UnityEngine.GameObject artifactUI;
         Debug.Log("Loading Artifact asset for " + name);
-        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/ConsortsScribe"));
+        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/FlamepaintingWand"));
         image = artifactUI.GetComponent<Image>();
         UnityEngine.GameObject.Destroy(artifactUI);
     }

@@ -12,17 +12,19 @@ public class ScarredJournal : Artifact
     public string title { get; set; }
     public string desc { get; set; }
     public Image image { get; set; }
+    public string lore { get; set; }
 
     public ScarredJournal()
     {
-        name = "ScarredJournal";
-        title = "Scarred Journal";
+        name = "CompatriotsLink";
+        title = "Compatriot’s Link";
         desc = "+25% Bond from Combat";
+        lore = "An enchanted ear cuff for each traveller, which allows for in-combat communication.";
         bondBoost = 0.25f;
         cost = 12;
         UnityEngine.GameObject artifactUI;
         Debug.Log("Loading Artifact asset for " + name);
-        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/ScarredJournal"));
+        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/CompatriotsLink"));
         image = artifactUI.GetComponent<Image>();
         UnityEngine.GameObject.Destroy(artifactUI);
     }

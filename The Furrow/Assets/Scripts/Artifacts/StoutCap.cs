@@ -12,17 +12,19 @@ public class StoutCap : Artifact
     public string title { get; set; }
     public string desc { get; set; }
     public Image image { get; set; }
+    public string lore { get; set; }
 
     public StoutCap()
     {
-        name = "StoutCap";
-        title = "Stout Cap";
+        name = "ShardedTankard";
+        title = "Sharded Tankard";
         desc = "+5 Max HP for both heroes";
+        lore = "A glowing blue shard bobs in a large, miraculously full mug of transparent liquid.";
         hpBoost = 5;
         cost = 12;
         UnityEngine.GameObject artifactUI;
         Debug.Log("Loading Artifact asset for " + name);
-        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/StoutCap"));
+        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/ShardedTankard"));
         image = artifactUI.GetComponent<Image>();
         UnityEngine.GameObject.Destroy(artifactUI);
     }

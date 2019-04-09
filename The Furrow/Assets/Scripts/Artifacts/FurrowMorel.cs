@@ -12,17 +12,19 @@ public class FurrowMorel : Artifact
     public string title { get; set; }
     public string desc { get; set; }
     public Image image { get; set; }
+    public string lore { get; set; }
 
     public FurrowMorel()
     {
-        name = "FurrowMorel";
-        title = "Furrow Morel";
+        name = "CurativeCuff";
+        title = "Curative Cuff";
         desc = "+7 Max HP for both heroes";
+        lore = "A metal cuff ringed with blue glowing stones, which cleanse the body’s blood.";
         hpBoost = 7;
         cost = 16;
         UnityEngine.GameObject artifactUI;
         Debug.Log("Loading Artifact asset for " + name);
-        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/FurrowMorel"));
+        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/CurativeCuff"));
         image = artifactUI.GetComponent<Image>();
         UnityEngine.GameObject.Destroy(artifactUI);
     }

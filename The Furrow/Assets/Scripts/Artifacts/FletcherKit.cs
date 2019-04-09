@@ -12,17 +12,19 @@ public class FletcherKit : Artifact
     public string title { get; set; }
     public string desc { get; set; }
     public Image image { get; set; }
+    public string lore { get; set; }
 
     public FletcherKit()
     {
-        name = "FletcherKit";
-        title = "Fletcher's Kit";
+        name = "TravelersTrap";
+        title = "Traveler’s Trap";
         desc = "+2 Rations when Hunting";
+        lore = "A trap left behind by some wayward soul, still rattling with the bones of a rabbit.";
         huntBoost = 2;
         cost = 9;
         UnityEngine.GameObject artifactUI;
         Debug.Log("Loading Artifact asset for " + name);
-        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/FletcherKit"));
+        artifactUI = UnityEngine.GameObject.Instantiate(UnityEngine.Resources.Load<UnityEngine.GameObject>("Artifacts/TravelersTrap"));
         image = artifactUI.GetComponent<Image>();
         UnityEngine.GameObject.Destroy(artifactUI);
     }
