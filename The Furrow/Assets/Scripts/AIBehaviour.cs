@@ -89,9 +89,24 @@ public class AIBehaviour : MonoBehaviour
     {
         var enemyUnits = _cellGrid.Units.FindAll(u => u.PlayerNumber.Equals(enemyPlayerNumber)).ToList();
         List<Cell> potentialDestinations = new List<Cell>();
+
+        
             
             foreach (var enemyUnit in enemyUnits)
             {
+
+                if(unit.IsUnitAttackable(enemyUnit, unit.Cell, skill))
+                {
+                    Debug.Log("IM AM LOGGING THAT THE AI SHOULD BE FUCKING HITTING THEIR BOI NOW");
+                    if(useSkill) 
+                    {
+                        unit.PlaySkillAnimationAI(skill, _cellGrid.Cells, _cellGrid.Units);
+                        Debug.Log("ANIMATION SHOULD BE FUCKING PLAING");
+                        yield break;
+                    }
+                    
+                }
+
                 potentialDestinations.AddRange(_cellGrid.Cells.FindAll(c=> unit.IsCellMovableTo(c) && unit.IsUnitAttackable(enemyUnit, c, skill))); 
             }//Making a list of cells that the unit can attack from.
       
