@@ -19,7 +19,7 @@ public class FletcherKit : Artifact
         name = "TravelersTrap";
         title = "Traveler’s Trap";
         desc = "+2 Rations when Hunting";
-        lore = "A trap left behind by some wayward soul, still rattling with the bones of a rabbit.";
+        lore = "A trap left behind by some wayward soul.";
         huntBoost = 2;
         cost = 9;
         UnityEngine.GameObject artifactUI;

@@ -18,7 +18,7 @@ public class SteelEgg : Artifact
     {
         name = "TitanstoneShield";
         title = "Titanstone Shield";
-        desc = "Start Each Combat with +3 Defense";
+        desc = "Start Combat with +3 Defense";
         lore = "A shield studded with blue stones, which glow like diluted stars.";
         defBoost = 3;
         cost = 7;

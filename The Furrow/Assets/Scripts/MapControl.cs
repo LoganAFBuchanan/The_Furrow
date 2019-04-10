@@ -244,6 +244,7 @@ public class MapControl : MonoBehaviour
                 if(node.positionID == clickedNode.positionID)
                 {
                     playerScript.MovePlayer(clickedNode);
+                    //clickedNode.isVisited = true;
 
                     if(clickedNode.isCorrupted)
                     {

@@ -18,8 +18,8 @@ public class AegisCharm : Artifact
     {
         name = "AegisCharm";
         title = "Aegis Charm";
-        desc = "Double the effectiveness of the Defend Action";
-        lore = "Some poor hero’s lost charm… You find that when you put it on, you feel bolstered.";
+        desc = "Double Defense Strength";
+        lore = "Some poor hero’s lost charm…";
         defMultiplier = 1;
         cost = 14;
         UnityEngine.GameObject artifactUI;

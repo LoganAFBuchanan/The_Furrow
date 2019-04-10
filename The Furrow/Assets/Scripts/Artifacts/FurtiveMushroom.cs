@@ -19,7 +19,7 @@ public class FurtiveMushroom : Artifact
         name = "ShardedFlask";
         title = "Sharded Flask";
         desc = "+3 Max HP for both heroes";
-        lore = "A small flask of a transparent liquid, in which a blue shard rattles, glowing.";
+        lore = "A small flask of a transparent liquid.";
         hpBoost = 3;
         cost = 8;
         UnityEngine.GameObject artifactUI;

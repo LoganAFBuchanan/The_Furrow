@@ -18,7 +18,7 @@ public class MercuryDraught : Artifact
     {
         name = "DraughtofGoodHaste";
         title = "Draught of Good Haste";
-        desc = "+3 AP on the first turn of each combat";
+        desc = "+3 AP on your first turn.";
         lore ="A tall bottle of fast-swirling amber liquid, the glass marked by inscrutable symbols.";
         apBoost = 3;
         cost = 11;

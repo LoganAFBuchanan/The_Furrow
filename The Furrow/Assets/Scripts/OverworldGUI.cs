@@ -264,6 +264,7 @@ public class OverworldGUI : MonoBehaviour
             Text artifactName = artifactSlot.Find("Name").GetComponent<Text>();
             Text artifactDesc = artifactSlot.Find("Description").GetComponent<Text>();
             Text artifactCost = artifactSlot.Find("Cost").GetComponent<Text>();
+            Text artifactLore = artifactSlot.Find("Lore").GetComponent<Text>();
 
             Artifact shopArtifact = player.GetRandomArtifact();
             Debug.Log("Generated " + shopArtifact.name);
@@ -272,6 +273,7 @@ public class OverworldGUI : MonoBehaviour
             Debug.Log("Grabbed sprite");
             artifactName.text = shopArtifact.title;
             artifactDesc.text = shopArtifact.desc;
+            artifactLore.text = shopArtifact.lore;
             artifactCost.text = "Cost: " + shopArtifact.cost.ToString();
 
             EventTrigger trigger = artifactSlot.gameObject.GetComponent<EventTrigger>();

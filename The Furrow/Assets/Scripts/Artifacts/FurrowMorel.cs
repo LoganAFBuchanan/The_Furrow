@@ -19,7 +19,7 @@ public class FurrowMorel : Artifact
         name = "CurativeCuff";
         title = "Curative Cuff";
         desc = "+7 Max HP for both heroes";
-        lore = "A metal cuff ringed with blue glowing stones, which cleanse the body’s blood.";
+        lore = "A metal cuff ringed with blue glowing stones.";
         hpBoost = 7;
         cost = 16;
         UnityEngine.GameObject artifactUI;

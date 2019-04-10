@@ -18,8 +18,8 @@ public class Cornucopia : Artifact
     {
         name = "SpiritdCornucopia";
         title = "Spirit’d Cornucopia";
-        desc = "You find that whatever you put into this horn becomes many meals of food.";
-        lore ="";
+        desc = "+6 Rations";
+        lore ="You find that whatever you put into this horn becomes many meals of food.";
         rationBoost = 6;
         cost = 15;
         UnityEngine.GameObject artifactUI;

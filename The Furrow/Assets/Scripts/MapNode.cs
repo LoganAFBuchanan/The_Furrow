@@ -96,6 +96,11 @@ public class MapNode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // if(isVisited)
+        // {
+        //     Color COLORTIME = new Color (128, 128, 128, 1);
+        //     image.GetComponent<SpriteRenderer>().color = COLORTIME;
+        // }
         TakenAnimation();
         ArrowAnimation();
         //FadeAnimation();

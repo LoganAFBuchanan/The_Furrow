@@ -18,7 +18,7 @@ public class StarShard : Artifact
     {
         name = "StarShard";
         title = "Shard of the Star";
-        desc = "+1 Max AP for both heroes";
+        desc = "+1 Max AP";
         lore = "A gently pulsing shard of light, which can only have come from a star.";
         apBoost = 5;
         cost = 10;

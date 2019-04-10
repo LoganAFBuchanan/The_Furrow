@@ -18,8 +18,8 @@ public class ConsortsScribe : Artifact
     {
         name = "FlamepaintingWand";
         title = "Flamepainting Wand";
-        desc = "Gain double Bond Points at Camp";
-        lore ="Some mage’s lost wand which draws flame to it, perfect for campfire entertainment.";
+        desc = "Double Bond Points at Camp";
+        lore ="Some mage’s lost wand which draws flame to it.";
         bondMultiplier = 1;
         cost = 9;
         UnityEngine.GameObject artifactUI;
