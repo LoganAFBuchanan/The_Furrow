@@ -158,7 +158,7 @@ public class CampGUI : OverworldGUI
             if(hero.isDead) hero.SetCharacterDeath(false);
         }
         //UpdateUIValues();
-        BackToOverworld();
+        StartCoroutine(BackToOverworld());
 
     }
 
@@ -169,7 +169,7 @@ public class CampGUI : OverworldGUI
         playerScript.rationCount += Constants.CAMP_HUNT_RATIONS;
         if(playerScript.isHuntBoosted) playerScript.rationCount += playerScript.huntBoost;
         //UpdateUIValues();
-        BackToOverworld();
+        StartCoroutine(BackToOverworld());
     }
 
     public void OnBondClicked()
@@ -223,26 +223,31 @@ public class CampGUI : OverworldGUI
             playerScript.bondCount += Constants.CAMP_BOND_INC * playerScript.campBondBoost;
             if(playerScript.bondCount > playerScript.bondMax) playerScript.bondCount = playerScript.bondMax;
             //UpdateUIValues();
-            BackToOverworld();
+            StartCoroutine(BackToOverworld());
         }
     }
 
 
     public void OnBackToOverworldClick()
     {
-        BackToOverworld();
+        StartCoroutine(BackToOverworld());
     }
 
 
-    public void BackToOverworld()
+    public IEnumerator BackToOverworld()
     {
         //Move Map Back
 
 
+        GameObject.Find("Fade").GetComponent<SceneFader>().isFading = true;
+        GameObject.Find("Fade").GetComponent<SceneFader>().ExternalStart( SceneFader.FadeDirection.In, 1);
+        while(GameObject.Find("Fade").GetComponent<SceneFader>().isFading)
+        {
+            yield return 0;
+        }
         ResetHeroes();
         mapControlScript.transform.position = mapControlScript.savedPosition;
         CleanUpDelegates();
-        SceneManager.LoadScene(0);
         Destroy(this.gameObject);
     }
 
@@ -393,7 +398,7 @@ public class CampGUI : OverworldGUI
                 heroScript.AttachSkills();
             }
         }
-        BackToOverworld();
+        StartCoroutine(BackToOverworld());
     }
 
     

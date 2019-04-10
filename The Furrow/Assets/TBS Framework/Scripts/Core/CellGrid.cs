@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Collections;
 
 /// <summary>
 /// CellGrid class keeps track of the game, stores cells, units and players objects. It starts the game and makes turn transitions. 
@@ -270,7 +271,7 @@ public class CellGrid : MonoBehaviour
         {
             if(GameEnded != null)
             {
-                GameEndCleanup();
+                StartCoroutine(GameEndCleanup());
                 GameEnded.Invoke(this, new EventArgs());
             }
                 
@@ -279,8 +280,14 @@ public class CellGrid : MonoBehaviour
     }
 
     //Move the players out of units and back into the player object
-    public void GameEndCleanup()
+    public IEnumerator GameEndCleanup()
     {
+        GameObject.Find("Fade").GetComponent<SceneFader>().isFading = true;
+        while(GameObject.Find("Fade").GetComponent<SceneFader>().isFading)
+        {
+            yield return 0;
+        }
+
         GameObject unitList = GameObject.Find("Units");
 
         GameObject overWorldPlayer = GameObject.Find("Player");
@@ -318,6 +325,8 @@ public class CellGrid : MonoBehaviour
         overWorldNode.GetComponent<MapNode>().GiveCombatRewards(overWorldPlayer.GetComponent<OverworldPlayer>());
         overWorldNode.transform.SetParent(overWorldMap.transform);
         overWorldNode.transform.position = overWorldNode.GetComponent<MapNode>().savedPosition;
+
+        yield return 0;
     }
 
     public void CheckContention()

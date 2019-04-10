@@ -384,19 +384,19 @@ public class MapNode : MonoBehaviour
         {
             case "Forest":
                 Debug.Log("WE GOING TO DA FOREST");
-                StartCoroutine(scenetransition.FadeAndLoadScene( SceneFader.FadeDirection.In, 1));
+                StartCoroutine(scenetransition.FadeAndLoadScene( SceneFader.FadeDirection.In, 2));
                 break;
             
             case "Swamp":
-                StartCoroutine(scenetransition.FadeAndLoadScene( SceneFader.FadeDirection.In, 4));
+                StartCoroutine(scenetransition.FadeAndLoadScene( SceneFader.FadeDirection.In, 5));
                 break;
 
             case "Ruins":
-                StartCoroutine(scenetransition.FadeAndLoadScene( SceneFader.FadeDirection.In, 3));
+                StartCoroutine(scenetransition.FadeAndLoadScene( SceneFader.FadeDirection.In, 4));
                 break;
 
             default:
-                StartCoroutine(scenetransition.FadeAndLoadScene( SceneFader.FadeDirection.In, 1));
+                StartCoroutine(scenetransition.FadeAndLoadScene( SceneFader.FadeDirection.In, 2));
                 break;
         }
         

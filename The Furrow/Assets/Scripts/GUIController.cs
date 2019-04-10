@@ -78,7 +78,7 @@ public class GUIController : MonoBehaviour
 
     public void ReallyEndTheGame()
     {
-        StartCoroutine(GameObject.Find("Fade").GetComponent<SceneFader>().FadeAndLoadScene( SceneFader.FadeDirection.In, 0));
+        StartCoroutine(GameObject.Find("Fade").GetComponent<SceneFader>().FadeAndLoadScene( SceneFader.FadeDirection.In, 1));
         CleanUpDelegates();
     }
 

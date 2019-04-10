@@ -211,10 +211,19 @@ public class OverworldGUI : MonoBehaviour
         {
             yield return 0;
         }
+
+        GameObject.Find("Fade").GetComponent<SceneFader>().isFading = true;
+        StartCoroutine(GameObject.Find("Fade").GetComponent<SceneFader>().FadeAndLoadScene( SceneFader.FadeDirection.In, 3));
+        
+        while(GameObject.Find("Fade").GetComponent<SceneFader>().isFading)
+        {
+            yield return 0;
+        }
+
         //Move Map Away
         mapControlScript.savedPosition = mapControlScript.transform.position;
         mapControlScript.transform.position = new Vector3(-100000, -100000, -100000);
-        SceneManager.LoadScene(2);
+        
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
