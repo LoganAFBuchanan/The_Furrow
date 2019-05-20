@@ -114,6 +114,7 @@ public class MapNode : MonoBehaviour
         foreach(MapNode node in nodeList)
         {
             distance = Vector3.Distance(transform.position, node.transform.position);
+            Debug.Log("Node Distance is: " + distance);
             if(distance <= moveDistance && distance != 0)
             {
                 accessNodes.Add(node);
