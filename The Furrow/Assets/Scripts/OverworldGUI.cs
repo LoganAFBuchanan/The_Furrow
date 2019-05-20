@@ -209,8 +209,11 @@ public class OverworldGUI : MonoBehaviour
     {
         while(mapControlScript.darkness.isMoving)
         {
+            campButton.interactable = false;
             yield return 0;
         }
+
+        
 
         GameObject.Find("Fade").GetComponent<SceneFader>().isFading = true;
         StartCoroutine(GameObject.Find("Fade").GetComponent<SceneFader>().FadeAndLoadScene( SceneFader.FadeDirection.In, 3));
@@ -223,7 +226,8 @@ public class OverworldGUI : MonoBehaviour
         //Move Map Away
         mapControlScript.savedPosition = mapControlScript.transform.position;
         mapControlScript.transform.position = new Vector3(-100000, -100000, -100000);
-        
+        campButton.interactable = true;
+
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
